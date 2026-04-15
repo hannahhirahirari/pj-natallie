@@ -1,2 +1,2 @@
 # pj-natallie
-Track your event based data.
+"Tag your life. Ask your AI what it means."
