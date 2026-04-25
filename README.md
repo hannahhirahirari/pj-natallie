@@ -105,6 +105,5 @@ Targets modern mobile browsers (iOS Safari 15+, Chrome on Android). Service work
 ---
 
 ## Maintainer
-
-Stephanie Sakuma, Tokyo, Japan
+Hiratsuka Hannah, Tokyo, Japan
 info@natallie.app
