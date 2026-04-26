@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111113">
+<title>The .natallie file format</title>
+<meta name="description" content="Documented schema for the .natallie backup file format.">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0D0D0F;color:#E8E8EA;font-family:'SF Pro Display','Helvetica Neue',-apple-system,sans-serif;line-height:1.6;padding:40px 20px;min-height:100vh}
+.wrap{max-width:720px;margin:0 auto}
+header{margin-bottom:48px;padding-bottom:24px;border-bottom:1px solid #1F1F23}
+.back{color:#4A90E2;text-decoration:none;font-size:13px;display:inline-block;margin-bottom:24px;letter-spacing:0.05em}
+.back:hover{text-decoration:underline}
+h1{font-size:32px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px}
+.meta{color:#888;font-size:12px;letter-spacing:0.08em;text-transform:uppercase}
+h2{font-size:18px;font-weight:700;margin-top:40px;margin-bottom:14px;color:#FFFFFF}
+p{margin-bottom:14px;color:#C8C8CC}
+.lede{font-size:17px;color:#E8E8EA;margin-bottom:24px}
+strong{color:#FFFFFF;font-weight:600}
+a{color:#4A90E2;text-decoration:none}
+a:hover{text-decoration:underline}
+ul{padding-left:20px;margin-bottom:14px;color:#C8C8CC}
+ol{padding-left:20px;margin-bottom:14px;color:#C8C8CC}
+li{margin-bottom:6px}
+code{font-family:'SF Mono','Menlo','Consolas',monospace;font-size:13px;background:#1A1A1E;color:#E8E8EA;padding:2px 6px;border-radius:4px}
+pre{background:#15151A;border:1px solid #25252A;border-radius:10px;padding:16px;margin:16px 0 20px;overflow-x:auto;font-size:12.5px;line-height:1.55}
+pre code{background:none;padding:0;color:#D8D8DC;font-size:12.5px;display:block;white-space:pre}
+table{width:100%;border-collapse:collapse;margin:14px 0 22px;font-size:14px;display:block;overflow-x:auto;white-space:nowrap}
+@media (min-width:600px){table{display:table;white-space:normal}}
+th{text-align:left;padding:10px 12px;background:#15151A;color:#FFFFFF;font-weight:600;border-bottom:1px solid #2A2A2E;font-size:13px;letter-spacing:0.02em}
+td{padding:10px 12px;border-bottom:1px solid #1F1F23;color:#C8C8CC;vertical-align:top}
+td:first-child{white-space:nowrap}
+td:nth-child(2){white-space:nowrap;color:#8E8E96;font-size:13px}
+table code{font-size:12.5px;padding:1px 5px}
+.swatch-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:14px;color:#C8C8CC}
+.swatch{width:18px;height:18px;border-radius:4px;flex-shrink:0;border:1px solid rgba(255,255,255,0.06)}
+.swatch-name{min-width:64px}
+.swatch-hex{font-family:'SF Mono','Menlo','Consolas',monospace;font-size:13px;color:#8E8E96}
+.palette{margin:14px 0 22px}
+hr{border:none;border-top:1px solid #1F1F23;margin:32px 0}
+footer{margin-top:60px;padding-top:24px;border-top:1px solid #1F1F23;color:#666;font-size:12px}
+footer a{color:#888}
+footer p{color:#666;margin-bottom:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<a href="/" class="back">← back to natallie</a>
+<h1>the .natallie file format</h1>
+<p class="meta">version 1 · April 26, 2026</p>
+</header>
+
+<p class="lede">natallie is a free local-only event logger built as a progressive web app. the <code>.natallie</code> backup file is the durable artifact of the project: a documented JSON format that holds a user's grid, taps, and notes in a way that other tools, including any future viewer, importer, or successor app, can read without depending on natallie itself continuing to run.</p>
+
+<h2>file basics</h2>
+<p>a <code>.natallie</code> file is plain JSON, encoded as UTF-8, with 2-space indentation. the extension is <code>.natallie</code>. the MIME type used at download is <code>application/octet-stream</code>. the file is created when the user taps "backup" in the app's settings; nothing is uploaded or sent. the suggested filename follows the pattern <code>natallie-backup-YYYY-MM-DD.natallie</code>, where the date is taken from the export moment in UTC.</p>
+
+<h2>the top-level structure</h2>
+<p>every <code>.natallie</code> file is a single JSON object with the following top-level fields.</p>
+
+<table>
+<thead><tr><th>field</th><th>type</th><th>description</th></tr></thead>
+<tbody>
+<tr><td><code>version</code></td><td>number</td><td>format version. currently <code>1</code>.</td></tr>
+<tr><td><code>exportedAt</code></td><td>number</td><td>unix milliseconds at the moment of export.</td></tr>
+<tr><td><code>exportedDate</code></td><td>string</td><td>the same moment as a human-readable, locale-dependent string.</td></tr>
+<tr><td><code>timezone</code></td><td>string</td><td>IANA timezone such as <code>"Asia/Tokyo"</code>. may be an empty string if the runtime cannot resolve it.</td></tr>
+<tr><td><code>utcOffset</code></td><td>string</td><td>the user's offset at export time, formatted like <code>"UTC+09:00"</code>.</td></tr>
+<tr><td><code>appName</code></td><td>string</td><td>the user's display name for their app, default <code>"natallie"</code>.</td></tr>
+<tr><td><code>language</code></td><td>string</td><td>the UI language at export. currently <code>"en"</code> or <code>"ja"</code>.</td></tr>
+<tr><td><code>slots</code></td><td>array</td><td>the user's top-level grid. always 9 entries.</td></tr>
+<tr><td><code>logs</code></td><td>array</td><td>a list of tap events, newest first.</td></tr>
+<tr><td><code>notes</code></td><td>array</td><td>a list of free-text notes, newest first.</td></tr>
+<tr><td><code>boardPins</code></td><td>object</td><td>a map of board id to pin string. may be <code>{}</code>.</td></tr>
+</tbody>
+</table>
+
+<p>a small example showing only the top-level shape:</p>
+
+<pre><code>{
+  "version": 1,
+  "exportedAt": 1745524320541,
+  "exportedDate": "4/24/2026, 3:32:00 PM",
+  "timezone": "Asia/Tokyo",
+  "utcOffset": "UTC+09:00",
+  "appName": "natallie",
+  "language": "en",
+  "slots": [ ... ],
+  "logs": [ ... ],
+  "notes": [ ... ],
+  "boardPins": {}
+}</code></pre>
+
+<h2>slots</h2>
+<p>the <code>slots</code> array represents the user's grid. natallie's grid is 3x3, so <code>slots</code> always has exactly 9 entries. each entry is an object, and an entry can be either a button (a tappable leaf) or a board (a folder that contains its own 3x3 grid of nine more entries). boards nest, so the structure is recursive.</p>
+
+<p>each slot has the following fields.</p>
+
+<table>
+<thead><tr><th>field</th><th>type</th><th>description</th></tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>string</td><td>unique identifier within the file. constructed from the parent id plus an index, joined with <code>_</code>. top-level slots are <code>r_0</code> through <code>r_8</code>.</td></tr>
+<tr><td><code>nm</code></td><td>string</td><td>the display name of the slot. an empty string means the slot has not been configured.</td></tr>
+<tr><td><code>cl</code></td><td>string</td><td>hex color, including the leading <code>#</code>, for example <code>"#FF6B6B"</code>. an empty string means no color is set.</td></tr>
+<tr><td><code>md</code></td><td>string</td><td>mode. currently always <code>"click"</code>.</td></tr>
+<tr><td><code>tp</code></td><td>string</td><td>type. either <code>"button"</code> or <code>"board"</code>.</td></tr>
+<tr><td><code>ch</code></td><td>array</td><td>children. always <code>[]</code> for a button. for a board, an array of nine slot objects.</td></tr>
+</tbody>
+</table>
+
+<p>an unconfigured slot is <code>tp: "button"</code> with <code>nm: ""</code> and <code>cl: ""</code>. there is no separate "empty" type value. the app distinguishes empty slots from configured buttons by checking whether <code>nm</code> is non-empty.</p>
+
+<p>slot ids are stable across exports as long as the slot itself is not deleted and recreated. clearing a slot resets its <code>nm</code>, <code>cl</code>, and <code>tp</code> to defaults but preserves its <code>id</code>. a slot whose parent is <code>r_3</code> will have children with ids <code>r_3_0</code> through <code>r_3_8</code>, and so on for any further depth.</p>
+
+<p>a small focused example showing one configured button, one board with one configured child, and one unconfigured slot:</p>
+
+<pre><code>[
+  {
+    "id": "r_0",
+    "nm": "anxiety",
+    "cl": "#FF6B6B",
+    "md": "click",
+    "tp": "button",
+    "ch": []
+  },
+  {
+    "id": "r_1",
+    "nm": "feelings",
+    "cl": "#C3A6FF",
+    "md": "click",
+    "tp": "board",
+    "ch": [
+      {
+        "id": "r_1_0",
+        "nm": "low",
+        "cl": "#C3A6FF",
+        "md": "click",
+        "tp": "button",
+        "ch": []
+      }
+    ]
+  },
+  {
+    "id": "r_2",
+    "nm": "",
+    "cl": "",
+    "md": "click",
+    "tp": "button",
+    "ch": []
+  }
+]</code></pre>
+
+<h2>logs</h2>
+<p>each entry in <code>logs</code> is one tap of one button. logs are stored newest-first.</p>
+
+<table>
+<thead><tr><th>field</th><th>type</th><th>description</th></tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>number</td><td>a per-event identifier formed from <code>Date.now() + Math.random()</code>. opaque; treat as a string for deduplication.</td></tr>
+<tr><td><code>bi</code></td><td>string</td><td>the slot id of the tapped button.</td></tr>
+<tr><td><code>en</code></td><td>string</td><td>the event name, equal to the button's <code>nm</code> at the moment of the tap.</td></tr>
+<tr><td><code>pa</code></td><td>string</td><td>the path through parent boards down to this button, joined by <code>" › "</code> (U+203A, single right-pointing angle quote, with one space on each side).</td></tr>
+<tr><td><code>cl</code></td><td>string</td><td>the button's color at the moment of the tap.</td></tr>
+<tr><td><code>ty</code></td><td>string</td><td>the event type. currently always <code>"click"</code>.</td></tr>
+<tr><td><code>ts</code></td><td>number</td><td>the unix-millisecond timestamp of the tap.</td></tr>
+<tr><td><code>date</code></td><td>string</td><td>a human-readable, locale-dependent rendering of <code>ts</code>. added at export time only, not present in the live in-memory state.</td></tr>
+</tbody>
+</table>
+
+<p><code>en</code>, <code>pa</code>, and <code>cl</code> are snapshots of the button's state at the moment of the tap. if the button is later renamed, recolored, or deleted, the historical log entry retains its original values. logs are self-contained: a deleted button still has a meaningful history.</p>
+
+<p><code>ts</code> is the source of truth for time. <code>date</code> exists only as a convenience for users who open the file in a text editor and do not want to convert milliseconds. importers should prefer <code>ts</code> and ignore <code>date</code> when there is any ambiguity.</p>
+
+<p>a single log entry:</p>
+
+<pre><code>{
+  "id": 1745524320541.7234,
+  "bi": "r_0",
+  "en": "anxiety",
+  "pa": "anxiety",
+  "cl": "#FF6B6B",
+  "ty": "click",
+  "ts": 1745524320541,
+  "date": "4/24/2026, 3:32:00 PM"
+}</code></pre>
+
+<h2>notes</h2>
+<p>each entry in <code>notes</code> is one free-text note. notes are independent of the grid: they have no <code>bi</code>, no <code>pa</code>, and no association with any slot. they are a parallel timeline of written observations, also stored newest-first.</p>
+
+<table>
+<thead><tr><th>field</th><th>type</th><th>description</th></tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>number</td><td>per-note identifier in the same form as a log id.</td></tr>
+<tr><td><code>text</code></td><td>string</td><td>the note content as the user typed it.</td></tr>
+<tr><td><code>ts</code></td><td>number</td><td>unix-millisecond timestamp of the note's creation.</td></tr>
+<tr><td><code>date</code></td><td>string</td><td>human-readable rendering of <code>ts</code>, added at export time only.</td></tr>
+</tbody>
+</table>
+
+<p>in the running app, each note is hidden behind a tap-to-reveal control. that masking is a UI behavior, not a data behavior. <strong>the file always contains the plaintext.</strong> notes are not encrypted.</p>
+
+<p>a single note:</p>
+
+<pre><code>{
+  "id": 1745524500999.1234,
+  "text": "headache started after lunch, lasted till 4ish",
+  "ts": 1745524500999,
+  "date": "4/24/2026, 3:35:00 PM"
+}</code></pre>
+
+<h2>board pins</h2>
+<p><code>boardPins</code> is an object mapping a board's slot <code>id</code> to a pin string. when a board has an entry here, the running app requires the pin to open it.</p>
+
+<pre><code>{
+  "r_2": "1234",
+  "r_5": "9999"
+}</code></pre>
+
+<p>pins are stored in plaintext. this is deliberate: the file already contains the user's full data in plaintext, and the pin is meaningful only to the running app, where it gates access at the UI layer. an importer should not treat <code>boardPins</code> as a security feature. if no boards have pins, <code>boardPins</code> is <code>{}</code>.</p>
+
+<h2>versioning</h2>
+<p><code>version: 1</code> is the only currently defined value of the <code>version</code> field. the natallie webapp's importer rejects any file with a different <code>version</code>.</p>
+<p>future format changes should increment <code>version</code>. importers in other tools should check <code>version</code> first. the safest behavior is to read what is recognized, ignore unknown fields rather than fail, and warn the user if the version is higher than what the importer was written for.</p>
+
+<h2>a complete example</h2>
+
+<pre><code>{
+  "version": 1,
+  "exportedAt": 1745524320541,
+  "exportedDate": "4/24/2026, 3:32:00 PM",
+  "timezone": "Asia/Tokyo",
+  "utcOffset": "UTC+09:00",
+  "appName": "natallie",
+  "language": "en",
+  "slots": [
+    {
+      "id": "r_0",
+      "nm": "anxiety",
+      "cl": "#FF6B6B",
+      "md": "click",
+      "tp": "button",
+      "ch": []
+    },
+    {
+      "id": "r_1",
+      "nm": "wins",
+      "cl": "#F0E68C",
+      "md": "click",
+      "tp": "button",
+      "ch": []
+    },
+    {
+      "id": "r_2",
+      "nm": "feelings",
+      "cl": "#C3A6FF",
+      "md": "click",
+      "tp": "board",
+      "ch": [
+        {
+          "id": "r_2_0",
+          "nm": "low",
+          "cl": "#C3A6FF",
+          "md": "click",
+          "tp": "button",
+          "ch": []
+        },
+        {
+          "id": "r_2_1",
+          "nm": "restless",
+          "cl": "#FFB347",
+          "md": "click",
+          "tp": "button",
+          "ch": []
+        },
+        { "id": "r_2_2", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] },
+        { "id": "r_2_3", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] },
+        { "id": "r_2_4", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] },
+        { "id": "r_2_5", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] },
+        { "id": "r_2_6", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] },
+        { "id": "r_2_7", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] },
+        { "id": "r_2_8", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] }
+      ]
+    },
+    { "id": "r_3", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] },
+    { "id": "r_4", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] },
+    { "id": "r_5", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] },
+    { "id": "r_6", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] },
+    { "id": "r_7", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] },
+    { "id": "r_8", "nm": "", "cl": "", "md": "click", "tp": "button", "ch": [] }
+  ],
+  "logs": [
+    {
+      "id": 1745525000123.5678,
+      "bi": "r_2_1",
+      "en": "restless",
+      "pa": "feelings › restless",
+      "cl": "#FFB347",
+      "ty": "click",
+      "ts": 1745525000123,
+      "date": "4/24/2026, 3:43:20 PM"
+    },
+    {
+      "id": 1745524320541.7234,
+      "bi": "r_0",
+      "en": "anxiety",
+      "pa": "anxiety",
+      "cl": "#FF6B6B",
+      "ty": "click",
+      "ts": 1745524320541,
+      "date": "4/24/2026, 3:32:00 PM"
+    }
+  ],
+  "notes": [
+    {
+      "id": 1745524500999.1234,
+      "text": "headache started after lunch, lasted till 4ish",
+      "ts": 1745524500999,
+      "date": "4/24/2026, 3:35:00 PM"
+    }
+  ],
+  "boardPins": {}
+}</code></pre>
+
+<h2>the standard color palette</h2>
+<p>the natallie app offers thirteen preset button colors. users can also pick any custom hex color, so importers should not assume <code>cl</code> is restricted to this list. it is given here only as reference for tools that want to render slots in the same default scheme.</p>
+
+<div class="palette">
+<div class="swatch-row"><div class="swatch" style="background:#FF6B6B"></div><div class="swatch-name">coral</div><div class="swatch-hex">#FF6B6B</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#FF85A1"></div><div class="swatch-name">pink</div><div class="swatch-hex">#FF85A1</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#FFB347"></div><div class="swatch-name">amber</div><div class="swatch-hex">#FFB347</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#FFCBA4"></div><div class="swatch-name">peach</div><div class="swatch-hex">#FFCBA4</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#F0E68C"></div><div class="swatch-name">butter</div><div class="swatch-hex">#F0E68C</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#77DD77"></div><div class="swatch-name">sage</div><div class="swatch-hex">#77DD77</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#98E8C1"></div><div class="swatch-name">mint</div><div class="swatch-hex">#98E8C1</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#5FABA1"></div><div class="swatch-name">teal</div><div class="swatch-hex">#5FABA1</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#7EC8E3"></div><div class="swatch-name">sky</div><div class="swatch-hex">#7EC8E3</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#C3A6FF"></div><div class="swatch-name">lilac</div><div class="swatch-hex">#C3A6FF</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#DDA0DD"></div><div class="swatch-name">plum</div><div class="swatch-hex">#DDA0DD</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#8899AA"></div><div class="swatch-name">slate</div><div class="swatch-hex">#8899AA</div></div>
+<div class="swatch-row"><div class="swatch" style="background:#4A90D9"></div><div class="swatch-name">blue</div><div class="swatch-hex">#4A90D9</div></div>
+</div>
+
+<h2>what an importer needs to do</h2>
+<p>at minimum, a correct <code>.natallie</code> importer should:</p>
+<ol>
+<li>parse the file as JSON. if parsing fails, reject the file.</li>
+<li>check <code>version</code>. accept <code>1</code>. for higher versions, either reject or warn and read what is recognized.</li>
+<li>confirm <code>slots</code> and <code>logs</code> are arrays. these are the only required arrays; <code>notes</code> and <code>boardPins</code> may be missing or empty.</li>
+<li>walk <code>slots</code> recursively, descending into <code>ch</code> for any slot where <code>tp === "board"</code>. tolerate slot arrays shorter than nine by treating missing slots as unconfigured.</li>
+<li>read <code>ts</code> as the source of truth for log and note timestamps. ignore <code>date</code> if it conflicts with <code>ts</code>.</li>
+<li>treat unknown fields as forward-compatible. ignore them rather than reject them.</li>
+<li>treat <code>boardPins</code> as a UI hint, not as encryption.</li>
+</ol>
+
+<h2>what is intentionally not in this format</h2>
+<p>a <code>.natallie</code> file does not contain:</p>
+<ul>
+<li>analytics, telemetry, or any record of how the user interacted with the app outside of their own logs and notes</li>
+<li>a user account, login, session, or remote identifier</li>
+<li>device identifiers, network information, IP address, or anything about the user beyond what they typed into the app</li>
+<li>any field encrypted at rest</li>
+</ul>
+<p>these absences are part of the format. a tool that adds any of these fields when writing a <code>.natallie</code> file is no longer writing the same format.</p>
+
+<h2>license</h2>
+<p>this format document is published alongside the natallie source code under the <a href="https://polyformproject.org/licenses/noncommercial/1.0.0/">PolyForm Noncommercial 1.0.0</a> license. anyone is free to read and write <code>.natallie</code> files for noncommercial use, including building a viewer, importer, or successor app. commercial use requires a separate arrangement with the natallie author.</p>
+
+<footer>
+<p>the markdown source of this page is also published at <a href="https://github.com/hannahhirahirari/pj-natallie/blob/main/FORMAT.md">github.com/hannahhirahirari/pj-natallie/blob/main/FORMAT.md</a>.</p>
+<p>natallie is a free, open self-report event logger. your data is yours.</p>
+</footer>
+</div>
+</body>
+</html>
