@@ -4,7 +4,7 @@ A free, tap-based self-report event logger. Web app (PWA), with native iOS and A
 
 **Live:** https://natallie.app
 **Vercel project:** pj-natallie
-
+the `.natallie` file format is documented at [FORMAT.md](FORMAT.md).
 ---
 
 ## Tech stack
