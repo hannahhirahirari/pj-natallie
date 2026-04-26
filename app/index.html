@@ -73,6 +73,27 @@ needPin:{en:"Set a pin first to enable exports",ja:"\u30A8\u30AF\u30B9\u30DD\u30
 expMap:{en:"Export my map",ja:"\u30DE\u30C3\u30D7\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8"},
 backup:{en:"Backup data",ja:"\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7"},
 importD:{en:"Import backup",ja:"\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7\u3092\u30A4\u30F3\u30DD\u30FC\u30C8"},
+expHead:{en:"Export",ja:"\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8"},
+restoreBak:{en:"Restore from backup",ja:"\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7\u304B\u3089\u5FA9\u5143"},
+logsAndNotes:{en:"Logs and notes",ja:"\u30ED\u30B0\u3068\u30CE\u30FC\u30C8"},
+entireApp:{en:"Entire app",ja:"\u30A2\u30D7\u30EA\u5168\u4F53"},
+dateRange:{en:"Date range",ja:"\u671F\u9593"},
+dr_all:{en:"All time",ja:"\u3059\u3079\u3066"},
+dr_7:{en:"Last 7 days",ja:"\u904E\u53BB7\u65E5\u9593"},
+dr_30:{en:"Last 30 days",ja:"\u904E\u53BB30\u65E5\u9593"},
+dr_90:{en:"Last 90 days",ja:"\u904E\u53BB90\u65E5\u9593"},
+dr_thisYear:{en:"This year",ja:"\u4ECA\u5E74"},
+dr_lastYear:{en:"Last year",ja:"\u6628\u5E74"},
+dr_custom:{en:"Custom range",ja:"\u30AB\u30B9\u30BF\u30E0\u671F\u9593"},
+dr_from:{en:"From",ja:"\u958B\u59CB"},
+dr_to:{en:"To",ja:"\u7D42\u4E86"},
+expCSV:{en:"Export as CSV",ja:"CSV\u3068\u3057\u3066\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8"},
+expCSVDesc:{en:"Every tap and note within the date range, with timestamps.",ja:"\u671F\u9593\u5185\u306E\u3059\u3079\u3066\u306E\u30BF\u30C3\u30D7\u3068\u30CE\u30FC\u30C8\u3001\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7\u4ED8\u304D\u3002"},
+expMapBtn:{en:"Board layout as CSV",ja:"\u30DC\u30FC\u30C9\u30EC\u30A4\u30A2\u30A6\u30C8\u3092CSV\u3067"},
+expMapDesc:{en:"The names and colors of your buttons. No logs.",ja:"\u30DC\u30BF\u30F3\u306E\u540D\u524D\u3068\u8272\u306E\u307F\u3002\u30ED\u30B0\u306F\u542B\u307F\u307E\u305B\u3093\u3002"},
+fullBackup:{en:"Full backup",ja:"\u5B8C\u5168\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7"},
+fullBackupDesc:{en:"Everything in one file. For restoring or moving devices.",ja:"\u3059\u3079\u3066\u3092\u30D5\u30A1\u30A4\u30EB1\u3064\u306B\u3002\u5FA9\u5143\u3084\u30C7\u30D0\u30A4\u30B9\u79FB\u52D5\u7528\u3002"},
+events:{en:"events",ja:"\u30A4\u30D9\u30F3\u30C8"},
 noEv:{en:"No events logged yet",ja:"\u307E\u3060\u30A4\u30D9\u30F3\u30C8\u306A\u3057"},
 todayD:{en:"Today",ja:"\u4ECA\u65E5"},yest:{en:"Yesterday",ja:"\u6628\u65E5"},
 setBPin:{en:"Set board pin",ja:"\u30DC\u30FC\u30C9PIN\u8A2D\u5B9A"},
@@ -273,8 +294,79 @@ function MoveModal(props){
       e("button",{onClick:props.onClose,style:{width:"100%",padding:"12px",background:"transparent",border:"1px solid #333",borderRadius:10,color:DM,fontSize:13,cursor:"pointer",marginTop:8}},t("cancel"))))
 }
 
-/* ========== MAIN APP ========== */
-function MainApp(){
+function ExportModal(props){
+  var s1=useState("all"),range=s1[0],setRange=s1[1];
+  var today=new Date();
+  var defFrom=new Date(today.getFullYear(),today.getMonth(),today.getDate()-30).toISOString().slice(0,10);
+  var defTo=today.toISOString().slice(0,10);
+  var s2=useState(defFrom),cFrom=s2[0],setCFrom=s2[1];
+  var s3=useState(defTo),cTo=s3[0],setCTo=s3[1];
+  function getRange(){
+    var now=Date.now();
+    var d=new Date();
+    if(range==="all")return{start:0,end:now};
+    if(range==="7")return{start:now-7*86400000,end:now};
+    if(range==="30")return{start:now-30*86400000,end:now};
+    if(range==="90")return{start:now-90*86400000,end:now};
+    if(range==="thisYear")return{start:new Date(d.getFullYear(),0,1).getTime(),end:now};
+    if(range==="lastYear")return{start:new Date(d.getFullYear()-1,0,1).getTime(),end:new Date(d.getFullYear(),0,1).getTime()-1};
+    if(range==="custom"){
+      var s=new Date(cFrom+"T00:00:00").getTime();
+      var ee=new Date(cTo+"T23:59:59").getTime();
+      return{start:s,end:ee};
+    }
+    return{start:0,end:now};
+  }
+  var r=getRange();
+  var fLogs=props.logs.filter(function(l){return l.ts>=r.start&&l.ts<=r.end});
+  var fNotes=props.notes.filter(function(n){return n.ts>=r.start&&n.ts<=r.end});
+  var count=fLogs.length+fNotes.length;
+  var rangeOpts=[
+    {v:"all",l:t("dr_all")},
+    {v:"7",l:t("dr_7")},
+    {v:"30",l:t("dr_30")},
+    {v:"90",l:t("dr_90")},
+    {v:"thisYear",l:t("dr_thisYear")},
+    {v:"lastYear",l:t("dr_lastYear")},
+    {v:"custom",l:t("dr_custom")}
+  ];
+  var sectLabel={fontSize:11,color:DM,letterSpacing:"0.08em",fontWeight:600,textTransform:"uppercase",margin:"0 0 12px"};
+  var card={background:SF,border:"1px solid #2A2A2E",borderRadius:12,padding:14,marginBottom:8,cursor:"pointer",WebkitTapHighlightColor:"transparent"};
+  var cardTitle={fontSize:14,fontWeight:600,color:TX,marginBottom:4};
+  var cardDesc={fontSize:12,color:DM,lineHeight:1.5,margin:0};
+  return e("div",{onClick:props.onClose,style:{position:"fixed",inset:0,background:"rgba(0,0,0,0.6)",zIndex:200,display:"flex",alignItems:"flex-end",justifyContent:"center"}},
+    e("div",{onClick:function(ev){ev.stopPropagation()},style:{background:BG,borderTopLeftRadius:20,borderTopRightRadius:20,width:"100%",maxWidth:480,maxHeight:"85vh",overflow:"auto",padding:"20px 20px 30px"}},
+      e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:24}},
+        e("h2",{style:{fontSize:18,fontWeight:700,color:TX,margin:0}},t("expHead")),
+        e("button",{onClick:props.onClose,style:{background:"none",border:"none",color:DM,fontSize:22,cursor:"pointer",padding:"0 4px",lineHeight:1}},"\u00d7")),
+      e("p",{style:sectLabel},t("logsAndNotes")),
+      e("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:12}},
+        e("span",{style:{fontSize:13,color:DM,minWidth:80}},t("dateRange")),
+        e("select",{value:range,onChange:function(ev){setRange(ev.target.value)},style:{flex:1,background:SF,border:"1px solid #2A2A2E",borderRadius:8,padding:"8px 10px",fontSize:13,color:TX,cursor:"pointer"}},
+          rangeOpts.map(function(o){return e("option",{key:o.v,value:o.v},o.l)}))),
+      range==="custom"?e("div",{style:{display:"flex",gap:8,marginBottom:12}},
+        e("div",{style:{flex:1}},
+          e("label",{style:{fontSize:11,color:DM,display:"block",marginBottom:4}},t("dr_from")),
+          e("input",{type:"date",value:cFrom,onChange:function(ev){setCFrom(ev.target.value)},style:{width:"100%",background:SF,border:"1px solid #2A2A2E",borderRadius:8,padding:"8px 10px",fontSize:13,color:TX,boxSizing:"border-box"}})),
+        e("div",{style:{flex:1}},
+          e("label",{style:{fontSize:11,color:DM,display:"block",marginBottom:4}},t("dr_to")),
+          e("input",{type:"date",value:cTo,onChange:function(ev){setCTo(ev.target.value)},style:{width:"100%",background:SF,border:"1px solid #2A2A2E",borderRadius:8,padding:"8px 10px",fontSize:13,color:TX,boxSizing:"border-box"}}))):null,
+      e("div",{onClick:function(){props.onExportCSV(fLogs,fNotes)},style:Object.assign({},card,{marginBottom:24})},
+        e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}},
+          e("span",{style:cardTitle},t("expCSV")),
+          e("span",{style:{fontSize:11,color:DM}},count+" "+t("events"))),
+        e("p",{style:cardDesc},t("expCSVDesc"))),
+      e("div",{style:{borderTop:"1px solid #2A2A2E",margin:"0 0 16px"}}),
+      e("p",{style:sectLabel},t("entireApp")),
+      e("div",{onClick:function(){props.onExportMap()},style:card},
+        e("div",{style:cardTitle},t("expMapBtn")),
+        e("p",{style:cardDesc},t("expMapDesc"))),
+      e("div",{onClick:function(){props.onBackup()},style:card},
+        e("div",{style:cardTitle},t("fullBackup")),
+        e("p",{style:cardDesc},t("fullBackupDesc")))))
+}
+
+
   /* ALL HOOKS - fixed order */
   var h1=useState(function(){return padSlots(ld("nat-s",mkCh("r")),"r")}),slots=h1[0],_SS=h1[1];
   var h2=useState(function(){return ld("nat-l",[])}),logs=h2[0],_SL=h2[1];
@@ -287,6 +379,7 @@ function MainApp(){
   var h9=useState(null),ctx=h9[0],setCtx=h9[1];
   var h10=useState(null),mvN=h10[0],setMvN=h10[1];
   var h11=useState(false),showSet=h11[0],setShowSet=h11[1];
+  var hExp=useState(false),showExp=hExp[0],setShowExp=hExp[1];
   var h12=useState(CL),lang=h12[0],setLang=h12[1];
   var h13=useState(null),prompt=h13[0],setPrompt=h13[1];
   var h14=useState(function(){return ld("nat-bp",{})}),bPins=h14[0],_SBP=h14[1];
@@ -322,6 +415,7 @@ function MainApp(){
   /* Pin-protected actions */
   function pinAct(action,title){var ap=lds("nat-pin","");if(!ap){window.alert(t("needPin"));return}setPrompt({mode:"enter",checkPin:ap,title:title||t("pinExp"),onSuccess:function(){setPrompt(null);action()}})}
   function doExp(ids){var f=ids?logs.filter(function(l){return ids.indexOf(l.bi)>=0}):logs;if(!f.length&&(!notes.length||ids))return;pinAct(function(){dlFile(gCSV(f,ids?[]:notes),"natallie-"+new Date().toISOString().slice(0,10)+".csv","text/csv;charset=utf-8;")})}
+  function doExpFiltered(fLogs,fNotes){if(!fLogs.length&&!fNotes.length)return;pinAct(function(){dlFile(gCSV(fLogs,fNotes),"natallie-"+new Date().toISOString().slice(0,10)+".csv","text/csv;charset=utf-8;");setShowExp(false)})}
   function doExpMap(){pinAct(function(){dlFile(genMapCSV(slots),"natallie-map-"+new Date().toISOString().slice(0,10)+".csv","text/csv;charset=utf-8;")})}
   function doBackup(){if(!logs.length&&!notes.length&&!slots.some(function(s){return s.nm}))return;pinAct(function(){var rdLogs=logs.map(function(l){return Object.assign({},l,{date:new Date(l.ts).toLocaleString()})});var rdNotes=notes.map(function(n){return Object.assign({},n,{date:new Date(n.ts).toLocaleString()})});var tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(x){}var off=new Date().getTimezoneOffset();var offH=Math.abs(Math.floor(off/60));var offM=Math.abs(off%60);var offStr=(off<=0?"+":"-")+String(offH).padStart(2,"0")+":"+String(offM).padStart(2,"0");var payload={version:1,exportedAt:Date.now(),exportedDate:new Date().toLocaleString(),timezone:tz,utcOffset:"UTC"+offStr,appName:appNm,language:lang,slots:slots,logs:rdLogs,notes:rdNotes,boardPins:bPins};dlFile(JSON.stringify(payload,null,2),"natallie-backup-"+new Date().toISOString().slice(0,10)+".natallie","application/octet-stream")})}
 
@@ -430,6 +524,7 @@ function MainApp(){
     mvN?e(MoveModal,{node:mvN,slots:slots,onClose:function(){setMvN(null)},onMove:function(tid){hdlMove(mvN,tid)}}):null,
     prompt?e(PinPrompt,{mode:prompt.mode,checkPin:prompt.checkPin,title:prompt.title,onSuccess:prompt.onSuccess,onCancel:function(){setPrompt(null)}}):null,
     edNote!==null?e(NoteEditor,{note:edNote.id?edNote:null,onSave:saveNote,onCancel:function(){setEdNote(null)}}):null,
+    showExp?e(ExportModal,{logs:logs,notes:notes,onClose:function(){setShowExp(false)},onExportCSV:function(fLogs,fNotes){doExpFiltered(fLogs,fNotes)},onExportMap:function(){doExpMap();setShowExp(false)},onBackup:function(){doBackup();setShowExp(false)}}):null,
     e("input",{ref:fileR,type:"file",accept:".natallie,.json",onChange:handleFileRead,style:{display:"none"}}));
 
   /* ========== NOTES SCREEN ========== */
@@ -491,9 +586,8 @@ function MainApp(){
     e("div",{style:{padding:"16px 18px",background:SF,border:"1px solid #2A2A2E",borderRadius:14,display:"flex",alignItems:"center",justifyContent:"space-between"}},e("span",{style:{color:TX,fontSize:14}},t("lang")),e("div",{style:{display:"flex",gap:4}},e("button",{onClick:function(){chgLang("en")},style:{padding:"6px 14px",borderRadius:8,border:"none",fontSize:12,fontWeight:600,cursor:"pointer",background:lang==="en"?"#4A90D9":"#2A2A2E",color:lang==="en"?"#fff":DM}},"EN"),e("button",{onClick:function(){chgLang("ja")},style:{padding:"6px 14px",borderRadius:8,border:"none",fontSize:12,fontWeight:600,cursor:"pointer",background:lang==="ja"?"#4A90D9":"#2A2A2E",color:lang==="ja"?"#fff":DM}},"\u65E5\u672C\u8A9E"))),
     e("button",{onClick:function(){setShowBL(true);setShowSet(false)},style:btnStyle},t("bLocks")),
     e("button",{onClick:function(){setShowTR(true);setShowSet(false)},style:btnStyle},t("trash")+(trash.length>0?" \xb7 "+trash.length:"")),
-    e("button",{onClick:function(){doExpMap()},style:btnStyle},t("expMap")),
-    e("button",{onClick:function(){doBackup()},style:btnStyle},t("backup")),
-    e("button",{onClick:function(){doImport()},style:btnStyle},t("importD")),
+    e("button",{onClick:function(){setShowExp(true);setShowSet(false)},style:btnStyle},t("expHead")),
+    e("button",{onClick:function(){doImport()},style:btnStyle},t("restoreBak")),
     e("button",{onClick:function(){if(window.confirm(t("delAll"))){rms("nat-s");rms("nat-l");rms("nat-n");rms("nat-pin");rms("nat-ps");rms("nat-bp");rms("nat-lang");rms("nat-tr");rms("nat-nt");location.reload()}},style:Object.assign({},dangerBtnStyle,{marginTop:20})},t("resetAll"))),modals)}
 
   /* ========== VIEW LOGS ========== */
