@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#111113">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="/app/manifest.json">
+<link rel="manifest" href="/manifest.json">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
@@ -366,6 +366,11 @@ function MainApp(){
   }
 
   function restoreItem(item){
+    if(item.kind==="note"){
+      setNotes(function(p){return [item.note].concat(p)});
+      setTrash(trash.filter(function(x){return x.id!==item.id}));
+      return;
+    }
     var added=addTo(slots,"root",item.node);
     if(!added){window.alert(t("homeFull"));return}
     setSlots(added);
@@ -395,6 +400,9 @@ function MainApp(){
     setEdNote(null);
   }
   function deleteNote(note){
+    var copy=JSON.parse(JSON.stringify(note));
+    var trashItem={id:"tr_"+Date.now()+"_"+Math.random().toString(36).slice(2,8),deletedAt:Date.now(),kind:"note",note:copy};
+    setTrash([trashItem].concat(trash));
     setNotes(function(p){return p.filter(function(n){return n.id!==note.id})});
   }
 
@@ -447,6 +455,16 @@ function MainApp(){
       e("div",{style:{padding:"0 20px 30px"}},
         trash.length===0?e("p",{style:{color:DM,fontSize:13,padding:"40px 0",textAlign:"center"}},t("noTrash")):
         trash.map(function(item){
+          if(item.kind==="note"){
+            return e("div",{key:item.id,style:{padding:"14px 16px",background:SF,borderRadius:14,border:"1px solid #2A2A2E",marginBottom:8,display:"flex",alignItems:"center",gap:12}},
+              e("div",{style:{width:12,height:12,borderRadius:3,background:"#8888A0",flexShrink:0}}),
+              e("div",{style:{flex:1,minWidth:0}},
+                e("div",{style:{fontSize:14,fontWeight:600,color:TX,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},t("notes")+" \xb7 "+fDT(item.note.ts)),
+                e("div",{style:{fontSize:11,color:DM,marginTop:1}},t("deleted")+" "+fDT(item.deletedAt))),
+              e("div",{style:{display:"flex",gap:6,flexShrink:0}},
+                e("button",{onClick:function(){restoreItem(item)},style:{padding:"6px 10px",borderRadius:8,border:"none",background:"#77DD7720",color:"#77DD77",fontSize:11,fontWeight:600,cursor:"pointer"}},t("restore")),
+                e("button",{onClick:function(){permDeleteItem(item)},style:{padding:"6px 10px",borderRadius:8,border:"none",background:"#FF6B6B20",color:"#FF6B6B",fontSize:11,fontWeight:600,cursor:"pointer"}},"\u2715")));
+          }
           var isBoard=item.node.tp==="board";var childCount=isBoard?(item.node.ch||[]).filter(function(c){return c.nm}).length:0;
           return e("div",{key:item.id,style:{padding:"14px 16px",background:SF,borderRadius:14,border:"1px solid #2A2A2E",marginBottom:8,display:"flex",alignItems:"center",gap:12}},
             e("div",{style:{width:12,height:12,borderRadius:isBoard?3:"50%",background:item.node.cl,flexShrink:0}}),
@@ -513,7 +531,7 @@ function MainApp(){
 
 /* ========== ROOT ========== */
 ReactDOM.createRoot(document.getElementById("root")).render(e(PinGate,null,e(MainApp)));
-if("serviceWorker" in navigator){navigator.serviceWorker.register("/app/sw.js")}
+if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js")}
 </script>
 </body>
 </html>
