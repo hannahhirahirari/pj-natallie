@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#111113">
+<title>natallie , manual</title>
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#111113;color:#E8E8EC;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased;line-height:1.6}
+body{min-height:100vh;padding:0 0 80px}
+a{color:#7EC8E3;text-decoration:none;border-bottom:1px solid #7EC8E340}
+a:hover{border-bottom-color:#7EC8E3}
+
+.wrap{max-width:760px;margin:0 auto;padding:60px 24px 0}
+.hero{text-align:left;margin-bottom:80px}
+.hero h1{font-size:42px;font-weight:600;letter-spacing:-0.02em;margin-bottom:8px}
+.hero .sub{color:#8888A0;font-size:16px;margin-bottom:24px}
+.hero .lead{font-size:17px;line-height:1.7;color:#C8C8D0;max-width:600px}
+
+.toc{background:#1C1C1F;border:1px solid #2A2A2E;border-radius:16px;padding:24px 28px;margin-bottom:60px}
+.toc-title{font-size:11px;letter-spacing:0.1em;color:#8888A0;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.toc ol{list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(2,1fr);gap:6px 24px}
+.toc li{counter-increment:s;font-size:14px;line-height:1.8}
+.toc li::before{content:counter(s,decimal-leading-zero) " ";color:#555;margin-right:8px;font-variant-numeric:tabular-nums}
+.toc li.hidden{display:none}
+.toc li.match-sub{font-size:12.5px;line-height:1.7;padding-left:8px;color:#C8C8D0}
+.toc li.match-sub::before{content:"› ";color:#7EC8E3;font-weight:600;margin-right:4px}
+.toc a{color:#E8E8EC;border:none}
+.toc a:hover{color:#7EC8E3}
+.toc mark{background:#7EC8E330;color:#7EC8E3;padding:0 2px;border-radius:3px}
+
+.search-wrap{position:relative;margin-bottom:18px}
+.search-input{width:100%;padding:12px 14px 12px 42px;background:#0A0A0C;border:1px solid #2A2A2E;border-radius:12px;color:#E8E8EC;font-size:15px;outline:none;font-family:inherit;-webkit-appearance:none}
+.search-input::placeholder{color:#555}
+.search-input:focus{border-color:#7EC8E3}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#555;pointer-events:none}
+.search-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:#8888A0;cursor:pointer;font-size:18px;font-weight:300;padding:4px;line-height:1;display:none;font-family:inherit}
+.search-clear.visible{display:block}
+.search-clear:hover{color:#E8E8EC}
+.search-empty{font-size:13px;color:#8888A0;font-style:italic;padding:12px 0;text-align:center;display:none}
+.search-empty.visible{display:block}
+
+section{margin-bottom:72px;scroll-margin-top:24px}
+section h2{font-size:28px;font-weight:600;letter-spacing:-0.01em;margin-bottom:8px;line-height:1.2}
+section .section-num{font-size:11px;letter-spacing:0.12em;color:#7EC8E3;text-transform:uppercase;margin-bottom:12px;font-weight:600;font-variant-numeric:tabular-nums}
+section h3{font-size:18px;font-weight:600;margin:32px 0 12px;color:#E8E8EC}
+section h4{font-size:14px;font-weight:600;margin:24px 0 8px;color:#C8C8D0;letter-spacing:0.02em}
+section p{font-size:15.5px;line-height:1.7;color:#C8C8D0;margin-bottom:16px;max-width:640px}
+section ul,section ol{margin:0 0 20px 22px;color:#C8C8D0}
+section ul li,section ol li{font-size:15.5px;line-height:1.7;margin-bottom:6px}
+section em{color:#E8E8EC;font-style:normal;font-weight:600}
+section code{background:#1C1C1F;border:1px solid #2A2A2E;padding:2px 8px;border-radius:6px;font-family:"SF Mono",Menlo,monospace;font-size:13px;color:#C8C8D0}
+
+.callout{background:#1C1C1F;border-left:3px solid #7EC8E3;padding:16px 20px;border-radius:8px;margin:20px 0}
+.callout p{margin-bottom:0;font-size:14.5px}
+.callout-warn{border-left-color:#FFB347}
+.callout-priv{border-left-color:#77DD77}
+
+.demo{background:#0A0A0C;border:1px solid #2A2A2E;border-radius:24px;padding:24px;margin:24px 0 28px;position:relative}
+.demo-label{font-size:10px;letter-spacing:0.12em;color:#8888A0;text-transform:uppercase;font-weight:600;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.demo-reset{background:transparent;border:1px solid #2A2A2E;color:#8888A0;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;font-weight:600;letter-spacing:0.05em}
+.demo-reset:hover{color:#E8E8EC;border-color:#444}
+.demo-frame{max-width:340px;margin:0 auto}
+.demo-hint{font-size:12px;color:#8888A0;text-align:center;margin-top:14px;font-style:italic}
+
+.kbd{background:#1C1C1F;border:1px solid #2A2A2E;padding:2px 8px;border-radius:5px;font-family:"SF Mono",Menlo,monospace;font-size:12px;color:#C8C8D0;display:inline-block}
+
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+th{text-align:left;padding:10px 14px;background:#1C1C1F;color:#8888A0;font-weight:600;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid #2A2A2E}
+td{padding:12px 14px;border-bottom:1px solid #1C1C1F;color:#C8C8D0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+.faq-q{background:#1C1C1F;border:1px solid #2A2A2E;border-radius:12px;padding:14px 18px;margin-bottom:10px;cursor:pointer;list-style:none}
+.faq-q::-webkit-details-marker{display:none}
+.faq-q summary{font-size:15px;font-weight:600;color:#E8E8EC;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-q summary::after{content:"+";color:#8888A0;font-size:20px;font-weight:300;transition:transform 0.15s}
+.faq-q[open] summary::after{transform:rotate(45deg)}
+.faq-q p{margin-top:12px;font-size:14.5px;color:#C8C8D0}
+
+footer{max-width:760px;margin:80px auto 0;padding:40px 24px 60px;border-top:1px solid #1C1C1F;color:#8888A0;font-size:13px}
+footer p{margin-bottom:8px}
+
+@keyframes bnce{0%{transform:scale(1)}30%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes ripPop{0%{opacity:0.6;transform:scale(0.5)}100%{opacity:0;transform:scale(1.4)}}
+
+@media (max-width:640px){
+  .wrap{padding:40px 18px 0}
+  .hero h1{font-size:34px}
+  .toc ol{grid-template-columns:1fr}
+  section h2{font-size:24px}
+  .demo{padding:16px;border-radius:16px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="hero">
+  <h1>the manual</h1>
+  <p class="sub">how natallie works, what every feature does, with things you can actually try</p>
+  <p class="lead">natallie is a tap-based event logger. you build your own buttons, tap them when something happens, and your data stays on your device. this manual walks through every feature with live demos you can play with safely. nothing you do here affects your real app.</p>
+</header>
+
+<nav class="toc">
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+    <input type="search" id="manual-search" class="search-input" placeholder="search the manual..." autocomplete="off" spellcheck="false">
+    <button id="search-clear" class="search-clear" aria-label="clear search">×</button>
+  </div>
+  <div class="search-empty" id="search-empty">no matches. try a different word.</div>
+  <div class="toc-title">contents</div>
+  <ol id="toc-list">
+    <li><a href="#what">what natallie is</a></li>
+    <li><a href="#first-tap">your first tap</a></li>
+    <li><a href="#setup">setting up buttons</a></li>
+    <li><a href="#colors">colors</a></li>
+    <li><a href="#boards">nested boards</a></li>
+    <li><a href="#notes">notes</a></li>
+    <li><a href="#stats">stats and history</a></li>
+    <li><a href="#trash">trash and restore</a></li>
+    <li><a href="#pins">pin locks</a></li>
+    <li><a href="#export">exporting data</a></li>
+    <li><a href="#backup">backup and restore</a></li>
+    <li><a href="#privacy">privacy and your data</a></li>
+    <li><a href="#install">install on your device</a></li>
+    <li><a href="#troubleshooting">troubleshooting</a></li>
+    <li><a href="#faq">frequently asked questions</a></li>
+  </ol>
+</nav>
+
+<section id="what">
+  <div class="section-num">section 01</div>
+  <h2>what natallie is</h2>
+  <div class="callout callout-priv">
+    <p><em>privacy first.</em> all data is stored locally in your browser. natallie has no servers, no accounts, no analytics, no third-party trackers. nothing leaves your device unless you explicitly export it yourself.</p>
+  </div>
+  <p>natallie is a private, tap-based event logger. it lives in your browser as a progressive web app, which means it can be installed on your phone like a real app but works without any servers, accounts, or signups.</p>
+  <p>the core idea: you create buttons that mean whatever you want them to mean. when something happens, you tap the corresponding button. each tap is a timestamped log entry. what you track is up to you.</p>
+</section>
+
+<section id="first-tap">
+  <div class="section-num">section 02</div>
+  <h2>your first tap</h2>
+  <p>natallie's home screen is a 3x3 grid. that's nine slots, and each one can hold either a button (a single thing you track) or a board (a folder of more buttons). when you first open natallie, all nine slots are empty.</p>
+  <p>this demo shows what tapping a button feels like. the buttons here are pre-configured so you can try the interaction.</p>
+
+  <div class="demo">
+    <div class="demo-label"><span>live demo · tap any button</span><button class="demo-reset" data-demo="basic">reset</button></div>
+    <div class="demo-frame" data-demo-mount="basic"></div>
+    <div class="demo-hint">each tap adds an entry to the log below the grid. the count is for this demo only.</div>
+  </div>
+
+  <p>three things happen on a tap: the button presses down with a small animation, your phone vibrates briefly (if your device supports haptics and you have them enabled), and a log entry is recorded with the exact timestamp.</p>
+</section>
+
+<section id="setup">
+  <div class="section-num">section 03</div>
+  <h2>setting up buttons</h2>
+  <p>tapping the small switch in the top right of the home screen toggles between <em>click mode</em> (the default, where taps log events) and <em>setup mode</em> (where taps configure buttons). in setup mode, tapping any slot opens an editor where you can name it, pick a color, and choose whether it's a button or a board.</p>
+
+  <div class="demo">
+    <div class="demo-label"><span>live demo · setup mode</span><button class="demo-reset" data-demo="setup">reset</button></div>
+    <div class="demo-frame" data-demo-mount="setup"></div>
+    <div class="demo-hint">tap an empty slot to configure it. tap a configured slot to edit it.</div>
+  </div>
+</section>
+
+<section id="colors">
+  <div class="section-num">section 04</div>
+  <h2>colors</h2>
+  <p>natallie ships with twelve colors. each one is soft, slightly muted, designed to look good in dark mode without being hard to read. you assign a color to each button when you create it, and you can change it later.</p>
+
+  <div class="demo">
+    <div class="demo-label"><span>live demo · the full palette</span><button class="demo-reset" data-demo="colors">reset</button></div>
+    <div class="demo-frame" data-demo-mount="colors"></div>
+    <div class="demo-hint">tap any swatch to see how a button looks with that color.</div>
+  </div>
+</section>
+
+<section id="boards">
+  <div class="section-num">section 05</div>
+  <h2>nested boards</h2>
+  <p>nine buttons isn't always enough. when you need more, you can turn a slot into a <em>board</em> , a folder containing its own 3x3 grid. boards can themselves contain boards, so you can nest as deep as you need to.</p>
+  <p>boards display as four small dots in a 2x2 grid (one for each of the first four buttons inside them). tapping a board opens it, replacing the current grid with its contents. a back arrow at the top returns to the previous level.</p>
+
+  <div class="demo">
+    <div class="demo-label"><span>live demo · tap "tasks" to enter the board</span><button class="demo-reset" data-demo="boards">reset</button></div>
+    <div class="demo-frame" data-demo-mount="boards"></div>
+    <div class="demo-hint">boards group related buttons without filling up the home screen.</div>
+  </div>
+</section>
+
+<section id="notes">
+  <div class="section-num">section 06</div>
+  <h2>notes</h2>
+  <p>sometimes a button isn't enough. you want to write a sentence. natallie has a separate notes view for this , open the notes panel from the bottom navigation, write whatever you want, and it gets timestamped and saved.</p>
+  <p>notes are designed for privacy. by default the text is hidden from view (showing only the date and time) and revealed when you tap the entry.</p>
+
+  <div class="demo">
+    <div class="demo-label"><span>live demo · write a note</span><button class="demo-reset" data-demo="notes">reset</button></div>
+    <div class="demo-frame" data-demo-mount="notes"></div>
+    <div class="demo-hint">notes are masked by default. tap a note to reveal it, tap again to hide.</div>
+  </div>
+
+  <p>you can edit a note after creating it (tap the pencil icon). you can also delete it , but deletions go to the trash, not into the void.</p>
+</section>
+
+<section id="stats">
+  <div class="section-num">section 07</div>
+  <h2>stats and history</h2>
+  <p>tapping a button in the bottom navigation opens the history view , a chronological list of every event you've logged, grouped by day. each entry shows the time, the button name, and the path through any boards.</p>
+  <p>each button also has its own stats panel, accessible by holding the button in setup mode and choosing "stats." it shows total taps, taps today, weekly count, monthly count, yearly count if applicable, and the date you first started tracking that button.</p>
+</section>
+
+<section id="trash">
+  <div class="section-num">section 08</div>
+  <h2>trash and restore</h2>
+  <p>when you delete a button, board, or note, it doesn't disappear forever. it goes to the trash, which is accessible from the settings panel. from there you can restore it back to your home screen (if there's room) or permanently delete it.</p>
+  <p>this catches accidental deletions. it also lets you experiment with structures , try a board layout, decide it's not for you, delete it, change your mind a week later and restore it.</p>
+
+  <div class="demo">
+    <div class="demo-label"><span>live demo · delete and restore</span><button class="demo-reset" data-demo="trash">reset</button></div>
+    <div class="demo-frame" data-demo-mount="trash"></div>
+    <div class="demo-hint">tap "delete" on a button to send it to trash. then tap "restore" to bring it back.</div>
+  </div>
+
+  <p>notes show up in the trash too, but their content is hidden , only the original timestamp and the deletion time are visible. tap restore to bring the note back to your notes list with its text intact.</p>
+</section>
+
+<section id="pins">
+  <div class="section-num">section 09</div>
+  <h2>pin locks</h2>
+  <p>natallie supports two kinds of pin protection. an <em>app-level pin</em> requires you to enter a code every time you open natallie. a <em>board-level pin</em> protects specific boards, requiring a code to open them while leaving the rest of your app accessible.</p>
+  <p>pins are 4-digit numeric codes, set up from the settings panel. you can change or remove a pin at any time, but if you forget it, there is no recovery. natallie has no servers, no email-based reset, no support team to call. losing your pin means losing access to whatever it protected.</p>
+  <div class="callout callout-warn">
+    <p><em>important.</em> if you set a pin, write it down somewhere safe (a password manager is fine). there is no way to recover a forgotten pin. this is a deliberate consequence of natallie having no servers.</p>
+  </div>
+  <p>pin locks are useful when natallie is on a shared device, when you track something sensitive, or when you simply want a moment of intention before opening the app.</p>
+</section>
+
+<section id="export">
+  <div class="section-num">section 10</div>
+  <h2>exporting data</h2>
+  <p>your data belongs to you. natallie supports several export formats so you can move it elsewhere, analyze it, share it, or just keep a copy outside the browser.</p>
+  <p>open the export dialog from the settings panel. it offers three options:</p>
+
+  <h3>logs and notes as CSV</h3>
+  <p>a comma-separated values file containing every tap and every note, with timestamps in both UTC and local time, the button name, the path through any boards, the event type, and the color. this is the format for spreadsheet analysis, sharing with researchers, or feeding into other tools.</p>
+  <p>you can filter by date range , all time, last 7 days, last 30 days, last 90 days, this year, last year, or a custom range you specify. a live count shows how many events match the current range, so you know what you're exporting before you tap.</p>
+  <p>the first line of every CSV is a comment with the timezone, so anyone reading the file later can correctly interpret the local timestamps.</p>
+
+  <h3>board layout as CSV</h3>
+  <p>the structure of your boards and buttons , names, colors, hierarchies , without any of your logged data. useful for sharing your setup with someone else, or as a record of how your tracking evolved over time.</p>
+
+  <h3>full backup</h3>
+  <p>a single .natallie file containing everything: your buttons, your logs, your notes, your settings. this is the file you'd use to restore on a new device or after clearing browser data. it's a JSON file with a custom extension so it's distinct from generic JSON exports.</p>
+</section>
+
+<section id="backup">
+  <div class="section-num">section 11</div>
+  <h2>backup and restore</h2>
+  <p>browser local storage is durable but not invincible. clearing your browser cache, switching browsers, getting a new phone, or rare browser bugs can all wipe your data. backups are how you protect against this.</p>
+
+  <h3>making a backup</h3>
+  <p>open settings, tap export, and choose "full backup." natallie generates a .natallie file and saves it wherever your browser saves downloads. on iOS this is usually the Files app. on Android it's the Downloads folder. on desktop it's wherever your browser is configured to save.</p>
+  <p>there's no automatic backup , natallie has no servers to back up to. you have to do this manually. once a week is reasonable for most people. once a month is fine if you don't track much.</p>
+
+  <h3>restoring from a backup</h3>
+  <p>open settings, tap "restore from backup," and select your .natallie file. natallie reads the file and replaces your current state with what's in the backup. anything that was in the app before the restore is overwritten.</p>
+  <div class="callout callout-warn">
+    <p><em>note.</em> restoring is destructive. if you have data in the app that's newer than the backup, it will be lost. if you're not sure, make a fresh backup first before restoring an older one.</p>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="section-num">section 12</div>
+  <h2>privacy and your data</h2>
+  <p>this is the part most apps put in fine print. natallie puts it in the manual.</p>
+
+  <h3>what natallie collects</h3>
+  <p>nothing. natallie has no servers, no analytics, no telemetry, no error reporting, no third-party SDKs that phone home. it does not know how many users it has. it does not know what features are popular. it does not know what country you're in.</p>
+
+  <h3>where your data lives</h3>
+  <p>in your browser's local storage on the device you're using natallie on. that's it. no cloud sync, no backend database, no copies on any server anywhere. if you uninstall natallie or clear your browser data, your data is gone (unless you've made backups).</p>
+
+  <h3>what natallie cannot do</h3>
+  <p>natallie cannot recover your data if you lose it. natallie cannot reset your pin if you forget it. natallie cannot see what you've logged. natallie cannot identify you. natallie cannot share your data with anyone , not advertisers, not researchers, not law enforcement , because natallie does not have your data to share.</p>
+
+  <h3>why this matters</h3>
+  <p>self-tracking apps have been used in court cases, custody disputes, immigration cases, and (in some jurisdictions) reproductive health prosecutions. data that lives only on your device is meaningfully more protected than data that lives on a company's servers. natallie's local-only architecture is a deliberate political choice, not just a technical one.</p>
+
+  <p>see the full <a href="/privacy.html">privacy policy</a> for legal details.</p>
+</section>
+
+<section id="install">
+  <div class="section-num">section 13</div>
+  <h2>install on your device</h2>
+  <p>natallie is a progressive web app, which means it can be installed on your phone or computer just like a regular app, with its own icon and standalone window , no app store required.</p>
+
+  <h3>iphone or ipad</h3>
+  <ol>
+    <li>open natallie.app in safari (it has to be safari, not chrome, on iOS)</li>
+    <li>tap the share icon at the bottom of the screen (the square with an arrow pointing up)</li>
+    <li>scroll down and tap "add to home screen"</li>
+    <li>name it however you want, then tap "add"</li>
+  </ol>
+
+  <h3>android</h3>
+  <ol>
+    <li>open natallie.app in chrome, samsung internet, or any modern browser</li>
+    <li>tap the menu (three dots, usually top right)</li>
+    <li>tap "add to home screen" or "install app"</li>
+    <li>confirm the prompt</li>
+  </ol>
+
+  <h3>desktop (mac, windows, linux)</h3>
+  <p>most modern browsers show an install icon in the address bar when you visit natallie.app. on chrome and edge it looks like a small download arrow or a "install" button. tap it and confirm. natallie will open in its own window.</p>
+
+  <h3>working offline</h3>
+  <p>once installed, natallie works without an internet connection. your data is local, the app code is cached, and there's nothing it needs to fetch. you can use natallie on a plane, on a subway, in a remote area with no signal , nothing changes.</p>
+</section>
+
+<section id="troubleshooting">
+  <div class="section-num">section 14</div>
+  <h2>troubleshooting</h2>
+
+  <h3>natallie shows a white screen or won't load</h3>
+  <p>this usually means a service worker update is in progress. close the tab and reopen it. if it still doesn't load, try a hard refresh (cmd+shift+r on mac, ctrl+shift+r on windows/android). on ios safari, tap the AA icon in the address bar and choose "reload page without content blockers."</p>
+
+  <h3>my data is missing</h3>
+  <p>natallie's data is stored in your browser's local storage. it can be cleared if you (or your browser) clear cookies and site data, switch browsers, use private/incognito mode, or run out of storage space. there is no recovery from this without a backup.</p>
+  <p>if you have a recent .natallie backup file, restore it from settings → restore from backup. if you don't, the data is lost. this is why making backups regularly matters.</p>
+
+  <h3>the app icon shows a white background on android</h3>
+  <p>this is a known issue with how some android launchers handle pwa icons. try uninstalling and reinstalling natallie from natallie.app. if you have samsung internet specifically, make sure you're using the latest version.</p>
+
+  <h3>haptic feedback isn't working</h3>
+  <p>haptics are only available on devices that support the web vibration api , most android phones, no iphones. if you're on android and not feeling vibration, check your phone's vibration settings (sometimes vibration is muted globally or for specific apps).</p>
+
+  <h3>i forgot my pin</h3>
+  <p>natallie has no way to reset a forgotten pin. there are no servers, no support team, no recovery flow. the only path forward is to clear the app's local storage (which deletes all your data), or restore from a backup made before you set the pin.</p>
+  <p>to clear local storage: in your browser's settings, find site data for natallie.app, and clear it. then reload the app.</p>
+
+  <h3>buttons don't respond / setup mode is stuck</h3>
+  <p>this is rare but has been reported. try refreshing the page first. if that doesn't work, your browser may have an old cached version of the app. clear the cache for natallie.app specifically (not all your browser data) and reload.</p>
+</section>
+
+<section id="faq">
+  <div class="section-num">section 15</div>
+  <h2>frequently asked questions</h2>
+
+  <details class="faq-q"><summary>do you sell my data?</summary>
+    <p>natallie does not have your data. it never leaves your device. there's nothing to sell.</p>
+  </details>
+
+  <details class="faq-q"><summary>can i sync between my phone and my computer?</summary>
+    <p>not automatically. natallie has no servers, so there's no automatic sync. you can export a backup from one device and restore it on another, but they won't stay in sync after that. real-time multi-device sync would require a server, which would compromise the local-only privacy model.</p>
+  </details>
+
+  <details class="faq-q"><summary>what happens if i clear my browser cache?</summary>
+    <p>if you clear browser cookies and site data for natallie.app, your data will be deleted. clearing just the cache (without site data) is usually safe. if you're unsure, make a backup before clearing anything.</p>
+  </details>
+
+  <details class="faq-q"><summary>is there an ios app coming?</summary>
+    <p>a native ios and android app is in progress. for now, the pwa works well , install it from natallie.app following the instructions in the install section. when native versions launch, they'll keep the same architecture and principles.</p>
+  </details>
+
+  <details class="faq-q"><summary>can i import data from another app?</summary>
+    <p>not yet. the .natallie backup format is the only supported import. if you want to bring in data from another app, you'd need to convert it manually.</p>
+  </details>
+
+  <details class="faq-q"><summary>how many buttons can i have?</summary>
+    <p>nine slots on the home screen. each one can be a button or a board. boards can contain nine more slots, and so on. there's no hard limit on nesting depth, but in practice most users find two or three levels is plenty.</p>
+  </details>
+
+  <details class="faq-q"><summary>can i undo a tap?</summary>
+    <p>not directly. taps are instant logs. but you can open the history view, find the entry, and delete it. deleted log entries don't go to trash , they're permanently removed (since the alternative would be confusing).</p>
+  </details>
+
+  <details class="faq-q"><summary>does natallie work in private/incognito mode?</summary>
+    <p>technically yes, but your data won't persist after you close the window. private mode clears local storage on close. don't use natallie in private mode unless you want a temporary session.</p>
+  </details>
+
+  <details class="faq-q"><summary>how do i delete everything and start over?</summary>
+    <p>open settings → reset, or alternatively clear your browser's site data for natallie.app. either approach gives you a fresh, empty natallie. there's no undo for this , make a backup first if you want the option to restore later.</p>
+  </details>
+
+  <details class="faq-q"><summary>i found a bug. how do i report it?</summary>
+    <p>natallie is built solo and doesn't have an issues page yet. you can email the project at info@natallie.app. include your device, browser version, and what you were doing when the bug happened. screenshots help.</p>
+  </details>
+
+  <details class="faq-q"><summary>can i use natallie for medical or research purposes?</summary>
+    <p>natallie is not a medical device and isn't validated for clinical use. it's a personal tool. if you find your data useful in conversations with a clinician, that's wonderful , but natallie isn't designed to replace medical assessment, and any inferences you draw are your own.</p>
+    <p>for research purposes, the csv export is intended to be useful as a data source, but you'd need to design the study and get appropriate consents from any participants. natallie doesn't manage any of that.</p>
+  </details>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>natallie is a free, open project by Hannah Hiratsuka in tokyo. the manual was last updated April 2026.</p>
+    <p><a href="/">home</a> · <a href="/app">open the app</a> · <a href="/privacy.html">privacy</a></p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script>
+"use strict";
+var e=React.createElement,useState=React.useState,useRef=React.useRef,useEffect=React.useEffect;
+var BG="#111113",SF="#1C1C1F",TX="#E8E8EC",DM="#8888A0",MX=9;
+var COLORS=["#FF6B6B","#FFB347","#77DD77","#7EC8E3","#C3A6FF","#FF85A1","#98E8C1","#FFCBA4","#8899AA","#F0E68C","#DDA0DD","#5FABA1"];
+
+function fT(ts){return new Date(ts).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"})}
+function hap(s){try{navigator.vibrate&&navigator.vibrate(s==="heavy"?[30,30,40]:s==="click"?[15,25,15]:12)}catch(x){}}
+function mkSlot(id,nm,cl,md,tp,ch){return{id:id,nm:nm||"",cl:cl||"",md:md||"click",tp:tp||"button",ch:ch||[]}}
+function mkEmpty(prefix){var arr=[];for(var i=0;i<MX;i++)arr.push(mkSlot(prefix+"_"+i,"","","click","button",[]));return arr}
+
+/* ========== CLICK BUTTON (lifted from natallie) ========== */
+function ClickBtn(props){
+  var b=props.b,s1=useState(false),pr=s1[0],setPr=s1[1];
+  var s2=useState(0),rip=s2[0],setRip=s2[1];
+  var tm=useRef(null),c=b.cl||"#2A2A2E",ok=!!b.nm;
+  return e("button",{
+    onPointerDown:function(){if(!ok)return;setPr(true);hap();tm.current=setTimeout(function(){hap("heavy");tm.current=null},600)},
+    onPointerUp:function(){if(!ok)return;setPr(false);if(tm.current){clearTimeout(tm.current);tm.current=null;hap("click");props.onLog&&props.onLog(b,"click");setRip(Date.now())}},
+    onPointerLeave:function(){setPr(false);if(tm.current){clearTimeout(tm.current);tm.current=null}},
+    style:{width:"100%",aspectRatio:"1",borderRadius:20,position:"relative",border:"2px solid "+(ok?c+"40":"#333"),background:pr?c+"40":ok?c+"0D":SF,cursor:ok?"pointer":"default",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:10,transition:pr?"transform 0.06s":"transform 0.2s",transform:pr?"scale(0.85)":"scale(1)",animation:!pr&&rip?"bnce 0.3s ease-out":"none",boxShadow:pr?"inset 0 3px 12px rgba(0,0,0,0.5)":"0 3px 10px rgba(0,0,0,0.25)",WebkitTapHighlightColor:"transparent",userSelect:"none",touchAction:"manipulation",overflow:"hidden"}},
+    ok?e("div",{key:rip,style:{position:"absolute",inset:0,borderRadius:18,pointerEvents:"none",background:"radial-gradient(circle at center,"+c+"50,transparent 70%)",animation:rip?"ripPop 0.4s ease-out forwards":"none",opacity:0}}):null,
+    ok&&pr?e("div",{style:{position:"absolute",inset:0,borderRadius:18,background:"radial-gradient(circle at center,"+c+"35,transparent 60%)",pointerEvents:"none"}}):null,
+    e("div",{style:{width:14,height:14,borderRadius:"50%",background:ok?c:"#444",transition:"all 0.15s",transform:pr?"scale(0.8)":"scale(1)",boxShadow:ok?"0 0 8px "+c+"40":"none"}}),
+    e("span",{style:{fontSize:11,fontWeight:600,color:ok?TX:DM,textAlign:"center",lineHeight:1.2,maxWidth:"100%",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},ok?b.nm:"empty"))
+}
+
+/* ========== BOARD TILE (lifted from natallie) ========== */
+function BoardTile(props){
+  var b=props.b,s1=useState(false),pr=s1[0],setPr=s1[1];
+  var c=b.cl||"#2A2A2E",ok=!!b.nm,ac=(b.ch||[]).filter(function(x){return x.nm});
+  return e("button",{
+    onPointerDown:function(){if(ok)setPr(true)},
+    onPointerUp:function(){setPr(false);if(ok)props.onClick&&props.onClick()},
+    onPointerLeave:function(){setPr(false)},
+    style:{width:"100%",aspectRatio:"1",borderRadius:20,border:"2px solid "+(ok?c+"40":"#333"),background:pr?c+"20":ok?c+"08":SF,cursor:ok?"pointer":"default",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:10,transition:"all 0.08s",transform:pr?"scale(0.95)":"scale(1)",boxShadow:"0 2px 8px rgba(0,0,0,0.2)",WebkitTapHighlightColor:"transparent",userSelect:"none",touchAction:"manipulation"}},
+    e("div",{style:{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:3}},[0,1,2,3].map(function(i){return e("div",{key:i,style:{width:8,height:8,borderRadius:2,background:ac[i]?ac[i].cl:"#333",opacity:ac[i]?1:0.3}})})),
+    e("span",{style:{fontSize:11,fontWeight:600,color:ok?TX:DM,textAlign:"center",maxWidth:"100%",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},ok?b.nm:"empty"),
+    ok?e("span",{style:{fontSize:9,color:DM}},ac.length+" items"):null)
+}
+
+/* ========== DEMO 1: BASIC TAPPING ========== */
+var demo1Initial=function(){return [
+  mkSlot("d1_0","coffee","#FFCBA4"),
+  mkSlot("d1_1","watered plants","#77DD77"),
+  mkSlot("d1_2","cigarette","#8899AA"),
+  mkSlot("d1_3","read 30min","#C3A6FF"),
+  mkSlot("d1_4","spotted a hawk","#7EC8E3"),
+  mkSlot("d1_5","cat fed","#FFB347"),
+  mkSlot("d1_6","took meds","#FF85A1"),
+  mkSlot("d1_7","customer call","#DDA0DD"),
+  mkSlot("d1_8","french lesson","#98E8C1")
+]};
+function Demo1(){
+  var s1=useState(demo1Initial),slots=s1[0],setSlots=s1[1];
+  var s2=useState([]),logs=s2[0],setLogs=s2[1];
+  function log(b){setLogs(function(p){return [{ts:Date.now(),en:b.nm,cl:b.cl}].concat(p).slice(0,5)})}
+  Demo1.reset=function(){setSlots(demo1Initial());setLogs([])};
+  return e("div",null,
+    e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:14}},
+      slots.map(function(s){return e("div",{key:s.id},e(ClickBtn,{b:s,onLog:log}))})),
+    e("div",{style:{background:SF,borderRadius:12,padding:"12px 14px",minHeight:120}},
+      e("div",{style:{fontSize:10,letterSpacing:"0.08em",color:DM,textTransform:"uppercase",fontWeight:600,marginBottom:8}},"recent taps"),
+      logs.length===0?e("div",{style:{fontSize:13,color:DM,fontStyle:"italic"}},"tap a button above"):
+      logs.map(function(l,i){return e("div",{key:i,style:{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13,color:TX,opacity:1-i*0.15}},
+        e("div",{style:{width:8,height:8,borderRadius:"50%",background:l.cl}}),
+        e("span",{style:{flex:1,fontWeight:500}},l.en),
+        e("span",{style:{color:DM,fontSize:11,fontVariantNumeric:"tabular-nums"}},fT(l.ts)))})))
+}
+
+/* ========== DEMO 2: SETUP MODE ========== */
+function Demo2(){
+  var s1=useState(function(){return [
+    mkSlot("d2_0","coffee","#FFCBA4"),
+    mkSlot("d2_1","run","#7EC8E3"),
+    mkSlot("d2_2","",""),
+    mkSlot("d2_3","",""),
+    mkSlot("d2_4","",""),
+    mkSlot("d2_5","",""),
+    mkSlot("d2_6","",""),
+    mkSlot("d2_7","",""),
+    mkSlot("d2_8","","")
+  ]}),slots=s1[0],setSlots=s1[1];
+  var s2=useState(null),editing=s2[0],setEditing=s2[1];
+  var s3=useState(""),nm=s3[0],setNm=s3[1];
+  var s4=useState(""),cl=s4[0],setCl=s4[1];
+  Demo2.reset=function(){setSlots([
+    mkSlot("d2_0","coffee","#FFCBA4"),mkSlot("d2_1","run","#7EC8E3"),
+    mkSlot("d2_2","",""),mkSlot("d2_3","",""),mkSlot("d2_4","",""),
+    mkSlot("d2_5","",""),mkSlot("d2_6","",""),mkSlot("d2_7","",""),mkSlot("d2_8","","")]);
+    setEditing(null);setNm("");setCl("")};
+  function startEdit(slot){setEditing(slot.id);setNm(slot.nm);setCl(slot.cl||"#7EC8E3")}
+  function save(){setSlots(function(p){return p.map(function(s){return s.id===editing?Object.assign({},s,{nm:nm,cl:cl}):s})});setEditing(null);setNm("");setCl("")}
+  function clear(){setSlots(function(p){return p.map(function(s){return s.id===editing?Object.assign({},s,{nm:"",cl:""}):s})});setEditing(null);setNm("");setCl("")}
+  if(editing){
+    return e("div",null,
+      e("div",{style:{textAlign:"center",fontSize:12,color:DM,marginBottom:14,letterSpacing:"0.06em"}},"setup mode"),
+      e("div",{style:{background:SF,borderRadius:16,padding:18}},
+        e("div",{style:{fontSize:11,letterSpacing:"0.08em",color:DM,textTransform:"uppercase",fontWeight:600,marginBottom:8}},"name"),
+        e("input",{value:nm,onChange:function(ev){setNm(ev.target.value.slice(0,20))},placeholder:"name your button",style:{width:"100%",padding:"10px 12px",background:BG,border:"1px solid #2A2A2E",borderRadius:10,color:TX,fontSize:14,outline:"none",fontFamily:"inherit"}}),
+        e("div",{style:{fontSize:11,letterSpacing:"0.08em",color:DM,textTransform:"uppercase",fontWeight:600,marginBottom:8,marginTop:14}},"color"),
+        e("div",{style:{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:8}},
+          COLORS.map(function(c){return e("button",{key:c,onClick:function(){setCl(c)},style:{width:"100%",aspectRatio:"1",borderRadius:10,border:cl===c?"2px solid "+TX:"2px solid transparent",background:c,cursor:"pointer"}})})),
+        e("div",{style:{display:"flex",gap:8,marginTop:18}},
+          e("button",{onClick:save,disabled:!nm,style:{flex:1,padding:"10px 12px",borderRadius:10,border:"none",background:nm?TX:"#2A2A2E",color:nm?BG:DM,fontWeight:600,fontSize:14,cursor:nm?"pointer":"default",fontFamily:"inherit"}},"save"),
+          e("button",{onClick:function(){setEditing(null);setNm("");setCl("")},style:{padding:"10px 16px",borderRadius:10,border:"1px solid #2A2A2E",background:"transparent",color:DM,fontWeight:600,fontSize:14,cursor:"pointer",fontFamily:"inherit"}},"cancel"),
+          slots.find(function(s){return s.id===editing}).nm?e("button",{onClick:clear,style:{padding:"10px 12px",borderRadius:10,border:"1px solid #FF6B6B40",background:"transparent",color:"#FF6B6B",fontWeight:600,fontSize:13,cursor:"pointer",fontFamily:"inherit"}},"clear"):null)));
+  }
+  return e("div",null,
+    e("div",{style:{textAlign:"center",fontSize:12,color:DM,marginBottom:14,letterSpacing:"0.06em"}},"setup mode · tap any slot"),
+    e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}},
+      slots.map(function(s){return e("button",{key:s.id,onClick:function(){startEdit(s)},style:{width:"100%",aspectRatio:"1",borderRadius:20,border:s.nm?"2px dashed "+s.cl+"60":"2px dashed #444",background:s.nm?s.cl+"0D":"transparent",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:10,fontFamily:"inherit",color:s.nm?TX:DM}},
+        e("div",{style:{width:14,height:14,borderRadius:"50%",background:s.nm?s.cl:"#444"}}),
+        e("span",{style:{fontSize:11,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:"100%"}},s.nm||"empty"))})))
+}
+
+/* ========== DEMO 3: COLORS ========== */
+function Demo3(){
+  var s1=useState("#7EC8E3"),sel=s1[0],setSel=s1[1];
+  var s2=useState("coffee"),nm=s2[0],setNm=s2[1];
+  Demo3.reset=function(){setSel("#7EC8E3");setNm("coffee")};
+  return e("div",null,
+    e("div",{style:{display:"flex",justifyContent:"center",marginBottom:24,maxWidth:140,marginLeft:"auto",marginRight:"auto"}},
+      e(ClickBtn,{b:{nm:nm,cl:sel,md:"click"}})),
+    e("input",{value:nm,onChange:function(ev){setNm(ev.target.value.slice(0,18))},style:{width:"100%",maxWidth:240,display:"block",margin:"0 auto 16px",padding:"8px 12px",background:SF,border:"1px solid #2A2A2E",borderRadius:8,color:TX,fontSize:13,outline:"none",textAlign:"center",fontFamily:"inherit"}}),
+    e("div",{style:{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:10,marginBottom:8}},
+      COLORS.map(function(c){return e("button",{key:c,onClick:function(){setSel(c)},style:{width:"100%",aspectRatio:"1",borderRadius:12,border:sel===c?"2px solid "+TX:"2px solid "+c+"40",background:c,cursor:"pointer"}})}))
+  )
+}
+
+/* ========== DEMO 4: BOARDS ========== */
+function Demo4(){
+  var initial=function(){return [
+    mkSlot("d4_0","coffee","#FFCBA4"),
+    mkSlot("d4_1","run","#7EC8E3"),
+    mkSlot("d4_2","tasks","#C3A6FF","click","board",[
+      mkSlot("d4_2_0","emails","#7EC8E3"),
+      mkSlot("d4_2_1","laundry","#98E8C1"),
+      mkSlot("d4_2_2","shopping","#FFB347"),
+      mkSlot("d4_2_3","dishes","#FF85A1"),
+      mkSlot("d4_2_4","",""),
+      mkSlot("d4_2_5","",""),
+      mkSlot("d4_2_6","",""),
+      mkSlot("d4_2_7","",""),
+      mkSlot("d4_2_8","","")
+    ]),
+    mkSlot("d4_3","cigarette","#8899AA"),
+    mkSlot("d4_4","",""),
+    mkSlot("d4_5","",""),
+    mkSlot("d4_6","",""),
+    mkSlot("d4_7","",""),
+    mkSlot("d4_8","","")
+  ]};
+  var s1=useState(initial),slots=s1[0],setSlots=s1[1];
+  var s2=useState([]),nav=s2[0],setNav=s2[1];
+  var s3=useState([]),logs=s3[0],setLogs=s3[1];
+  Demo4.reset=function(){setSlots(initial());setNav([]);setLogs([])};
+  var current=slots,path="home";
+  for(var i=0;i<nav.length;i++){
+    for(var j=0;j<current.length;j++){if(current[j].id===nav[i]){current=current[j].ch;path=slots.find(function(s){return s.id===nav[i]}).nm;break}}
+  }
+  function log(b){setLogs(function(p){return [{ts:Date.now(),en:b.nm,cl:b.cl,path:path}].concat(p).slice(0,4)})}
+  return e("div",null,
+    e("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:14,minHeight:24}},
+      nav.length>0?e("button",{onClick:function(){setNav(nav.slice(0,-1))},style:{background:"transparent",border:"none",color:TX,cursor:"pointer",fontSize:18,padding:0,fontFamily:"inherit"}},"‹"):null,
+      e("span",{style:{fontSize:13,color:nav.length?TX:DM,fontWeight:600}},nav.length?path:"home"),
+      e("span",{style:{flex:1}}),
+      logs.length>0?e("span",{style:{fontSize:11,color:DM}},logs.length+" logged"):null),
+    e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}},
+      current.map(function(s){return e("div",{key:s.id},
+        s.tp==="board"?e(BoardTile,{b:s,onClick:function(){setNav(nav.concat([s.id]))}}):e(ClickBtn,{b:s,onLog:log}))})),
+    logs.length>0?e("div",{style:{background:SF,borderRadius:12,padding:"10px 14px",marginTop:14}},
+      e("div",{style:{fontSize:10,letterSpacing:"0.08em",color:DM,textTransform:"uppercase",fontWeight:600,marginBottom:6}},"recent taps"),
+      logs.map(function(l,i){return e("div",{key:i,style:{display:"flex",alignItems:"center",gap:10,padding:"4px 0",fontSize:12,color:TX,opacity:1-i*0.2}},
+        e("div",{style:{width:6,height:6,borderRadius:"50%",background:l.cl}}),
+        e("span",{style:{flex:1}},l.path!=="home"?l.path+" ‹ "+l.en:l.en),
+        e("span",{style:{color:DM,fontSize:11,fontVariantNumeric:"tabular-nums"}},fT(l.ts)))})):null)
+}
+
+/* ========== DEMO 6: NOTES ========== */
+function Demo6(){
+  var s1=useState([]),notes=s1[0],setNotes=s1[1];
+  var s2=useState(""),input=s2[0],setInput=s2[1];
+  var s3=useState({}),revealed=s3[0],setRevealed=s3[1];
+  Demo6.reset=function(){setNotes([]);setInput("");setRevealed({})};
+  function add(){if(!input.trim())return;setNotes([{id:"n_"+Date.now(),text:input,ts:Date.now()}].concat(notes));setInput("")}
+  function toggle(id){setRevealed(function(p){var c=Object.assign({},p);c[id]=!c[id];return c})}
+  function del(id){setNotes(notes.filter(function(n){return n.id!==id}))}
+  return e("div",null,
+    e("div",{style:{display:"flex",gap:8,marginBottom:14}},
+      e("input",{value:input,onChange:function(ev){setInput(ev.target.value)},onKeyDown:function(ev){if(ev.key==="Enter")add()},placeholder:"write something private...",style:{flex:1,padding:"10px 12px",background:SF,border:"1px solid #2A2A2E",borderRadius:10,color:TX,fontSize:13,outline:"none",fontFamily:"inherit"}}),
+      e("button",{onClick:add,disabled:!input.trim(),style:{padding:"10px 16px",borderRadius:10,border:"none",background:input.trim()?TX:"#2A2A2E",color:input.trim()?BG:DM,fontWeight:600,fontSize:13,cursor:input.trim()?"pointer":"default",fontFamily:"inherit"}},"save")),
+    e("div",{style:{minHeight:140}},
+      notes.length===0?e("div",{style:{fontSize:13,color:DM,fontStyle:"italic",textAlign:"center",padding:"30px 0"}},"no notes yet"):
+      notes.map(function(n){return e("div",{key:n.id,style:{background:SF,borderRadius:12,padding:"12px 14px",marginBottom:8,border:"1px solid #2A2A2E"}},
+        e("div",{style:{display:"flex",alignItems:"center",gap:10,marginBottom:revealed[n.id]?8:0}},
+          e("div",{onClick:function(){toggle(n.id)},style:{flex:1,fontSize:12,color:DM,cursor:"pointer"}},revealed[n.id]?"hide":"tap to reveal"+" · "+fT(n.ts)),
+          e("button",{onClick:function(){del(n.id)},style:{background:"transparent",border:"none",color:"#FF6B6B",cursor:"pointer",fontSize:14,padding:0,fontFamily:"inherit"}},"✕")),
+        revealed[n.id]?e("div",{style:{fontSize:14,color:TX,lineHeight:1.5}},n.text):null)})))
+}
+
+/* ========== DEMO 7: TRASH ========== */
+function Demo7(){
+  var initial=function(){return [
+    mkSlot("d7_0","coffee","#FFCBA4"),
+    mkSlot("d7_1","run","#7EC8E3"),
+    mkSlot("d7_2","watered plants","#77DD77")
+  ]};
+  var s1=useState(initial),slots=s1[0],setSlots=s1[1];
+  var s2=useState([]),trash=s2[0],setTrash=s2[1];
+  Demo7.reset=function(){setSlots(initial());setTrash([])};
+  function del(slot){setTrash([{id:"t_"+Date.now()+"_"+Math.random(),deletedAt:Date.now(),node:slot}].concat(trash));setSlots(slots.filter(function(s){return s.id!==slot.id}))}
+  function restore(item){setSlots(slots.concat([item.node]));setTrash(trash.filter(function(t){return t.id!==item.id}))}
+  function permDel(item){setTrash(trash.filter(function(t){return t.id!==item.id}))}
+  return e("div",null,
+    e("div",{style:{fontSize:11,letterSpacing:"0.08em",color:DM,textTransform:"uppercase",fontWeight:600,marginBottom:8}},"buttons"),
+    e("div",{style:{minHeight:60,marginBottom:18}},
+      slots.length===0?e("div",{style:{fontSize:13,color:DM,fontStyle:"italic",padding:"12px 0"}},"all deleted , restore from trash below"):
+      slots.map(function(s){return e("div",{key:s.id,style:{display:"flex",alignItems:"center",gap:10,padding:"8px 12px",background:SF,borderRadius:10,marginBottom:6}},
+        e("div",{style:{width:10,height:10,borderRadius:"50%",background:s.cl}}),
+        e("span",{style:{flex:1,fontSize:13,fontWeight:500}},s.nm),
+        e("button",{onClick:function(){del(s)},style:{background:"transparent",border:"none",color:"#FF6B6B",cursor:"pointer",fontSize:11,fontWeight:600,padding:"4px 10px",borderRadius:6,fontFamily:"inherit"}},"delete"))})),
+    e("div",{style:{fontSize:11,letterSpacing:"0.08em",color:DM,textTransform:"uppercase",fontWeight:600,marginBottom:8}},"trash"),
+    e("div",{style:{minHeight:60}},
+      trash.length===0?e("div",{style:{fontSize:13,color:DM,fontStyle:"italic",padding:"12px 0"}},"empty"):
+      trash.map(function(t){return e("div",{key:t.id,style:{display:"flex",alignItems:"center",gap:10,padding:"8px 12px",background:SF,borderRadius:10,marginBottom:6,opacity:0.85}},
+        e("div",{style:{width:10,height:10,borderRadius:"50%",background:t.node.cl}}),
+        e("span",{style:{flex:1,fontSize:13,fontWeight:500,color:DM}},t.node.nm),
+        e("button",{onClick:function(){restore(t)},style:{background:"transparent",border:"1px solid #77DD7740",color:"#77DD77",cursor:"pointer",fontSize:11,fontWeight:600,padding:"4px 10px",borderRadius:6,marginRight:4,fontFamily:"inherit"}},"restore"),
+        e("button",{onClick:function(){permDel(t)},style:{background:"transparent",border:"none",color:"#FF6B6B",cursor:"pointer",fontSize:14,fontWeight:600,padding:"4px 6px",borderRadius:6,fontFamily:"inherit"}},"✕"))})))
+}
+
+/* ========== MOUNT ALL DEMOS ========== */
+var demos={basic:Demo1,setup:Demo2,colors:Demo3,boards:Demo4,notes:Demo6,trash:Demo7};
+Object.keys(demos).forEach(function(key){
+  var mount=document.querySelector('[data-demo-mount="'+key+'"]');
+  if(mount){ReactDOM.createRoot(mount).render(e(demos[key],{key:Math.random()}))}
+});
+
+/* Reset buttons */
+document.querySelectorAll('.demo-reset').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var key=btn.getAttribute('data-demo');
+    var mount=document.querySelector('[data-demo-mount="'+key+'"]');
+    if(mount&&demos[key]){ReactDOM.createRoot(mount).render(e(demos[key],{key:Math.random()}))}
+  });
+});
+
+/* Smooth scroll for TOC */
+document.querySelectorAll('.toc a').forEach(function(a){
+  a.addEventListener('click',function(ev){
+    var href=a.getAttribute('href');
+    if(href.startsWith('#')){
+      ev.preventDefault();
+      var el=document.querySelector(href);
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'})
+    }
+  });
+});
+
+/* ========== SEARCH ========== */
+(function(){
+  var input=document.getElementById('manual-search');
+  var clearBtn=document.getElementById('search-clear');
+  var emptyMsg=document.getElementById('search-empty');
+  var tocList=document.getElementById('toc-list');
+  if(!input||!tocList)return;
+
+  /* Build search index from sections, sub-headings, and FAQ */
+  var index=[];
+  document.querySelectorAll('section').forEach(function(sec){
+    var id=sec.id;if(!id)return;
+    var h2=sec.querySelector('h2');
+    if(h2)index.push({id:id,title:h2.textContent.trim(),type:'section',parent:null});
+    sec.querySelectorAll('h3,h4').forEach(function(h){
+      index.push({id:id,title:h.textContent.trim(),type:'sub',parent:h2?h2.textContent.trim():null});
+    });
+    sec.querySelectorAll('.faq-q summary').forEach(function(s){
+      index.push({id:id,title:s.textContent.trim(),type:'faq',parent:'faq'});
+    });
+  });
+
+  /* Save original TOC HTML so we can restore it */
+  var originalTOC=tocList.innerHTML;
+
+  function escapeHtml(s){return s.replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function highlight(text,query){
+    if(!query)return escapeHtml(text);
+    var safe=escapeHtml(text);
+    var qSafe=query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    return safe.replace(new RegExp('('+qSafe+')','gi'),'<mark>$1</mark>');
+  }
+
+  function search(query){
+    query=query.trim().toLowerCase();
+    if(!query){
+      tocList.innerHTML=originalTOC;
+      tocList.style.display='';
+      emptyMsg.classList.remove('visible');
+      clearBtn.classList.remove('visible');
+      attachClickHandlers();
+      return;
+    }
+    clearBtn.classList.add('visible');
+    var matches=index.filter(function(it){return it.title.toLowerCase().indexOf(query)>=0});
+    if(matches.length===0){
+      tocList.style.display='none';
+      emptyMsg.classList.add('visible');
+      return;
+    }
+    tocList.style.display='';
+    emptyMsg.classList.remove('visible');
+    var html='';
+    /* Group matches by section: show top-level matches first, then their sub-matches */
+    var seenSections={};
+    matches.forEach(function(m){
+      if(m.type==='section'){
+        seenSections[m.id]=true;
+        html+='<li><a href="#'+m.id+'">'+highlight(m.title,query)+'</a></li>';
+      }
+    });
+    matches.forEach(function(m){
+      if(m.type!=='section'){
+        html+='<li class="match-sub"><a href="#'+m.id+'">'+highlight(m.title,query)+'</a></li>';
+      }
+    });
+    tocList.innerHTML=html;
+    attachClickHandlers();
+  }
+
+  function attachClickHandlers(){
+    tocList.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click',function(ev){
+        var href=a.getAttribute('href');
+        if(href&&href.startsWith('#')){
+          ev.preventDefault();
+          var el=document.querySelector(href);
+          if(el){
+            el.scrollIntoView({behavior:'smooth',block:'start'});
+            /* If matched item was a FAQ, also open it */
+            if(input.value.trim()){
+              setTimeout(function(){
+                el.querySelectorAll('.faq-q').forEach(function(d){
+                  if(d.querySelector('summary').textContent.toLowerCase().indexOf(input.value.trim().toLowerCase())>=0){
+                    d.setAttribute('open','');
+                  }
+                });
+              },300);
+            }
+          }
+        }
+      });
+    });
+  }
+
+  attachClickHandlers();
+
+  input.addEventListener('input',function(){search(input.value)});
+  input.addEventListener('keydown',function(ev){
+    if(ev.key==='Escape'){input.value='';search('');input.blur()}
+  });
+  clearBtn.addEventListener('click',function(){input.value='';search('');input.focus()});
+})();
+</script>
+</body>
+</html>
