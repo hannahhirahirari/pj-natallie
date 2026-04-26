@@ -1,8 +1,8 @@
 const CACHE = 'natallie-v15';
 const FILES = [
-  '/app/',
-  '/app/index.html',
-  '/app/manifest.json',
+  '/',
+  '/index.html',
+  '/manifest.json',
   '/icon-192.png',
   '/icon-512.png'
 ];
@@ -42,7 +42,7 @@ self.addEventListener('fetch', function(e) {
       return response;
     }).catch(function() {
       return caches.match(e.request).then(function(cached) {
-        return cached || caches.match('/app/index.html');
+        return cached || caches.match('/index.html');
       });
     })
   );
