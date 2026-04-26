@@ -1,4 +1,4 @@
-const CACHE = 'natallie-v15';
+const CACHE = 'natallie-v16';
 const FILES = [
   '/',
   '/index.html',
