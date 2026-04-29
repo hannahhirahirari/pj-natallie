@@ -1,10 +1,19 @@
 # the .natallie file format
 
-natallie is a free local-only event logger built as a progressive web app. the `.natallie` backup file is the durable artifact of the project: a documented JSON format that holds a user's grid, taps, and notes in a way that other tools, including any future viewer, importer, or successor app, can read without depending on natallie itself continuing to run.
+natallie is a free local-only event logger built as a progressive web app. when the user exports their data, the resulting files are documented artifacts: shapes that other tools, including any future viewer, importer, or successor app, can read without depending on natallie itself continuing to run.
+
+this document describes every format natallie produces:
+
+- the `.natallie` backup file (a JSON object, plaintext)
+- the encrypted variant of either of the above (a JSON wrapper around AES-GCM ciphertext)
+
+the CSV format is not a natallie-specific format and is not specified here, except where the encrypted variant adds a one-line marker. the `.natallie` backup is the heart of the document, and most of what follows describes it.
 
 ## file basics
 
-a `.natallie` file is plain JSON, encoded as UTF-8, with 2-space indentation. the extension is `.natallie`. the MIME type used at download is `application/octet-stream`. the file is created when the user taps "backup" in the app's settings; nothing is uploaded or sent. the suggested filename follows the pattern `natallie-backup-YYYY-MM-DD.natallie`, where the date is taken from the export moment in UTC.
+a plaintext `.natallie` backup file is plain JSON, encoded as UTF-8, with 2-space indentation. the extension is `.natallie`. the MIME type used at download is `application/octet-stream`. the file is created when the user taps "backup" in the app's settings; nothing is uploaded or sent. the suggested filename follows the pattern `natallie-backup-YYYY-MM-DD.natallie`, where the date is taken from the export moment in UTC.
+
+when "encrypt exports" is on, the backup file is wrapped in an encryption envelope before being written. the file extension stays `.natallie`, but the contents are an envelope (see [encrypted variants](#encrypted-variants) below) rather than the JSON described in the next section. an encrypted CSV export is written instead with the extension `.natallie-csv`.
 
 ## the top-level structure
 
@@ -299,26 +308,128 @@ the natallie app offers thirteen preset button colors. users can also pick any c
 | slate | `#8899AA` |
 | blue | `#4A90D9` |
 
+## encrypted variants
+
+when the user has turned on "encrypt exports" in natallie's settings, the files described above are not written directly to disk. instead, they are wrapped in an authenticated symmetric-encryption envelope and saved as a JSON file. this section describes that envelope so that any tool can decrypt and produce these files independently of the natallie app.
+
+encryption applies to two file kinds:
+
+- encrypted full backups, saved with the `.natallie` extension (same as plaintext backups; the encryption is internal)
+- encrypted CSV exports, saved with the `.natallie-csv` extension
+
+nothing else is encrypted by natallie. the in-memory state of the app and the data sitting in browser local storage are not encrypted at rest.
+
+### the envelope
+
+an encrypted file is a single JSON object, encoded as UTF-8 with 2-space indentation:
+
+```json
+{
+  "natallie_encrypted": true,
+  "version": 1,
+  "salt": "<base64>",
+  "iv": "<base64>",
+  "ciphertext": "<base64>"
+}
+```
+
+| field | type | description |
+| --- | --- | --- |
+| `natallie_encrypted` | boolean | always `true`. used by importers to detect that a file is encrypted. |
+| `version` | number | envelope format version. currently `1`. |
+| `salt` | string | base64-encoded 16-byte salt for key derivation. |
+| `iv` | string | base64-encoded 12-byte initialization vector for AES-GCM. |
+| `ciphertext` | string | base64-encoded ciphertext, including the AES-GCM 128-bit authentication tag appended to the end (this is the standard Web Crypto AES-GCM output). |
+
+### cryptographic parameters (version 1)
+
+the parameters below are committed to the format. an envelope with `version: 1` uses exactly these values; an envelope that uses different values is not a valid version-1 file and an importer should reject it.
+
+- **key derivation:** PBKDF2 with HMAC-SHA-256, 200,000 iterations
+- **derived key:** 256-bit AES key
+- **salt:** 16 bytes, freshly generated for each encryption from a cryptographically secure random source
+- **cipher:** AES-GCM with a 256-bit key
+- **IV:** 12 bytes, freshly generated for each encryption from a cryptographically secure random source
+- **authentication tag:** 128 bits (the default for AES-GCM), appended to the ciphertext
+- **password encoding:** UTF-8
+- **plaintext encoding:** UTF-8
+
+these are the same primitives used by mainstream password managers and end-to-end encrypted messengers. they are not bespoke. natallie uses the Web Crypto API (`crypto.subtle`) provided by the browser; no third-party crypto code is bundled.
+
+### plaintext content of an encrypted backup
+
+when an encrypted backup envelope is decrypted, the plaintext is exactly the JSON described in the rest of this document: a single object with `version`, `exportedAt`, `slots`, `logs`, `notes`, and the rest. there is no additional wrapping inside the ciphertext.
+
+### plaintext content of an encrypted CSV
+
+encrypted CSVs are not part of the `.natallie` format proper, but the envelope is the same. when an encrypted CSV envelope is decrypted, the plaintext is a CSV file with one extra line at the very top:
+
+```
+# natallie-csv
+# timezone: Asia/Tokyo (UTC+09:00)
+timestamp_utc,timestamp_local,event_name,path,event_type,color
+...
+```
+
+the first line, `# natallie-csv`, is a marker that lets the decryption tool know to write the output as a `.csv` file rather than a `.natallie` file. an importer that gets a decrypted plaintext starting with this marker should strip the line before treating the rest as a standard CSV.
+
+the second line is the timezone comment that all natallie CSVs include. the third line is the standard CSV header. the marker line is the only thing that differs between an encrypted-CSV plaintext and a plain CSV produced by natallie.
+
+### encrypting a file
+
+to write an encrypted file that natallie can decrypt:
+
+1. generate a 16-byte salt from a cryptographically secure random source.
+2. derive a 256-bit AES key using PBKDF2 with HMAC-SHA-256, 200,000 iterations, the user's password (UTF-8 bytes), and the salt.
+3. generate a 12-byte IV from a cryptographically secure random source.
+4. UTF-8 encode the plaintext (a `.natallie` JSON, or a CSV with the `# natallie-csv` marker line at the top).
+5. encrypt with AES-GCM, using the derived key and the IV. the resulting ciphertext includes the 128-bit authentication tag appended at the end.
+6. base64-encode the salt, IV, and ciphertext.
+7. write the envelope JSON object with the five fields above.
+
+### decrypting a file
+
+to decrypt an envelope:
+
+1. parse the envelope JSON. confirm `natallie_encrypted === true` and `version === 1`.
+2. base64-decode the salt, IV, and ciphertext.
+3. derive the AES key using PBKDF2 with the same parameters as in encryption, using the user-supplied password.
+4. decrypt with AES-GCM, using the derived key and the IV. AES-GCM verifies the authentication tag automatically; if the tag does not verify (wrong password, or tampered ciphertext), decryption will fail. treat any failure as an authentication error and tell the user the password is wrong or the file is corrupted; do not attempt to distinguish.
+5. UTF-8 decode the resulting plaintext.
+6. if the plaintext starts with `# natallie-csv\n`, treat the file as an encrypted CSV: strip that line and the result is the CSV content. otherwise, treat the plaintext as a `.natallie` backup JSON.
+
+### recovery
+
+there is no master key, no escrow, no recovery path. an encrypted file with a forgotten password is permanently unreadable. natallie does not store the password in any form, and does not produce any record from which the password could be derived. this is by design.
+
+### versioning of the envelope
+
+`version: 1` is the only currently defined value of the envelope's `version` field. future changes to the cryptographic parameters (for example, raising the iteration count, or migrating to a stronger KDF) will increment this number. an importer should check `version` first and reject envelopes with versions it does not understand.
+
+this versioning is independent of the inner backup's `version` field. a `version: 2` envelope might still wrap a `version: 1` backup, or vice versa.
+
 ## what an importer needs to do
 
 at minimum, a correct `.natallie` importer should:
 
-1. parse the file as JSON. if parsing fails, reject the file.
-2. check `version`. accept `1`. for higher versions, either reject or warn and read what is recognized.
-3. confirm `slots` and `logs` are arrays. these are the only required arrays; `notes` and `boardPins` may be missing or empty.
-4. walk `slots` recursively, descending into `ch` for any slot where `tp === "board"`. tolerate slot arrays shorter than nine by treating missing slots as unconfigured.
-5. read `ts` as the source of truth for log and note timestamps. ignore `date` if it conflicts with `ts`.
-6. treat unknown fields as forward-compatible. ignore them rather than reject them.
-7. treat `boardPins` as a UI hint, not as encryption.
+1. read the file as UTF-8 text and parse as JSON. if parsing fails, reject the file.
+2. check whether the parsed object has `natallie_encrypted: true`. if so, treat it as an envelope and follow the decryption steps above to obtain the plaintext, then continue. if the user does not supply a password, stop here and ask for one.
+3. after decryption (or on a plaintext file), check whether the plaintext begins with `# natallie-csv\n`. if so, the file is an encrypted CSV; strip the marker and treat the rest as a CSV, not a backup.
+4. otherwise, parse the plaintext as JSON and check `version`. accept `1`. for higher versions, either reject or warn and read what is recognized.
+5. confirm `slots` and `logs` are arrays. these are the only required arrays; `notes` and `boardPins` may be missing or empty.
+6. walk `slots` recursively, descending into `ch` for any slot where `tp === "board"`. tolerate slot arrays shorter than nine by treating missing slots as unconfigured.
+7. read `ts` as the source of truth for log and note timestamps. ignore `date` if it conflicts with `ts`.
+8. treat unknown fields as forward-compatible. ignore them rather than reject them.
+9. treat `boardPins` as a UI hint, not as encryption.
 
 ## what is intentionally not in this format
 
-a `.natallie` file does not contain:
+a plaintext `.natallie` file does not contain:
 
 - analytics, telemetry, or any record of how the user interacted with the app outside of their own logs and notes
 - a user account, login, session, or remote identifier
 - device identifiers, network information, IP address, or anything about the user beyond what they typed into the app
-- any field encrypted at rest
+- any field encrypted at rest within the plaintext backup itself (encryption is applied at the file level by the encrypted variant described above, not field by field)
 
 these absences are part of the format. a tool that adds any of these fields when writing a `.natallie` file is no longer writing the same format.
 
