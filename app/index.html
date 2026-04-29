@@ -111,7 +111,7 @@ invalidFile:{en:"Not a valid natallie backup file",ja:"\u6709\u52B9\u306Anatalli
 impSuccess:{en:"Backup restored successfully",ja:"\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7\u3092\u5FA9\u5143\u3057\u307E\u3057\u305F"},
 homeFull:{en:"Home screen is full. Delete or move an item first.",ja:"\u30DB\u30FC\u30E0\u753B\u9762\u304C\u3044\u3063\u3071\u3044\u3067\u3059\u3002\u5148\u306B\u9805\u76EE\u3092\u524A\u9664\u3059\u308B\u304B\u79FB\u52D5\u3057\u3066\u304F\u3060\u3055\u3044"},
 deleted:{en:"Deleted",ja:"\u524A\u9664\u6E08"},confirmEmpty:{en:"Permanently delete all items in trash?",ja:"\u30B4\u30DF\u7BB1\u306E\u5168\u9805\u76EE\u3092\u5B8C\u5168\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F"},
-encryptToggle:{en:"Encrypt backup files",ja:"\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7\u30D5\u30A1\u30A4\u30EB\u3092\u6697\u53F7\u5316"},
+encryptToggle:{en:"Encrypt exports",ja:"\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3092\u6697\u53F7\u5316"},
 encryptOn:{en:"Encryption on",ja:"\u6697\u53F7\u5316\u30AA\u30F3"},
 encryptOff:{en:"Encryption off",ja:"\u6697\u53F7\u5316\u30AA\u30D5"},
 setPwd:{en:"Set a password",ja:"\u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u8A2D\u5B9A"},
@@ -121,9 +121,10 @@ pwdMismatch:{en:"Passwords don't match",ja:"\u30D1\u30B9\u30EF\u30FC\u30C9\u304C
 pwdWrong:{en:"Wrong password. Try again.",ja:"\u30D1\u30B9\u30EF\u30FC\u30C9\u304C\u9593\u9055\u3063\u3066\u3044\u307E\u3059\u3002\u3082\u3046\u4E00\u5EA6\u8A66\u3057\u3066\u304F\u3060\u3055\u3044"},
 pwdEmpty:{en:"Password cannot be empty",ja:"\u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044"},
 encryptWarn:{en:"We can't recover this password. Write it down somewhere safe.",ja:"\u3053\u306E\u30D1\u30B9\u30EF\u30FC\u30C9\u306F\u5FA9\u5143\u3067\u304D\u307E\u305B\u3093\u3002\u5B89\u5168\u306A\u5834\u6240\u306B\u63A7\u3048\u3066\u304A\u3044\u3066\u304F\u3060\u3055\u3044"},
-encryptOffConfirm:{en:"Turn off encryption? Future backups will be unencrypted.",ja:"\u6697\u53F7\u5316\u3092\u30AA\u30D5\u306B\u3057\u307E\u3059\u304B\uFF1F\u4ECA\u5F8C\u306E\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7\u306F\u6697\u53F7\u5316\u3055\u308C\u307E\u305B\u3093"},
-decryptFile:{en:"Decrypt a backup file",ja:"\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7\u30D5\u30A1\u30A4\u30EB\u3092\u5FA9\u53F7"},
-decryptDesc:{en:"Get a plain version of an encrypted backup",ja:"\u6697\u53F7\u5316\u3055\u308C\u305F\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7\u306E\u5E73\u6587\u7248\u3092\u53D6\u5F97"},
+encryptOffConfirm:{en:"Turn off encryption? Future exports will be unencrypted.",ja:"\u6697\u53F7\u5316\u3092\u30AA\u30D5\u306B\u3057\u307E\u3059\u304B\uFF1F\u4ECA\u5F8C\u306E\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u306F\u6697\u53F7\u5316\u3055\u308C\u307E\u305B\u3093"},
+decryptFile:{en:"Decrypt a file",ja:"\u30D5\u30A1\u30A4\u30EB\u3092\u5FA9\u53F7"},
+decryptDesc:{en:"Get a plain version of an encrypted file",ja:"\u6697\u53F7\u5316\u3055\u308C\u305F\u30D5\u30A1\u30A4\u30EB\u306E\u5E73\u6587\u7248\u3092\u53D6\u5F97"},
+csvNotBackup:{en:"This is an encrypted CSV, not a backup. Use Decrypt in settings to get the plaintext.",ja:"\u6697\u53F7\u5316\u3055\u308C\u305FCSV\u3067\u3059\u3002\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7\u3067\u306F\u3042\u308A\u307E\u305B\u3093\u3002\u8A2D\u5B9A\u306E\u300C\u5FA9\u53F7\u300D\u6A5F\u80FD\u3067\u5E73\u6587\u3092\u53D6\u5F97\u3057\u3066\u304F\u3060\u3055\u3044"},
 encrypt:{en:"Encrypt",ja:"\u6697\u53F7\u5316"},
 decrypt:{en:"Decrypt",ja:"\u5FA9\u53F7"},
 on:{en:"ON",ja:"\u30AA\u30F3"},
@@ -483,9 +484,10 @@ function MainApp(){
 
   /* Pin-protected actions */
   function pinAct(action,title){var ap=lds("nat-pin","");if(!ap){window.alert(t("needPin"));return}setPrompt({mode:"enter",checkPin:ap,title:title||t("pinExp"),onSuccess:function(){setPrompt(null);action()}})}
-  function doExp(ids){var f=ids?logs.filter(function(l){return ids.indexOf(l.bi)>=0}):logs;if(!f.length&&(!notes.length||ids))return;pinAct(function(){dlFile(gCSV(f,ids?[]:notes),"natallie-"+new Date().toISOString().slice(0,10)+".csv","text/csv;charset=utf-8;")})}
-  function doExpFiltered(fLogs,fNotes){if(!fLogs.length&&!fNotes.length)return;pinAct(function(){dlFile(gCSV(fLogs,fNotes),"natallie-"+new Date().toISOString().slice(0,10)+".csv","text/csv;charset=utf-8;");setShowExp(false)})}
-  function doExpMap(){pinAct(function(){dlFile(genMapCSV(slots),"natallie-map-"+new Date().toISOString().slice(0,10)+".csv","text/csv;charset=utf-8;")})}
+  function dlCSV(csv,fnameBase){if(encOn){var marked="# natallie-csv\n"+csv;setPwdPrompt({mode:"set",title:t("setPwd"),subtitle:t("encryptToggle"),busyLabel:t("encrypting"),submitLabel:t("encrypt"),onSubmit:function(pwd){return encryptText(marked,pwd).then(function(blob){dlFile(blob,fnameBase+".natallie-csv","application/octet-stream");setPwdPrompt(null)})},onCancel:function(){setPwdPrompt(null)}})}else{dlFile(csv,fnameBase+".csv","text/csv;charset=utf-8;")}}
+  function doExp(ids){var f=ids?logs.filter(function(l){return ids.indexOf(l.bi)>=0}):logs;if(!f.length&&(!notes.length||ids))return;pinAct(function(){dlCSV(gCSV(f,ids?[]:notes),"natallie-"+new Date().toISOString().slice(0,10))})}
+  function doExpFiltered(fLogs,fNotes){if(!fLogs.length&&!fNotes.length)return;pinAct(function(){dlCSV(gCSV(fLogs,fNotes),"natallie-"+new Date().toISOString().slice(0,10));setShowExp(false)})}
+  function doExpMap(){pinAct(function(){dlCSV(genMapCSV(slots),"natallie-map-"+new Date().toISOString().slice(0,10))})}
   function doBackup(){if(!logs.length&&!notes.length&&!slots.some(function(s){return s.nm}))return;pinAct(function(){var rdLogs=logs.map(function(l){return Object.assign({},l,{date:new Date(l.ts).toLocaleString()})});var rdNotes=notes.map(function(n){return Object.assign({},n,{date:new Date(n.ts).toLocaleString()})});var tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(x){}var off=new Date().getTimezoneOffset();var offH=Math.abs(Math.floor(off/60));var offM=Math.abs(off%60);var offStr=(off<=0?"+":"-")+String(offH).padStart(2,"0")+":"+String(offM).padStart(2,"0");var payload={version:1,exportedAt:Date.now(),exportedDate:new Date().toLocaleString(),timezone:tz,utcOffset:"UTC"+offStr,appName:appNm,language:lang,slots:slots,logs:rdLogs,notes:rdNotes,boardPins:bPins};var json=JSON.stringify(payload,null,2);var fname="natallie-backup-"+new Date().toISOString().slice(0,10)+".natallie";if(encOn){setPwdPrompt({mode:"set",title:t("setPwd"),subtitle:t("encryptToggle"),busyLabel:t("encrypting"),submitLabel:t("encrypt"),onSubmit:function(pwd){return encryptText(json,pwd).then(function(blob){dlFile(blob,fname,"application/octet-stream");setPwdPrompt(null)})},onCancel:function(){setPwdPrompt(null)}})}else{dlFile(json,fname,"application/octet-stream")}})}
 
   function doImport(){pinAct(function(){if(fileR.current)fileR.current.click()},t("pinImp"))}
@@ -496,7 +498,7 @@ function MainApp(){
     reader.onload=function(re){
       var text=re.target.result;
       if(!isEncryptedFile(text)){window.alert(t("invalidFile"));return}
-      setPwdPrompt({mode:"enter",title:t("enterPwd"),subtitle:t("decryptDesc"),busyLabel:t("decrypting"),submitLabel:t("decrypt"),onSubmit:function(pwd){return decryptText(text,pwd).then(function(plain){setPwdPrompt(null);var fname=f.name.replace(/\.natallie$/,"")+"-decrypted.natallie";dlFile(plain,fname,"application/octet-stream")})},onCancel:function(){setPwdPrompt(null)}});
+      setPwdPrompt({mode:"enter",title:t("enterPwd"),subtitle:t("decryptDesc"),busyLabel:t("decrypting"),submitLabel:t("decrypt"),onSubmit:function(pwd){return decryptText(text,pwd).then(function(plain){setPwdPrompt(null);var base=f.name.replace(/\.natallie(-csv)?$/,"");if(plain.indexOf("# natallie-csv\n")===0){var csv=plain.slice("# natallie-csv\n".length);dlFile(csv,base+"-decrypted.csv","text/csv;charset=utf-8;")}else{dlFile(plain,base+"-decrypted.natallie","application/octet-stream")}})},onCancel:function(){setPwdPrompt(null)}});
     };
     reader.readAsText(f);
     ev.target.value="";
@@ -526,6 +528,7 @@ function MainApp(){
     ev.target.value="";
   }
   function applyImport(text){
+    if(text.indexOf("# natallie-csv\n")===0){window.alert(t("csvNotBackup"));return}
     try{
       var obj=JSON.parse(text);
       if(!obj||obj.version!==1||!Array.isArray(obj.slots)||!Array.isArray(obj.logs)){window.alert(t("invalidFile"));return}
@@ -626,7 +629,7 @@ function MainApp(){
     showExp?e(ExportModal,{logs:logs,notes:notes,onClose:function(){setShowExp(false)},onExportCSV:function(fLogs,fNotes){doExpFiltered(fLogs,fNotes)},onExportMap:function(){doExpMap();setShowExp(false)},onBackup:function(){doBackup();setShowExp(false)}}):null,
     pwdPrompt?e(PwdPrompt,pwdPrompt):null,
     e("input",{ref:fileR,type:"file",accept:".natallie,.json",onChange:handleFileRead,style:{display:"none"}}),
-    e("input",{ref:decR,type:"file",accept:".natallie,.json",onChange:handleDecryptFileRead,style:{display:"none"}}));
+    e("input",{ref:decR,type:"file",accept:".natallie,.natallie-csv,.json",onChange:handleDecryptFileRead,style:{display:"none"}}));
 
   /* ========== NOTES SCREEN ========== */
   if(showNT){
