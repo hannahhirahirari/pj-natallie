@@ -122,8 +122,9 @@ All persistent user data lives in `localStorage` under the following keys:
 | `nat-tr` | JSON array | Trash (deleted slots and notes, recoverable) |
 | `nat-nt` | JSON array | Notes |
 | `nat-enc` | string | Encryption toggle (`"1"` if enabled, empty otherwise) |
+| `nat-tz` | string | Per-tap timezone recording toggle (`"1"` if enabled, empty otherwise; off by default) |
 
-The reset-everything action clears all ten keys. Any new `nat-*` key added in the future must also be cleared in that path, or the app's privacy guarantees are weakened.
+The reset-everything action clears all eleven keys. Any new `nat-*` key added in the future must also be cleared in that path, or the app's privacy guarantees are weakened.
 
 ---
 
@@ -138,6 +139,8 @@ The app supports four export paths and one decrypt-only path, all gated behind t
 - Decrypt an encrypted file back to plaintext
 
 When the user enables "encrypt exports" in settings, all of the above export paths produce password-protected encrypted files. Encrypted backups keep the `.natallie` extension; encrypted CSVs use the `.natallie-csv` extension. The encryption envelope and its parameters (PBKDF2-SHA-256 with 200,000 iterations, AES-GCM-256, 16-byte salt, 12-byte IV) are fully specified in [FORMAT.md](FORMAT.md), so any third-party tool can read or write these files independently of natallie.
+
+When the user enables "record timezone with each tap" in settings (off by default), each new tap is logged with an additional `tz` field containing the IANA timezone name of the device at the moment of the tap. This appears in CSV exports as an `iana_timezone` column and in backup files as a `tz` field per log entry. Taps logged before the toggle was turned on, or while it was off, do not have this field; importers should treat its absence as "timezone unknown for this tap".
 
 ---
 

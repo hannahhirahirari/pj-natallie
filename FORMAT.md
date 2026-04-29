@@ -123,13 +123,16 @@ each entry in `logs` is one tap of one button. logs are stored newest-first.
 | `cl` | string | the button's color at the moment of the tap. |
 | `ty` | string | the event type. currently always `"click"`. |
 | `ts` | number | the unix-millisecond timestamp of the tap. |
+| `tz` | string | optional. an IANA timezone identifier (for example `"Asia/Tokyo"`) recorded at the moment of the tap. only present if the user has opted in to timezone recording in their app settings. omit or treat as unknown if the field is missing or empty. |
 | `date` | string | a human-readable, locale-dependent rendering of `ts`. added at export time only, not present in the live in-memory state. |
 
-`en`, `pa`, and `cl` are snapshots of the button's state at the moment of the tap. if the button is later renamed, recolored, or deleted, the historical log entry retains its original values. logs are self-contained: a deleted button still has a meaningful history.
+`en`, `pa`, `cl`, and `tz` are snapshots of the button's and device's state at the moment of the tap. if the button is later renamed, recolored, or deleted, the historical log entry retains its original values. logs are self-contained: a deleted button still has a meaningful history.
 
 `ts` is the source of truth for time. `date` exists only as a convenience for users who open the file in a text editor and do not want to convert milliseconds. importers should prefer `ts` and ignore `date` when there is any ambiguity.
 
-a single log entry:
+`tz` is optional and present only on taps logged after the user has turned on the timezone-recording toggle. taps logged before opt-in, or with the toggle off, will not have a `tz` field. an importer should treat a missing `tz` as "timezone unknown for this tap", not as an error.
+
+a single log entry (with timezone recorded):
 
 ```json
 {
@@ -140,6 +143,7 @@ a single log entry:
   "cl": "#FF6B6B",
   "ty": "click",
   "ts": 1745524320541,
+  "tz": "Asia/Tokyo",
   "date": "4/24/2026, 3:32:00 PM"
 }
 ```

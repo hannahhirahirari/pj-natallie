@@ -215,6 +215,11 @@ footer p{margin-bottom:8px}
   <h2>stats and history</h2>
   <p>tapping a button in the bottom navigation opens the history view , a chronological list of every event you've logged, grouped by day. each entry shows the time, the button name, and the path through any boards.</p>
   <p>each button also has its own stats panel showing total taps, taps today, weekly count, monthly count, yearly count if applicable, and the date you first started tracking that button. you can reach a button's stats two ways: tap the small colored pill at the bottom of the home screen for that button, or tap the button while you're in setup mode.</p>
+
+  <h3>about timezones</h3>
+  <p>natallie stores every tap as an absolute moment in time, independent of timezone. the times you see in the app and in your stats panel are rendered in your phone's current timezone. if you travel between timezones, the times of past taps will shift to reflect "what time was that, here?" rather than "what time was that, where I was?". this is the simple model and it works for most people.</p>
+  <p>for users who travel a lot internationally and want to know which timezone they were in when they logged each tap, there's an opt-in setting in the settings panel called "record timezone with each tap". it's off by default. when on, every new tap also stores the IANA timezone name of your device at the moment you tapped (for example, "Asia/Tokyo" or "Europe/London"). that information is then included in CSV exports as an extra "iana_timezone" column, and in backup files as a "tz" field on each log entry.</p>
+  <p>turning the toggle on does not retroactively label past taps; only taps logged after you turn it on get a timezone. turning the toggle off later does not erase timezone data from taps that already have it; future taps simply won't be recorded with one. nothing about this leaves your device.</p>
 </section>
 
 <section id="trash">

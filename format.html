@@ -52,7 +52,7 @@ footer p{color:#666;margin-bottom:6px}
 <header>
 <a href="/" class="back">← back to natallie</a>
 <h1>the .natallie file format</h1>
-<p class="meta">version 1 · April 29, 2026</p>
+<p class="meta">version 1 · April 30, 2026</p>
 </header>
 
 <p class="lede">natallie is a free local-only event logger built as a progressive web app. when the user exports their data, the resulting files are documented artifacts: shapes that other tools, including any future viewer, importer, or successor app, can read without depending on natallie itself continuing to run.</p>
@@ -176,15 +176,18 @@ footer p{color:#666;margin-bottom:6px}
 <tr><td><code>cl</code></td><td>string</td><td>the button's color at the moment of the tap.</td></tr>
 <tr><td><code>ty</code></td><td>string</td><td>the event type. currently always <code>"click"</code>.</td></tr>
 <tr><td><code>ts</code></td><td>number</td><td>the unix-millisecond timestamp of the tap.</td></tr>
+<tr><td><code>tz</code></td><td>string</td><td>optional. an IANA timezone identifier (for example <code>"Asia/Tokyo"</code>) recorded at the moment of the tap. only present if the user has opted in to timezone recording in their app settings. omit or treat as unknown if the field is missing or empty.</td></tr>
 <tr><td><code>date</code></td><td>string</td><td>a human-readable, locale-dependent rendering of <code>ts</code>. added at export time only, not present in the live in-memory state.</td></tr>
 </tbody>
 </table>
 
-<p><code>en</code>, <code>pa</code>, and <code>cl</code> are snapshots of the button's state at the moment of the tap. if the button is later renamed, recolored, or deleted, the historical log entry retains its original values. logs are self-contained: a deleted button still has a meaningful history.</p>
+<p><code>en</code>, <code>pa</code>, <code>cl</code>, and <code>tz</code> are snapshots of the button's and device's state at the moment of the tap. if the button is later renamed, recolored, or deleted, the historical log entry retains its original values. logs are self-contained: a deleted button still has a meaningful history.</p>
 
 <p><code>ts</code> is the source of truth for time. <code>date</code> exists only as a convenience for users who open the file in a text editor and do not want to convert milliseconds. importers should prefer <code>ts</code> and ignore <code>date</code> when there is any ambiguity.</p>
 
-<p>a single log entry:</p>
+<p><code>tz</code> is optional and present only on taps logged after the user has turned on the timezone-recording toggle. taps logged before opt-in, or with the toggle off, will not have a <code>tz</code> field. an importer should treat a missing <code>tz</code> as "timezone unknown for this tap", not as an error.</p>
+
+<p>a single log entry (with timezone recorded):</p>
 
 <pre><code>{
   "id": 1745524320541.7234,
@@ -194,6 +197,7 @@ footer p{color:#666;margin-bottom:6px}
   "cl": "#FF6B6B",
   "ty": "click",
   "ts": 1745524320541,
+  "tz": "Asia/Tokyo",
   "date": "4/24/2026, 3:32:00 PM"
 }</code></pre>
 
