@@ -124,6 +124,7 @@ footer p{margin-bottom:8px}
     <li><a href="#trash">trash and restore</a></li>
     <li><a href="#pins">pin locks</a></li>
     <li><a href="#export">exporting data</a></li>
+    <li><a href="#encryption">encryption</a></li>
     <li><a href="#backup">backup and restore</a></li>
     <li><a href="#privacy">privacy and your data</a></li>
     <li><a href="#install">install on your device</a></li>
@@ -213,7 +214,7 @@ footer p{margin-bottom:8px}
   <div class="section-num">section 07</div>
   <h2>stats and history</h2>
   <p>tapping a button in the bottom navigation opens the history view , a chronological list of every event you've logged, grouped by day. each entry shows the time, the button name, and the path through any boards.</p>
-  <p>each button also has its own stats panel, accessible by holding the button in setup mode and choosing "stats." it shows total taps, taps today, weekly count, monthly count, yearly count if applicable, and the date you first started tracking that button.</p>
+  <p>each button also has its own stats panel showing total taps, taps today, weekly count, monthly count, yearly count if applicable, and the date you first started tracking that button. you can reach a button's stats two ways: tap the small colored pill at the bottom of the home screen for that button, or tap the button while you're in setup mode.</p>
 </section>
 
 <section id="trash">
@@ -258,10 +259,46 @@ footer p{margin-bottom:8px}
 
   <h3>full backup</h3>
   <p>a single .natallie file containing everything: your buttons, your logs, your notes, your settings. this is the file you'd use to restore on a new device or after clearing browser data. it's a JSON file with a custom extension so it's distinct from generic JSON exports.</p>
+
+  <h3>about encryption</h3>
+  <p>if you've turned on the "encrypt exports" toggle in settings, every export above (CSVs and full backups) will ask you for a password and download as an encrypted file. CSVs come out as .natallie-csv files, backups come out as .natallie files. you can decrypt them later using the decrypt feature in settings, which gives you back the plain CSV or .natallie file. see section 11 for the full story.</p>
+</section>
+
+<section id="encryption">
+  <div class="section-num">section 11</div>
+  <h2>encryption</h2>
+  <p>by default, the files you export from natallie (CSVs and full backups) are plain text. anyone who opens the file can read what's inside. for most people, most of the time, that's fine; you save the file to your own device, and that's that.</p>
+  <p>if you'd like the files themselves to be unreadable without a password, turn on encryption. this protects your exports if they end up somewhere outside your control: an email attachment, a cloud drive, a shared folder, a stolen laptop.</p>
+
+  <h3>turning it on</h3>
+  <p>open settings and look for the "encrypt exports" toggle. tap to turn it on. natallie shows a warning that encryption uses passwords you choose, and that there is no way to recover a file if you forget its password. confirm to enable.</p>
+  <div class="callout callout-warn">
+    <p><em>important.</em> if you forget the password for an encrypted file, the file is permanently unreadable. natallie has no recovery system, no master key, no support team to call. write the password down somewhere safe (a password manager is fine).</p>
+  </div>
+
+  <h3>how exports change when encryption is on</h3>
+  <p>every time you export anything, natallie asks you to set a password for that file. you can use the same password for every export (easier to remember) or a different one each time (more secure). there's no rule, just a trade-off.</p>
+  <p>encrypted files come out with these extensions:</p>
+  <ul>
+    <li>encrypted CSV exports: <em>.natallie-csv</em></li>
+    <li>encrypted full backups: <em>.natallie</em> (same as unencrypted backups, the encryption is inside the file)</li>
+  </ul>
+  <p>the file extension is your hint: if you see .natallie-csv, that's an encrypted CSV. if you see .natallie, it could be either an encrypted or unencrypted backup; natallie figures out which when you import or decrypt it.</p>
+
+  <h3>decrypting a file</h3>
+  <p>open settings and tap "decrypt a file." pick the encrypted file. enter the password you set when you exported it. natallie decrypts the file and saves the plain version to your downloads. the original encrypted file is left untouched.</p>
+  <p>decrypted CSVs come out as regular .csv files you can open in a spreadsheet. decrypted backups come out as plain .natallie files you can either open in a text editor (they're JSON) or import back into natallie.</p>
+
+  <h3>what encryption protects, and what it doesn't</h3>
+  <p>encryption protects exported files. it does not encrypt the data sitting in natallie itself; that data lives in your browser's local storage, which is protected by your device's lock screen and account password. encryption is for the moment a file leaves natallie and goes somewhere else.</p>
+  <p>this is the right level of protection for most people. if you want stronger protection of the data inside natallie, the pin lock feature (section 09) requires a pin to open the app or specific boards.</p>
+
+  <h3>turning it off</h3>
+  <p>tap the "encrypt exports" toggle again. natallie confirms you want to turn it off and warns that future exports will be unencrypted. existing encrypted files stay encrypted; this only affects future exports.</p>
 </section>
 
 <section id="backup">
-  <div class="section-num">section 11</div>
+  <div class="section-num">section 12</div>
   <h2>backup and restore</h2>
   <p>browser local storage is durable but not invincible. clearing your browser cache, switching browsers, getting a new phone, or rare browser bugs can all wipe your data. backups are how you protect against this.</p>
 
@@ -271,13 +308,14 @@ footer p{margin-bottom:8px}
 
   <h3>restoring from a backup</h3>
   <p>open settings, tap "restore from backup," and select your .natallie file. natallie reads the file and replaces your current state with what's in the backup. anything that was in the app before the restore is overwritten.</p>
+  <p>if your backup is encrypted, natallie asks for the password before continuing. enter it; the rest of the restore works the same way.</p>
   <div class="callout callout-warn">
     <p><em>note.</em> restoring is destructive. if you have data in the app that's newer than the backup, it will be lost. if you're not sure, make a fresh backup first before restoring an older one.</p>
   </div>
 </section>
 
 <section id="privacy">
-  <div class="section-num">section 12</div>
+  <div class="section-num">section 13</div>
   <h2>privacy and your data</h2>
   <p>this is the part most apps put in fine print. natallie puts it in the manual.</p>
 
@@ -297,7 +335,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="install">
-  <div class="section-num">section 13</div>
+  <div class="section-num">section 14</div>
   <h2>install on your device</h2>
   <p>natallie is a progressive web app, which means it can be installed on your phone or computer just like a regular app, with its own icon and standalone window , no app store required.</p>
 
@@ -325,7 +363,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="troubleshooting">
-  <div class="section-num">section 14</div>
+  <div class="section-num">section 15</div>
   <h2>troubleshooting</h2>
 
   <h3>natallie shows a white screen or won't load</h3>
@@ -350,7 +388,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="faq">
-  <div class="section-num">section 15</div>
+  <div class="section-num">section 16</div>
   <h2>frequently asked questions</h2>
 
   <details class="faq-q"><summary>do you sell my data?</summary>
