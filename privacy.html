@@ -35,7 +35,7 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid #1F1F23;color:#666;
 <header>
 <a href="/" class="back">← back to natallie</a>
 <h1>Privacy policy</h1>
-<p class="meta">Last updated: April 25, 2026</p>
+<p class="meta">Last updated: April 29, 2026</p>
 </header>
 
 <p class="lede">natallie is built on a simple principle: your data belongs to you, stays on your device, and is never transmitted to anyone, including us.</p>
@@ -69,6 +69,7 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid #1F1F23;color:#666;
 
 <h2>Data export and backup</h2>
 <p>natallie includes features that let you export your own data as CSV or backup files. When you use these features, the data is generated on your device and downloaded to your device. We do not see, copy, or process the exported files.</p>
+<p>natallie also offers an optional encryption setting for exports. When you turn on "encrypt exports" in settings, every CSV and backup you export is wrapped in a password-protected, AES-GCM encrypted file before being saved to your device. The password is yours; we never see it, never store it, and have no way to recover an encrypted file if the password is lost. Encryption is opt-in and can be turned off at any time. Files exported before you turned it on, or after you turned it off, are unencrypted plain CSV or JSON. The full technical specification of the encrypted file format is published in our <a href="/format.html">file format documentation</a>.</p>
 <p>If you choose to share an exported file with someone else (for example, by emailing it to a researcher or therapist), that sharing is your action and is governed by the privacy policy of whatever service you use to share it.</p>
 
 <h2>Service worker and offline use</h2>
@@ -87,7 +88,7 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid #1F1F23;color:#666;
 <h2>Your rights</h2>
 <p>Because we do not collect, store, or process your personal data, there is no data for us to delete, export, or correct on your behalf. Your data lives on your device. You can:</p>
 <ul>
-<li>Export your data at any time using the in-app backup feature.</li>
+<li>Export your data at any time using the in-app export and backup features (optionally encrypted).</li>
 <li>Delete your data at any time using the in-app reset function or by clearing your browser's storage for natallie.app.</li>
 <li>Use the app entirely offline if you prefer.</li>
 </ul>
