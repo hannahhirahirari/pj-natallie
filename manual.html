@@ -120,6 +120,7 @@ footer p{margin-bottom:8px}
     <li><a href="#colors">colors</a></li>
     <li><a href="#boards">nested boards</a></li>
     <li><a href="#notes">notes</a></li>
+    <li><a href="#timebox">time-boxed boards</a></li>
     <li><a href="#stats">stats and history</a></li>
     <li><a href="#trash">trash and restore</a></li>
     <li><a href="#pins">pin locks</a></li>
@@ -210,8 +211,23 @@ footer p{margin-bottom:8px}
   <p>you can edit a note after creating it (tap the pencil icon). you can also delete it , but deletions go to the trash, not into the void.</p>
 </section>
 
-<section id="stats">
+<section id="timebox">
   <div class="section-num">section 07</div>
+  <h2>time-boxed boards</h2>
+  <p>most boards in natallie are open-ended; you build them and they stay forever. but sometimes you want to track something for a specific period and then be done. a 14-day migraine diary, a 30-day project, a 3-day check-in around a hospital stay. for those, you can give a board a time-box.</p>
+  <p>when you create or edit a board in setup mode, you'll see a checkbox labeled "time-box this board". turn it on, pick a duration (3, 7, 14, or 30 days, or a custom number up to 50 years), and save. the board will display a small "ends in Nd" label on its tile so you can see at a glance how much time is left.</p>
+  <p>when the time is up, natallie shows a small banner at the top of the home screen offering you three options:</p>
+  <ul>
+    <li><strong>export and delete</strong>: download a CSV of just this board's data, then move the board and its taps to the trash. the board can be restored from trash if you change your mind. when restored, it comes back as a regular board without the time-box.</li>
+    <li><strong>extend</strong>: pick a new duration. the board's clock starts over from now.</li>
+    <li><strong>remove time-box, keep board</strong>: the board stays exactly as it is, just without the time-box. it becomes a regular board.</li>
+  </ul>
+  <p>there's also an optional checkbox in the editor called "auto-delete data when time is up". this is a way of telling yourself, at setup, that you intend to end this board cleanly when the period is over. it doesn't actually delete anything automatically; the same three options are still presented to you when the time-box ends. it's a record of intent, useful for self-quantification windows where you want to be deliberate about not letting old data accumulate.</p>
+  <p>if you want to know more about how the time-box data is stored (for example, if you're thinking about exporting and analyzing it elsewhere), see the file format documentation at natallie.app/format.html.</p>
+</section>
+
+<section id="stats">
+  <div class="section-num">section 08</div>
   <h2>stats and history</h2>
   <p>tapping a button in the bottom navigation opens the history view , a chronological list of every event you've logged, grouped by day. each entry shows the time, the button name, and the path through any boards.</p>
   <p>each button also has its own stats panel showing total taps, taps today, weekly count, monthly count, yearly count if applicable, and the date you first started tracking that button. you can reach a button's stats two ways: tap the small colored pill at the bottom of the home screen for that button, or tap the button while you're in setup mode.</p>
@@ -223,7 +239,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="trash">
-  <div class="section-num">section 08</div>
+  <div class="section-num">section 09</div>
   <h2>trash and restore</h2>
   <p>when you delete a button, board, or note, it doesn't disappear forever. it goes to the trash, which is accessible from the settings panel. from there you can restore it back to your home screen (if there's room) or permanently delete it.</p>
   <p>this catches accidental deletions. it also lets you experiment with structures , try a board layout, decide it's not for you, delete it, change your mind a week later and restore it.</p>
@@ -238,7 +254,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="pins">
-  <div class="section-num">section 09</div>
+  <div class="section-num">section 10</div>
   <h2>pin locks</h2>
   <p>natallie supports two kinds of pin protection. an <em>app-level pin</em> requires you to enter a code every time you open natallie. a <em>board-level pin</em> protects specific boards, requiring a code to open them while leaving the rest of your app accessible.</p>
   <p>pins are 4-digit numeric codes, set up from the settings panel. you can change or remove a pin at any time, but if you forget it, there is no recovery. natallie has no servers, no email-based reset, no support team to call. losing your pin means losing access to whatever it protected.</p>
@@ -249,7 +265,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="export">
-  <div class="section-num">section 10</div>
+  <div class="section-num">section 11</div>
   <h2>exporting data</h2>
   <p>your data belongs to you. natallie supports several export formats so you can move it elsewhere, analyze it, share it, or just keep a copy outside the browser.</p>
   <p>open the export dialog from the settings panel. it offers three options:</p>
@@ -270,7 +286,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="encryption">
-  <div class="section-num">section 11</div>
+  <div class="section-num">section 12</div>
   <h2>encryption</h2>
   <p>by default, the files you export from natallie (CSVs and full backups) are plain text. anyone who opens the file can read what's inside. for most people, most of the time, that's fine; you save the file to your own device, and that's that.</p>
   <p>if you'd like the files themselves to be unreadable without a password, turn on encryption. this protects your exports if they end up somewhere outside your control: an email attachment, a cloud drive, a shared folder, a stolen laptop.</p>
@@ -303,7 +319,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="backup">
-  <div class="section-num">section 12</div>
+  <div class="section-num">section 13</div>
   <h2>backup and restore</h2>
   <p>browser local storage is durable but not invincible. clearing your browser cache, switching browsers, getting a new phone, or rare browser bugs can all wipe your data. backups are how you protect against this.</p>
 
@@ -320,7 +336,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="privacy">
-  <div class="section-num">section 13</div>
+  <div class="section-num">section 14</div>
   <h2>privacy and your data</h2>
   <p>this is the part most apps put in fine print. natallie puts it in the manual.</p>
 
@@ -340,7 +356,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="install">
-  <div class="section-num">section 14</div>
+  <div class="section-num">section 15</div>
   <h2>install on your device</h2>
   <p>natallie is a progressive web app, which means it can be installed on your phone or computer just like a regular app, with its own icon and standalone window , no app store required.</p>
 
@@ -368,7 +384,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="troubleshooting">
-  <div class="section-num">section 15</div>
+  <div class="section-num">section 16</div>
   <h2>troubleshooting</h2>
 
   <h3>natallie shows a white screen or won't load</h3>
@@ -393,7 +409,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="faq">
-  <div class="section-num">section 16</div>
+  <div class="section-num">section 17</div>
   <h2>frequently asked questions</h2>
 
   <details class="faq-q"><summary>do you sell my data?</summary>

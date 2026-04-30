@@ -142,6 +142,8 @@ When the user enables "encrypt exports" in settings, all of the above export pat
 
 When the user enables "record timezone with each tap" in settings (off by default), each new tap is logged with an additional `tz` field containing the IANA timezone name of the device at the moment of the tap. This appears in CSV exports as an `iana_timezone` column and in backup files as a `tz` field per log entry. Taps logged before the toggle was turned on, or while it was off, do not have this field; importers should treat its absence as "timezone unknown for this tap".
 
+Boards may also carry an optional `tb` field on their slot definition: `{start, days, mode}`. This indicates a time-boxed board, a board with a finite lifecycle. When the time-box expires, the user is prompted to export the data and either delete, extend, or convert the board to permanent. The full schema is in [FORMAT.md](FORMAT.md).
+
 ---
 
 ## Browser support

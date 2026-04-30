@@ -65,6 +65,7 @@ each slot has the following fields.
 | `md` | string | mode. currently always `"click"`. |
 | `tp` | string | type. either `"button"` or `"board"`. |
 | `ch` | array | children. always `[]` for a button. for a board, an array of nine slot objects. |
+| `tb` | object | optional. only present on boards that have a time-box configured. shape: `{start: <unix-ms>, days: <int>, mode: "prompt" | "auto-export-delete"}`. see [time-boxed boards](#time-boxed-boards) below. |
 
 an unconfigured slot is `tp: "button"` with `nm: ""` and `cl: ""`. there is no separate "empty" type value. the app distinguishes empty slots from configured buttons by checking whether `nm` is non-empty.
 
@@ -109,6 +110,50 @@ a small focused example showing one configured button, one board with one config
   }
 ]
 ```
+
+## time-boxed boards
+
+a board may carry an optional `tb` field that gives it a time-bounded lifecycle. natallie uses this for self-quantification windows: a user sets up a board for a specific period (e.g., 14 days), and at the end of that window the app prompts them to export the data and decide what to do with the board.
+
+### shape
+
+```json
+"tb": {
+  "start": 1745524320541,
+  "days": 14,
+  "mode": "prompt"
+}
+```
+
+| field | type | description |
+| --- | --- | --- |
+| `start` | number | unix-millisecond timestamp of when the time-box was set or last extended. |
+| `days` | number | duration of the time-box in days. integer. |
+| `mode` | string | `"prompt"` or `"auto-export-delete"`. see below. |
+
+the time-box is considered expired when `Date.now() >= start + days*86400000`.
+
+### modes
+
+- **`"prompt"`**: when expired, the app shows a banner offering three options to the user: export the data and delete the board (which moves it to trash), extend the time-box, or remove the time-box (keeping the board as a regular board with all its data intact). nothing happens automatically.
+- **`"auto-export-delete"`**: same banner, but the user pre-acknowledged at setup time that the intent is to export and delete. the same three options are shown; the difference is informational, captured at the moment of board creation as a record of user intent.
+
+an importer can show or hide the time-box UI based on `mode`, but the three lifecycle actions (export, extend, remove) are available regardless of mode.
+
+### relationship to the export and trash
+
+when a user picks "export and delete" on an expired time-boxed board:
+
+- a CSV is generated containing only the log entries whose `bi` matches one of the buttons inside that board (recursively)
+- the CSV uses the same format as a normal CSV export
+- the entire board structure (including its children and `tb` field) is moved into the trash as a normal trash entry. the trash entry's `node` is the full board subtree.
+- log entries belonging to the board's buttons are removed from `logs` at the same moment
+
+a restored time-boxed board (from the trash) loses its `tb` field on restore. this is intentional: a user restoring a board they previously ended doesn't want it to immediately appear expired again.
+
+### versioning
+
+the `tb` field is forward-additive: importers that don't recognize it should ignore it. an old natallie that doesn't know about time-boxes will treat a board with a `tb` field as a regular board, which is harmless. the format version stays at `1`.
 
 ## logs
 

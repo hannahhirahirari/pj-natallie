@@ -52,7 +52,7 @@ footer p{color:#666;margin-bottom:6px}
 <header>
 <a href="/" class="back">← back to natallie</a>
 <h1>the .natallie file format</h1>
-<p class="meta">version 1 · April 30, 2026</p>
+<p class="meta">version 1 · April 30, 2026 (revised)</p>
 </header>
 
 <p class="lede">natallie is a free local-only event logger built as a progressive web app. when the user exports their data, the resulting files are documented artifacts: shapes that other tools, including any future viewer, importer, or successor app, can read without depending on natallie itself continuing to run.</p>
@@ -118,6 +118,7 @@ footer p{color:#666;margin-bottom:6px}
 <tr><td><code>md</code></td><td>string</td><td>mode. currently always <code>"click"</code>.</td></tr>
 <tr><td><code>tp</code></td><td>string</td><td>type. either <code>"button"</code> or <code>"board"</code>.</td></tr>
 <tr><td><code>ch</code></td><td>array</td><td>children. always <code>[]</code> for a button. for a board, an array of nine slot objects.</td></tr>
+<tr><td><code>tb</code></td><td>object</td><td>optional. only present on boards that have a time-box configured. shape: <code>{start: &lt;unix-ms&gt;, days: &lt;int&gt;, mode: "prompt" | "auto-export-delete"}</code>. see <a href="#time-boxed-boards">time-boxed boards</a> below.</td></tr>
 </tbody>
 </table>
 
@@ -162,6 +163,55 @@ footer p{color:#666;margin-bottom:6px}
     "ch": []
   }
 ]</code></pre>
+
+<h2 id="time-boxed-boards">time-boxed boards</h2>
+
+<p>a board may carry an optional <code>tb</code> field that gives it a time-bounded lifecycle. natallie uses this for self-quantification windows: a user sets up a board for a specific period (e.g., 14 days), and at the end of that window the app prompts them to export the data and decide what to do with the board.</p>
+
+<h3>shape</h3>
+
+<pre><code>"tb": {
+  "start": 1745524320541,
+  "days": 14,
+  "mode": "prompt"
+}</code></pre>
+
+<table>
+<thead><tr><th>field</th><th>type</th><th>description</th></tr></thead>
+<tbody>
+<tr><td><code>start</code></td><td>number</td><td>unix-millisecond timestamp of when the time-box was set or last extended.</td></tr>
+<tr><td><code>days</code></td><td>number</td><td>duration of the time-box in days. integer.</td></tr>
+<tr><td><code>mode</code></td><td>string</td><td><code>"prompt"</code> or <code>"auto-export-delete"</code>. see below.</td></tr>
+</tbody>
+</table>
+
+<p>the time-box is considered expired when <code>Date.now() &gt;= start + days*86400000</code>.</p>
+
+<h3>modes</h3>
+
+<ul>
+<li><strong><code>"prompt"</code></strong>: when expired, the app shows a banner offering three options to the user: export the data and delete the board (which moves it to trash), extend the time-box, or remove the time-box (keeping the board as a regular board with all its data intact). nothing happens automatically.</li>
+<li><strong><code>"auto-export-delete"</code></strong>: same banner, but the user pre-acknowledged at setup time that the intent is to export and delete. the same three options are shown; the difference is informational, captured at the moment of board creation as a record of user intent.</li>
+</ul>
+
+<p>an importer can show or hide the time-box UI based on <code>mode</code>, but the three lifecycle actions (export, extend, remove) are available regardless of mode.</p>
+
+<h3>relationship to the export and trash</h3>
+
+<p>when a user picks "export and delete" on an expired time-boxed board:</p>
+
+<ul>
+<li>a CSV is generated containing only the log entries whose <code>bi</code> matches one of the buttons inside that board (recursively)</li>
+<li>the CSV uses the same format as a normal CSV export</li>
+<li>the entire board structure (including its children and <code>tb</code> field) is moved into the trash as a normal trash entry. the trash entry's <code>node</code> is the full board subtree.</li>
+<li>log entries belonging to the board's buttons are removed from <code>logs</code> at the same moment</li>
+</ul>
+
+<p>a restored time-boxed board (from the trash) loses its <code>tb</code> field on restore. this is intentional: a user restoring a board they previously ended doesn't want it to immediately appear expired again.</p>
+
+<h3>versioning</h3>
+
+<p>the <code>tb</code> field is forward-additive: importers that don't recognize it should ignore it. an old natallie that doesn't know about time-boxes will treat a board with a <code>tb</code> field as a regular board, which is harmless. the format version stays at <code>1</code>.</p>
 
 <h2>logs</h2>
 <p>each entry in <code>logs</code> is one tap of one button. logs are stored newest-first.</p>
