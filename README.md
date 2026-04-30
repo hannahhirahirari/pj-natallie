@@ -32,18 +32,19 @@ pj-natallie/
 ├── privacy.html            Privacy policy
 ├── FORMAT.md               Markdown source of format.html
 ├── README.md               This file
+├── vercel.json             Runs pre-deploy checks before Vercel publishes
 ├── LICENSE                 PolyForm Noncommercial 1.0.0
-├── favicon.ico
-├── icon-32.png
-├── icon-192.png
-├── icon-512.png
-├── icon-maskable-192.png   Android maskable, with safe-zone padding
-├── icon-maskable-512.png
-├── apple-touch-icon.png    180x180 for iOS home screen
 └── app/
     ├── index.html          The PWA itself (~741 lines, single file)
     ├── sw.js               Service worker (cache version bumped on every user-facing deploy)
-    └── manifest.json       PWA manifest, scoped to /app/
+    ├── manifest.json       PWA manifest, scoped to /app/
+    ├── favicon.ico
+    ├── icon-32.png
+    ├── icon-192.png
+    ├── icon-512.png
+    ├── icon-maskable-192.png
+    ├── icon-maskable-512.png
+    └── apple-touch-icon.png
 ```
 
 Note that the PWA lives at `natallie.app/app/`, not at the root. The marketing landing page is the root `index.html`. The manifest is scoped to `/app/` to match the PWA's URL.
@@ -69,11 +70,23 @@ To preview the marketing landing page or the manual, serve from the repo root in
 python3 -m http.server 8000
 ```
 
+## Pre-deploy checks
+
+Run the zero-dependency smoke suite from the repo root before deploying:
+
+```
+node scripts/predeploy-check.mjs
+```
+
+It starts a temporary local static server and checks the high-risk paths from `TEST_PLAN.md`: key pages, app-scoped manifest/icon/service-worker URLs, service-worker precache entries, external script allowlisting, and `nat-*` localStorage key reset/documentation coverage.
+
+Vercel also runs this command automatically before publishing, through `vercel.json`. If any check fails, the Vercel build fails and the deploy is blocked.
+
 ---
 
 ## Deployment
 
-Vercel is connected to the `main` branch of this repository. Every push to `main` triggers an auto-deploy in roughly 30 seconds. There is no CI, no test suite, no preview environment in active use.
+Vercel is connected to the `main` branch of this repository. Every push to `main` triggers an auto-deploy in roughly 30 seconds. Vercel runs `node scripts/predeploy-check.mjs` as the build command before publishing the static files. There is no separate CI or preview environment in active use.
 
 When deploying a change to `app/index.html`, `app/sw.js`, or any file in the service worker's cache list, the cache version in `app/sw.js` must be bumped. Otherwise returning users will continue to receive the cached previous version of the app until their browsers invalidate the cache on their own.
 
@@ -82,6 +95,17 @@ const CACHE = 'natallie-v24';  // increment to v25, v26, ... on every relevant d
 ```
 
 Files outside the cache list (the marketing landing page, the manual, the format doc, the privacy policy) do not require a cache bump; users see those changes on their next visit.
+
+### Refactor checklist
+
+If you move files, change PWA paths, rename `nat-*` localStorage keys, or refactor reset/export/service-worker logic, update the deployment guardrails in the same PR:
+
+- `scripts/predeploy-check.mjs`
+- `TEST_PLAN.md`
+- this README
+- `app/sw.js` cache version, if cached app files changed
+
+The Vercel build runs `node scripts/predeploy-check.mjs` before deploy. If that script still reflects old assumptions after an intentional refactor, deploys may fail even when the app itself works.
 
 ---
 

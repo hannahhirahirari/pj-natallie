@@ -23,6 +23,14 @@ If these paths are wrong, the page may still appear to work, but installability,
 
 ## Before Every Deploy
 
+Run the automated pre-deploy checks from the repository root:
+
+```
+node scripts/predeploy-check.mjs
+```
+
+These checks cover the most common accidental breakages: missing pages/assets, root-vs-`/app/` PWA paths, manifest icon files, service-worker precache entries, unexpected analytics/script additions, and `nat-*` localStorage reset/documentation coverage.
+
 Open these pages:
 
 - `/`
@@ -172,6 +180,7 @@ Expected result: timezone recording is opt-in, and time-boxed board actions do n
 
 ## Safe Change Rules
 
+- If moving files, changing PWA paths, renaming `nat-*` localStorage keys, or refactoring reset/export/service-worker logic, update `scripts/predeploy-check.mjs`, this file, and README in the same PR.
 - If `app/index.html`, `app/sw.js`, `app/manifest.json`, or cached app assets change, bump `const CACHE = 'natallie-vNN'` in `app/sw.js`.
 - If adding a new `nat-*` localStorage key, update reset-all and README.
 - If changing exports/imports/backups/encryption, check `FORMAT.md` and run the export/import tests.

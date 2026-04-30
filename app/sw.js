@@ -1,10 +1,10 @@
-const CACHE = 'natallie-v27';
+const CACHE = 'natallie-v28';
 const FILES = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/app/',
+  '/app/index.html',
+  '/app/manifest.json',
+  '/app/icon-192.png',
+  '/app/icon-512.png'
 ];
 
 self.addEventListener('install', function(e) {
@@ -42,7 +42,7 @@ self.addEventListener('fetch', function(e) {
       return response;
     }).catch(function() {
       return caches.match(e.request).then(function(cached) {
-        return cached || caches.match('/index.html');
+        return cached || caches.match('/app/index.html');
       });
     })
   );
