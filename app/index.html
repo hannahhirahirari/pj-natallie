@@ -6,11 +6,11 @@
 <meta name="theme-color" content="#111113">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="/manifest.json">
-<link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/app/manifest.json">
+<link rel="icon" type="image/x-icon" href="/app/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/app/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/app/icon-192.png">
+<link rel="apple-touch-icon" href="/app/apple-touch-icon.png">
 <title>natallie</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -830,7 +830,7 @@ function MainApp(){
 
 /* ========== ROOT ========== */
 ReactDOM.createRoot(document.getElementById("root")).render(e(PinGate,null,e(MainApp)));
-if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js")}
+if("serviceWorker" in navigator){navigator.serviceWorker.register("/app/sw.js")}
 </script>
 </body>
 </html>
