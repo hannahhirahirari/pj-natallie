@@ -224,6 +224,12 @@ footer p{margin-bottom:8px}
   </ul>
   <p>there's also an optional checkbox in the editor called "auto-delete data when time is up". this is a way of telling yourself, at setup, that you intend to end this board cleanly when the period is over. it doesn't actually delete anything automatically; the same three options are still presented to you when the time-box ends. it's a record of intent, useful for self-quantification windows where you want to be deliberate about not letting old data accumulate.</p>
   <p>if you want to know more about how the time-box data is stored (for example, if you're thinking about exporting and analyzing it elsewhere), see the file format documentation at natallie.app/format.html.</p>
+
+  <div class="demo">
+    <div class="demo-label"><span>live demo · set a time-box and watch it expire</span><button class="demo-reset" data-demo="timebox">reset</button></div>
+    <div class="demo-frame" data-demo-mount="timebox"></div>
+    <div class="demo-hint">pick a duration, then tap "fast-forward" to simulate the time passing. the action buttons in the expired banner just reset this demo; in the real app they actually export, extend, or remove the time-box.</div>
+  </div>
 </section>
 
 <section id="stats">
@@ -231,6 +237,12 @@ footer p{margin-bottom:8px}
   <h2>stats and history</h2>
   <p>tapping a button in the bottom navigation opens the history view , a chronological list of every event you've logged, grouped by day. each entry shows the time, the button name, and the path through any boards.</p>
   <p>each button also has its own stats panel showing total taps, taps today, weekly count, monthly count, yearly count if applicable, and the date you first started tracking that button. you can reach a button's stats two ways: tap the small colored pill at the bottom of the home screen for that button, or tap the button while you're in setup mode.</p>
+
+  <div class="demo">
+    <div class="demo-label"><span>live demo · stats panel sample data</span><button class="demo-reset" data-demo="stats">reset</button></div>
+    <div class="demo-frame" data-demo-mount="stats"></div>
+    <div class="demo-hint">switch between sample patterns to see how the stats panel changes for different kinds of usage.</div>
+  </div>
 
   <h3>about timezones</h3>
   <p>natallie stores every tap as an absolute moment in time, independent of timezone. the times you see in the app and in your stats panel are rendered in your phone's current timezone. if you travel between timezones, the times of past taps will shift to reflect "what time was that, here?" rather than "what time was that, where I was?". this is the simple model and it works for most people.</p>
@@ -262,6 +274,12 @@ footer p{margin-bottom:8px}
     <p><em>important.</em> if you set a pin, write it down somewhere safe (a password manager is fine). there is no way to recover a forgotten pin. this is a deliberate consequence of natallie having no servers.</p>
   </div>
   <p>pin locks are useful when natallie is on a shared device, when you track something sensitive, or when you simply want a moment of intention before opening the app.</p>
+
+  <div class="demo">
+    <div class="demo-label"><span>live demo · set, confirm, and unlock</span><button class="demo-reset" data-demo="pins">reset</button></div>
+    <div class="demo-frame" data-demo-mount="pins"></div>
+    <div class="demo-hint">type a 4-digit pin, confirm it, then try unlocking with the right one (or a wrong one to see the error).</div>
+  </div>
 </section>
 
 <section id="export">
@@ -282,7 +300,13 @@ footer p{margin-bottom:8px}
   <p>a single .natallie file containing everything: your buttons, your logs, your notes, your settings. this is the file you'd use to restore on a new device or after clearing browser data. it's a JSON file with a custom extension so it's distinct from generic JSON exports.</p>
 
   <h3>about encryption</h3>
-  <p>if you've turned on the "encrypt exports" toggle in settings, every export above (CSVs and full backups) will ask you for a password and download as an encrypted file. CSVs come out as .natallie-csv files, backups come out as .natallie files. you can decrypt them later using the decrypt feature in settings, which gives you back the plain CSV or .natallie file. see section 11 for the full story.</p>
+  <p>if you've turned on the "encrypt exports" toggle in settings, every export above (CSVs and full backups) will ask you for a password and download as an encrypted file. CSVs come out as .natallie-csv files, backups come out as .natallie files. you can decrypt them later using the decrypt feature in settings, which gives you back the plain CSV or .natallie file. see section 12 for the full story.</p>
+
+  <div class="demo">
+    <div class="demo-label"><span>live demo · sample CSV outputs</span><button class="demo-reset" data-demo="export">reset</button></div>
+    <div class="demo-frame" data-demo-mount="export"></div>
+    <div class="demo-hint">switch between the three export formats to see what each one looks like. real exports will have your data instead of these samples.</div>
+  </div>
 </section>
 
 <section id="encryption">
@@ -312,10 +336,16 @@ footer p{margin-bottom:8px}
 
   <h3>what encryption protects, and what it doesn't</h3>
   <p>encryption protects exported files. it does not encrypt the data sitting in natallie itself; that data lives in your browser's local storage, which is protected by your device's lock screen and account password. encryption is for the moment a file leaves natallie and goes somewhere else.</p>
-  <p>this is the right level of protection for most people. if you want stronger protection of the data inside natallie, the pin lock feature (section 09) requires a pin to open the app or specific boards.</p>
+  <p>this is the right level of protection for most people. if you want stronger protection of the data inside natallie, the pin lock feature (section 10) requires a pin to open the app or specific boards.</p>
 
   <h3>turning it off</h3>
   <p>tap the "encrypt exports" toggle again. natallie confirms you want to turn it off and warns that future exports will be unencrypted. existing encrypted files stay encrypted; this only affects future exports.</p>
+
+  <div class="demo">
+    <div class="demo-label"><span>live demo · encrypt and decrypt with real crypto</span><button class="demo-reset" data-demo="encryption">reset</button></div>
+    <div class="demo-frame" data-demo-mount="encryption"></div>
+    <div class="demo-hint">this uses the same Web Crypto API natallie uses for real exports. encryption takes a moment because PBKDF2 is intentionally slow; that slowness is what makes the password hard to brute-force. try the wrong password on decrypt to see the failure mode.</div>
+  </div>
 </section>
 
 <section id="backup">
@@ -701,8 +731,169 @@ function Demo7(){
         e("button",{onClick:function(){permDel(t)},style:{background:"transparent",border:"none",color:"#FF6B6B",cursor:"pointer",fontSize:14,fontWeight:600,padding:"4px 6px",borderRadius:6,fontFamily:"inherit"}},"✕"))})))
 }
 
+/* ========== DEMO 8: TIME-BOX ========== */
+function Demo8(){
+  var s1=useState(null),tb=s1[0],setTb=s1[1];
+  var s2=useState(0),fakeNow=s2[0],setFakeNow=s2[1];
+  Demo8.reset=function(){setTb(null);setFakeNow(0)};
+  function setBox(days){setTb({start:Date.now(),days:days,mode:"prompt"});setFakeNow(0)}
+  function fastForward(){if(!tb)return;setFakeNow(tb.days*864e5+1)}
+  var endsAt=tb?(tb.start+tb.days*864e5):0;
+  var simulatedNow=tb?(tb.start+fakeNow):0;
+  var expired=tb&&simulatedNow>=endsAt;
+  var daysLeft=tb?Math.ceil((endsAt-simulatedNow)/864e5):0;
+  var label=tb?(expired?"expired":"ends in "+daysLeft+"d"):"";
+  return e("div",null,
+    !tb?e("div",null,
+      e("div",{style:{fontSize:11,letterSpacing:"0.08em",color:DM,textTransform:"uppercase",fontWeight:600,marginBottom:10}},"pick a duration"),
+      e("div",{style:{display:"flex",gap:6,flexWrap:"wrap"}},[1,3,7].map(function(d){return e("button",{key:d,onClick:function(){setBox(d)},style:{padding:"8px 14px",borderRadius:8,border:"1px solid #333",background:"#2A2A2E",color:TX,fontSize:12,cursor:"pointer",fontFamily:"inherit"}},d+" day"+(d>1?"s":""))})),
+      e("div",{style:{fontSize:11,color:DM,marginTop:14,fontStyle:"italic"}},"in real natallie, you'd also see custom days and 'auto-delete data when time is up' here.")):
+    e("div",null,
+      e("div",{style:{padding:"14px 16px",background:SF,borderRadius:14,border:"2px solid "+(expired?"#FFB347":"#7EC8E340"),display:"flex",alignItems:"center",gap:12,marginBottom:14}},
+        e("div",{style:{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:3}},[0,1,2,3].map(function(i){return e("div",{key:i,style:{width:8,height:8,borderRadius:2,background:i<2?"#7EC8E3":"#333",opacity:i<2?1:0.3}})})),
+        e("div",{style:{flex:1}},
+          e("div",{style:{fontSize:14,fontWeight:600,color:TX}},"my project board"),
+          e("div",{style:{fontSize:10,color:expired?"#FFB347":DM,marginTop:2}},label))),
+      expired?e("div",{style:{padding:"12px 14px",background:"#FFB34715",border:"1px solid #FFB34740",borderRadius:12,marginBottom:12}},
+        e("div",{style:{fontSize:11,fontWeight:700,color:"#FFB347",letterSpacing:"0.05em",textTransform:"uppercase",marginBottom:4}},"time-box ended"),
+        e("div",{style:{fontSize:11,color:DM,marginBottom:10}},"your board has finished. choose what to do."),
+        e("div",{style:{display:"flex",gap:6,flexWrap:"wrap"}},
+          e("button",{onClick:function(){Demo8.reset()},style:{padding:"4px 10px",borderRadius:6,border:"none",background:"#FFB34730",color:"#FFB347",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}},"export and delete"),
+          e("button",{onClick:function(){setBox(7)},style:{padding:"4px 10px",borderRadius:6,border:"1px solid #444",background:"transparent",color:TX,fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}},"extend"),
+          e("button",{onClick:function(){setTb(null)},style:{padding:"4px 10px",borderRadius:6,border:"1px solid #444",background:"transparent",color:DM,fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}},"remove time-box"))):
+        e("button",{onClick:fastForward,style:{padding:"8px 14px",borderRadius:8,border:"1px solid #444",background:"transparent",color:TX,fontSize:12,cursor:"pointer",fontFamily:"inherit"}},"fast-forward (simulate time passing)")))
+}
+
+/* ========== DEMO 9: STATS PANEL ========== */
+function Demo9(){
+  var patterns=[
+    {label:"steady use",total:127,today:3,week:21,month:89,daily:1.4,since:"Jan 12"},
+    {label:"heavy this week",total:54,today:8,week:48,month:54,daily:7.7,since:"3 weeks ago"},
+    {label:"declining",total:312,today:0,week:2,month:14,daily:0.5,since:"1 yr ago"},
+    {label:"just starting",total:6,today:2,week:6,month:6,daily:1.5,since:"4 days ago"}];
+  var s1=useState(0),idx=s1[0],setIdx=s1[1];
+  Demo9.reset=function(){setIdx(0)};
+  var p=patterns[idx];
+  var cols=[{l:"total",v:p.total},{l:"today",v:p.today},{l:"7 days",v:p.week},{l:"30 days",v:p.month},{l:"daily avg",v:p.daily}];
+  return e("div",null,
+    e("div",{style:{padding:"16px 18px",background:SF,borderRadius:14,border:"1px solid #2A2A2E",marginBottom:12}},
+      e("div",{style:{display:"flex",alignItems:"center",gap:10,marginBottom:14}},
+        e("div",{style:{width:10,height:10,borderRadius:"50%",background:"#FFB347"}}),
+        e("span",{style:{fontSize:14,fontWeight:700,color:TX}},"coffee"),
+        e("span",{style:{fontSize:10,color:DM,marginLeft:"auto"}},"sample: "+p.label)),
+      e("div",{style:{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8}},cols.map(function(c){return e("div",{key:c.l,style:{textAlign:"center"}},
+        e("div",{style:{fontSize:18,fontWeight:800,color:"#FFB347",lineHeight:1.2}},c.v),
+        e("div",{style:{fontSize:9,color:DM,letterSpacing:"0.06em",textTransform:"uppercase",marginTop:3}},c.l))})),
+      e("div",{style:{textAlign:"center",marginTop:12,fontSize:10,color:DM}},"tracking since "+p.since)),
+    e("div",{style:{display:"flex",gap:6,flexWrap:"wrap"}},patterns.map(function(pat,i){return e("button",{key:i,onClick:function(){setIdx(i)},style:{padding:"6px 10px",borderRadius:8,border:"1px solid "+(i===idx?"#FFB347":"#333"),background:i===idx?"#FFB34715":"transparent",color:i===idx?"#FFB347":DM,fontSize:11,cursor:"pointer",fontFamily:"inherit"}},pat.label)})))
+}
+
+/* ========== DEMO 10: PIN ========== */
+function Demo10(){
+  var s1=useState("setting"),phase=s1[0],setPhase=s1[1];
+  var s2=useState(""),input=s2[0],setInput=s2[1];
+  var s3=useState(""),storedPin=s3[0],setStoredPin=s3[1];
+  var s4=useState(""),firstEntry=s4[0],setFirstEntry=s4[1];
+  var s5=useState(""),err=s5[0],setErr=s5[1];
+  Demo10.reset=function(){setPhase("setting");setInput("");setStoredPin("");setFirstEntry("");setErr("")};
+  function add(d){if(input.length>=4)return;setInput(input+d);setErr("")}
+  function clear(){setInput("");setErr("")}
+  function submit(){
+    if(input.length!==4)return;
+    if(phase==="setting"){setFirstEntry(input);setInput("");setPhase("confirming");return}
+    if(phase==="confirming"){if(input===firstEntry){setStoredPin(input);setInput("");setPhase("locked")}else{setErr("doesn't match, try setting again");setInput("");setFirstEntry("");setPhase("setting")}return}
+    if(phase==="locked"){if(input===storedPin){setInput("");setPhase("unlocked")}else{setErr("wrong pin");setInput("")}return}
+  }
+  var label={setting:"set a 4-digit pin",confirming:"confirm the pin",locked:"enter your pin to unlock",unlocked:"unlocked!"}[phase];
+  return e("div",null,
+    e("div",{style:{textAlign:"center",fontSize:13,color:phase==="unlocked"?"#77DD77":TX,marginBottom:10,fontWeight:600}},label),
+    e("div",{style:{display:"flex",gap:8,justifyContent:"center",marginBottom:14}},[0,1,2,3].map(function(i){return e("div",{key:i,style:{width:14,height:14,borderRadius:"50%",background:i<input.length?"#7EC8E3":"#2A2A2E",border:"1px solid "+(i<input.length?"#7EC8E3":"#333")}})})),
+    err?e("div",{style:{textAlign:"center",fontSize:11,color:"#FF6B6B",marginBottom:10}},err):null,
+    phase!=="unlocked"?e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,60px)",gap:8,justifyContent:"center"}},[1,2,3,4,5,6,7,8,9].map(function(d){return e("button",{key:d,onClick:function(){add(d.toString())},style:{padding:"12px 0",borderRadius:8,border:"1px solid #333",background:"#1C1C1F",color:TX,fontSize:16,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}},d)}).concat([
+      e("button",{key:"clear",onClick:clear,style:{padding:"12px 0",borderRadius:8,border:"1px solid #333",background:"transparent",color:DM,fontSize:11,cursor:"pointer",fontFamily:"inherit"}},"clear"),
+      e("button",{key:0,onClick:function(){add("0")},style:{padding:"12px 0",borderRadius:8,border:"1px solid #333",background:"#1C1C1F",color:TX,fontSize:16,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}},"0"),
+      e("button",{key:"ok",onClick:submit,disabled:input.length!==4,style:{padding:"12px 0",borderRadius:8,border:"none",background:input.length===4?"#7EC8E3":"#2A2A2E",color:input.length===4?"#000":DM,fontSize:11,fontWeight:700,cursor:input.length===4?"pointer":"default",fontFamily:"inherit"}},"\u2713")])):
+      e("button",{onClick:function(){Demo10.reset()},style:{display:"block",margin:"0 auto",padding:"8px 16px",borderRadius:8,border:"1px solid #444",background:"transparent",color:TX,fontSize:12,cursor:"pointer",fontFamily:"inherit"}},"try again"))
+}
+
+/* ========== DEMO 11: EXPORTING ========== */
+function Demo11(){
+  var s1=useState("logs"),which=s1[0],setWhich=s1[1];
+  Demo11.reset=function(){setWhich("logs")};
+  var sample={
+    logs:'# exported_in_timezone: Asia/Tokyo (UTC+09:00)\n# note: timestamp_local is rendered in the export timezone above. iana_timezone is the timezone where each tap was logged, if recorded; otherwise blank.\ntimestamp_utc,timestamp_local,iana_timezone,event_name,path,event_type,color\n2026-04-28T22:14:03.000Z,"4/29/2026, 7:14:03 AM","Asia/Tokyo","coffee","coffee","click","#FFCBA4"\n2026-04-29T01:32:18.000Z,"4/29/2026, 10:32:18 AM","Asia/Tokyo","walked","walked","click","#7EC8E3"\n2026-04-29T05:48:51.000Z,"4/29/2026, 2:48:51 PM","Asia/Tokyo","good day","good day","click","#77DD77"',
+    map:'path,type,color\n"coffee",button,#FFCBA4\n"walked",button,#7EC8E3\n"good day",button,#77DD77\n"feelings",board,#C3A6FF\n"feelings \u203a anxious",button,#FF6B6B\n"feelings \u203a calm",button,#98E8C1',
+    filtered:'# exported_in_timezone: Asia/Tokyo (UTC+09:00)\n# date range: 2026-04-25 to 2026-04-29\ntimestamp_utc,timestamp_local,iana_timezone,event_name,path,event_type,color\n2026-04-26T03:12:00.000Z,"4/26/2026, 12:12:00 PM","Asia/Tokyo","coffee","coffee","click","#FFCBA4"\n2026-04-28T22:14:03.000Z,"4/29/2026, 7:14:03 AM","Asia/Tokyo","coffee","coffee","click","#FFCBA4"\n2026-04-29T01:32:18.000Z,"4/29/2026, 10:32:18 AM","Asia/Tokyo","walked","walked","click","#7EC8E3"'
+  };
+  var labels={logs:"all logs (with notes)",map:"board layout",filtered:"filtered by date range"};
+  return e("div",null,
+    e("div",{style:{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}},["logs","map","filtered"].map(function(k){return e("button",{key:k,onClick:function(){setWhich(k)},style:{padding:"6px 10px",borderRadius:8,border:"1px solid "+(k===which?"#7EC8E3":"#333"),background:k===which?"#7EC8E315":"transparent",color:k===which?"#7EC8E3":DM,fontSize:11,cursor:"pointer",fontFamily:"inherit"}},labels[k])})),
+    e("pre",{style:{padding:"12px 14px",background:"#0D0D0F",border:"1px solid #2A2A2E",borderRadius:10,fontSize:11,color:TX,overflowX:"auto",margin:0,fontFamily:"Menlo,Consolas,monospace",lineHeight:1.5,whiteSpace:"pre"}},sample[which]))
+}
+
+/* ========== DEMO 12: ENCRYPTION (real Web Crypto) ========== */
+function Demo12(){
+  var s1=useState("idle"),phase=s1[0],setPhase=s1[1];
+  var s2=useState(""),pwd=s2[0],setPwd=s2[1];
+  var s3=useState("hello! this is the data inside my export."),plain=s3[0],setPlain=s3[1];
+  var s4=useState(null),envelope=s4[0],setEnvelope=s4[1];
+  var s5=useState(""),decryptPwd=s5[0],setDecryptPwd=s5[1];
+  var s6=useState(""),decrypted=s6[0],setDecrypted=s6[1];
+  var s7=useState(""),err=s7[0],setErr=s7[1];
+  Demo12.reset=function(){setPhase("idle");setPwd("");setEnvelope(null);setDecryptPwd("");setDecrypted("");setErr("")};
+  function b64e(buf){var bytes=new Uint8Array(buf);var bin="";for(var i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);return btoa(bin)}
+  function b64d(s){var bin=atob(s);var bytes=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return bytes.buffer}
+  function deriveKey(p,salt){return crypto.subtle.importKey("raw",new TextEncoder().encode(p),{name:"PBKDF2"},false,["deriveKey"]).then(function(km){return crypto.subtle.deriveKey({name:"PBKDF2",salt:salt,iterations:200000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])})}
+  function encrypt(){
+    if(!pwd){return}
+    setPhase("encrypting");setErr("");
+    var salt=crypto.getRandomValues(new Uint8Array(16));
+    var iv=crypto.getRandomValues(new Uint8Array(12));
+    deriveKey(pwd,salt).then(function(key){
+      return crypto.subtle.encrypt({name:"AES-GCM",iv:iv},key,new TextEncoder().encode(plain))
+    }).then(function(ct){
+      setEnvelope({natallie_encrypted:true,version:1,salt:b64e(salt.buffer),iv:b64e(iv.buffer),ciphertext:b64e(ct)});
+      setPhase("encrypted")
+    }).catch(function(){setErr("encryption failed");setPhase("idle")})
+  }
+  function decrypt(){
+    if(!decryptPwd||!envelope){return}
+    setPhase("decrypting");setErr("");
+    var salt=new Uint8Array(b64d(envelope.salt));
+    var iv=new Uint8Array(b64d(envelope.iv));
+    var ct=b64d(envelope.ciphertext);
+    deriveKey(decryptPwd,salt).then(function(key){
+      return crypto.subtle.decrypt({name:"AES-GCM",iv:iv},key,ct)
+    }).then(function(buf){
+      setDecrypted(new TextDecoder().decode(buf));setPhase("decrypted")
+    }).catch(function(){setErr("wrong password or corrupted file");setPhase("encrypted")})
+  }
+  return e("div",null,
+    phase==="idle"||phase==="encrypting"?e("div",null,
+      e("div",{style:{fontSize:11,letterSpacing:"0.08em",color:DM,textTransform:"uppercase",fontWeight:600,marginBottom:6}},"sample plaintext"),
+      e("textarea",{value:plain,onChange:function(ev){setPlain(ev.target.value)},rows:2,style:{width:"100%",padding:"8px 10px",background:"#0D0D0F",border:"1px solid #333",borderRadius:8,color:TX,fontSize:12,fontFamily:"Menlo,Consolas,monospace",outline:"none",boxSizing:"border-box",resize:"vertical",marginBottom:12}}),
+      e("div",{style:{fontSize:11,letterSpacing:"0.08em",color:DM,textTransform:"uppercase",fontWeight:600,marginBottom:6}},"password"),
+      e("input",{type:"password",value:pwd,onChange:function(ev){setPwd(ev.target.value)},placeholder:"any password",style:{width:"100%",padding:"8px 10px",background:"#0D0D0F",border:"1px solid #333",borderRadius:8,color:TX,fontSize:13,outline:"none",boxSizing:"border-box",marginBottom:12,fontFamily:"inherit"}}),
+      e("button",{onClick:encrypt,disabled:phase==="encrypting"||!pwd,style:{padding:"10px 18px",borderRadius:10,border:"none",background:pwd?"#7EC8E3":"#2A2A2E",color:pwd?"#000":DM,fontSize:13,fontWeight:700,cursor:pwd?"pointer":"default",fontFamily:"inherit"}},phase==="encrypting"?"encrypting (this takes a moment, that's PBKDF2)\u2026":"encrypt"),
+      err?e("div",{style:{fontSize:11,color:"#FF6B6B",marginTop:8}},err):null):null,
+    phase==="encrypted"||phase==="decrypting"||phase==="decrypted"?e("div",null,
+      e("div",{style:{fontSize:11,letterSpacing:"0.08em",color:DM,textTransform:"uppercase",fontWeight:600,marginBottom:6}},"encrypted envelope"),
+      e("pre",{style:{padding:"10px 12px",background:"#0D0D0F",border:"1px solid #2A2A2E",borderRadius:8,fontSize:10,color:DM,overflowX:"auto",margin:"0 0 14px",fontFamily:"Menlo,Consolas,monospace",lineHeight:1.5,whiteSpace:"pre"}},JSON.stringify(envelope,null,2)),
+      phase!=="decrypted"?e("div",null,
+        e("div",{style:{fontSize:11,letterSpacing:"0.08em",color:DM,textTransform:"uppercase",fontWeight:600,marginBottom:6}},"decrypt with password"),
+        e("input",{type:"password",value:decryptPwd,onChange:function(ev){setDecryptPwd(ev.target.value)},placeholder:"the password you set above",style:{width:"100%",padding:"8px 10px",background:"#0D0D0F",border:"1px solid #333",borderRadius:8,color:TX,fontSize:13,outline:"none",boxSizing:"border-box",marginBottom:10,fontFamily:"inherit"}}),
+        e("div",{style:{display:"flex",gap:8}},
+          e("button",{onClick:decrypt,disabled:phase==="decrypting"||!decryptPwd,style:{padding:"10px 18px",borderRadius:10,border:"none",background:decryptPwd?"#77DD77":"#2A2A2E",color:decryptPwd?"#000":DM,fontSize:13,fontWeight:700,cursor:decryptPwd?"pointer":"default",fontFamily:"inherit",flex:1}},phase==="decrypting"?"decrypting\u2026":"decrypt"),
+          e("button",{onClick:function(){Demo12.reset()},style:{padding:"10px 14px",borderRadius:10,border:"1px solid #444",background:"transparent",color:DM,fontSize:12,cursor:"pointer",fontFamily:"inherit"}},"start over"))):
+        e("div",null,
+          e("div",{style:{fontSize:11,letterSpacing:"0.08em",color:"#77DD77",textTransform:"uppercase",fontWeight:600,marginBottom:6}},"decrypted plaintext"),
+          e("pre",{style:{padding:"10px 12px",background:"#77DD7710",border:"1px solid #77DD7740",borderRadius:8,fontSize:12,color:TX,overflowX:"auto",margin:"0 0 12px",fontFamily:"Menlo,Consolas,monospace",lineHeight:1.5,whiteSpace:"pre-wrap"}},decrypted),
+          e("button",{onClick:function(){Demo12.reset()},style:{padding:"8px 16px",borderRadius:10,border:"1px solid #444",background:"transparent",color:TX,fontSize:12,cursor:"pointer",fontFamily:"inherit"}},"start over")),
+      err?e("div",{style:{fontSize:11,color:"#FF6B6B",marginTop:8}},err):null):null)
+}
+
 /* ========== MOUNT ALL DEMOS ========== */
-var demos={basic:Demo1,setup:Demo2,colors:Demo3,boards:Demo4,notes:Demo6,trash:Demo7};
+var demos={basic:Demo1,setup:Demo2,colors:Demo3,boards:Demo4,notes:Demo6,trash:Demo7,timebox:Demo8,stats:Demo9,pins:Demo10,export:Demo11,encryption:Demo12};
 Object.keys(demos).forEach(function(key){
   var mount=document.querySelector('[data-demo-mount="'+key+'"]');
   if(mount){ReactDOM.createRoot(mount).render(e(demos[key],{key:Math.random()}))}
