@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#111113">
 <title>natallie , manual</title>
-<link rel="icon" href="/app/icon-192.png">
-<link rel="apple-touch-icon" href="/app/apple-touch-icon.png">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#111113;color:#E8E8EC;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased;line-height:1.6}
@@ -157,6 +157,7 @@ footer p{margin-bottom:8px}
   </div>
 
   <p>three things happen on a tap: the button presses down with a small animation, your phone vibrates briefly (if your device supports haptics and you have them enabled), and a log entry is recorded with the exact timestamp.</p>
+  <p>natallie is designed to be fast. that's intentional, but it has a cost: a tap that takes no thought collects less information than a tap you paid attention to. you decide what's right for what you're tracking. notes (section 6) are there for the moments a tap by itself isn't enough.</p>
 </section>
 
 <section id="setup">
@@ -363,6 +364,9 @@ footer p{margin-bottom:8px}
   <div class="callout callout-warn">
     <p><em>note.</em> restoring is destructive. if you have data in the app that's newer than the backup, it will be lost. if you're not sure, make a fresh backup first before restoring an older one.</p>
   </div>
+
+  <h3>if natallie itself stops being maintained</h3>
+  <p>natallie is built and maintained by one person. that comes with a real continuity risk: if the project stops being updated, the live site might eventually go offline. your data is protected against this in three concrete ways. .natallie backup files are plain JSON inside, readable by any text editor without natallie being online. CSV exports are a universal format readable by any spreadsheet for the indefinite future. and an installed PWA copy of natallie keeps working on your device even if natallie.app stops responding. exporting periodically and keeping backups somewhere you trust is good practice for any tool, especially one that runs on no servers.</p>
 </section>
 
 <section id="privacy">
@@ -464,6 +468,11 @@ footer p{margin-bottom:8px}
 
   <details class="faq-q"><summary>how many buttons can i have?</summary>
     <p>nine slots on the home screen. each one can be a button or a board. boards can contain nine more slots, and so on. there's no hard limit on nesting depth, but in practice most users find two or three levels is plenty.</p>
+  </details>
+
+  <details class="faq-q"><summary>should i keep my button names consistent over time?</summary>
+    <p>it depends on what you want. if you plan to look back in six months and compare similar things, consistency helps; a button called "tired" should keep meaning roughly the same thing each time. but you can also rename, retire, or restructure your buttons whenever you want; nothing about natallie locks you into a vocabulary.</p>
+    <p>a practical middle ground: when a button's meaning shifts, make a new button instead of renaming the old one. the old data stays labeled with the old meaning, the new data gets a name that fits, and your history stays honest.</p>
   </details>
 
   <details class="faq-q"><summary>can i undo a tap?</summary>
