@@ -6,6 +6,8 @@ A free, tap-based self-report event logger built as a Progressive Web App. The u
 
 The `.natallie` file format and its encrypted variant are specified in [FORMAT.md](FORMAT.md).
 
+Native iOS and Android wrapper notes live in [NATIVE.md](NATIVE.md).
+
 ---
 
 ## Tech stack

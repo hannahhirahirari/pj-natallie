@@ -1,1 +1,11 @@
 .codex/
+.DS_Store
+node_modules/
+native/www/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

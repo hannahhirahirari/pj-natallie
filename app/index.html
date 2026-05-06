@@ -672,7 +672,18 @@ function MainApp(){
   }
 
   var gc=function(n){return n<=1?"minmax(0,1fr)":n===2?"repeat(2,minmax(0,1fr))":"repeat(3,minmax(0,1fr))"};
-  var ps={minHeight:"100vh",background:BG,color:TX,fontFamily:"'SF Pro Display','Helvetica Neue',-apple-system,sans-serif",overflowX:"hidden"};
+  var ps={
+    minHeight:"100dvh",
+    background:BG,
+    color:TX,
+    fontFamily:"'SF Pro Display','Helvetica Neue',-apple-system,sans-serif",
+    overflowX:"hidden",
+    boxSizing:"border-box",
+    paddingTop:"var(--safe-area-inset-top, env(safe-area-inset-top, 0px))",
+    paddingRight:"var(--safe-area-inset-right, env(safe-area-inset-right, 0px))",
+    paddingBottom:"var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))",
+    paddingLeft:"var(--safe-area-inset-left, env(safe-area-inset-left, 0px))"
+  };
   var bb=function(fn){return e("button",{onClick:fn,style:{background:"none",border:"none",color:DM,fontSize:20,cursor:"pointer",padding:"4px 8px"}},"\u2190")};
 
   var Pill=function(p){var ids2=cIds(p.btn),st=gSt(logs,ids2);return e("button",{onClick:function(){setVl(p.btn)},style:{background:p.btn.cl+"15",border:"1px solid "+p.btn.cl+"30",borderRadius:20,padding:"6px 12px",color:p.btn.cl,fontSize:11,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:5}},e("span",{style:{width:6,height:6,borderRadius:p.btn.tp==="board"?2:"50%",background:p.btn.cl}}),p.btn.nm+" \xb7 "+st.total+(st.trend?" "+st.trend:""))};
