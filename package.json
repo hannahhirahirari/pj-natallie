@@ -1,0 +1,27 @@
+{
+  "name": "natallie-native-wrapper",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Native iOS and Android wrapper tooling for natallie.",
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/predeploy-check.mjs",
+    "native:prepare-web": "node scripts/prepare-native-web.mjs",
+    "native:sync": "node scripts/prepare-native-web.mjs && cap sync",
+    "native:copy": "node scripts/prepare-native-web.mjs && cap copy",
+    "native:open:ios": "cap open ios",
+    "native:open:android": "cap open android",
+    "native:android:debug": "node scripts/prepare-native-web.mjs && cap sync android && cd android && JAVA_HOME=\"${JAVA_HOME:-/Applications/Android Studio.app/Contents/jbr/Contents/Home}\" ./gradlew assembleDebug",
+    "native:android:bundle": "node scripts/prepare-native-web.mjs && cap sync android && cd android && JAVA_HOME=\"${JAVA_HOME:-/Applications/Android Studio.app/Contents/jbr/Contents/Home}\" ./gradlew bundleRelease"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.3.1",
+    "@capacitor/core": "8.3.1",
+    "@capacitor/ios": "8.3.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.3.1"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "appId": "app.natallie",
+  "appName": "natallie",
+  "webDir": "native/www",
+  "server": {
+    "hostname": "localhost",
+    "iosScheme": "capacitor",
+    "androidScheme": "https"
+  }
+}
