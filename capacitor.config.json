@@ -13,6 +13,10 @@
       "style": "DARK",
       "hidden": false,
       "animation": "NONE"
+    },
+    "SplashScreen": {
+      "backgroundColor": "#111113",
+      "launchAutoHide": true
     }
   }
 }
