@@ -154,6 +154,43 @@ on:{en:"ON",ja:"\u30AA\u30F3"},
 off:{en:"OFF",ja:"\u30AA\u30D5"},
 encrypting:{en:"Encrypting...",ja:"\u6697\u53F7\u5316\u4E2D..."},
 decrypting:{en:"Decrypting...",ja:"\u5FA9\u53F7\u4E2D..."},
+wtSkip:{en:"skip"},
+wtNext:{en:"next"},
+wtDone:{en:"set up my first slot"},
+wtSkipConfirmTitle:{en:"skip the walkthrough?"},
+wtSkipConfirmBody:{en:"you can see it again any time from settings."},
+wtKeepGoing:{en:"keep going"},
+settingsShowWT:{en:"show walkthrough"},
+wt1H:{en:"welcome to natallie"},
+wt1D:{en:"nine slots on your home screen. each one is yours."},
+wt2H:{en:"tap to log a moment"},
+wt2D:{en:"your data is saved on this device only. natallie has no servers, no accounts."},
+wt3H:{en:"tap setup to configure"},
+wt3D:{en:"switch to setup mode any time. add buttons, edit names, change colors."},
+wt4H:{en:"hold a slot for options"},
+wt4D:{en:"in setup mode, press and hold a slot to edit, move, or delete it."},
+wt5H:{en:"boards are folders"},
+wt5D:{en:"a slot can hold nine more slots. open a board to see what's inside."},
+wt6H:{en:"boards within boards"},
+wt6D:{en:"go as deep as you need. by week, by project, by mood, anything."},
+wt7H:{en:"buttons can do more than log"},
+wt7D:{en:"set a button to also open your camera or call a number when tapped."},
+wt8H:{en:"time-box a board"},
+wt8D:{en:"turn any board into a temporary challenge. it ends on its own."},
+wt9H:{en:"share a board with a friend"},
+wt9D:{en:"send your board as a link. they see a preview, then add it to their grid."},
+wt10H:{en:"write a note any time"},
+wt10D:{en:"notes are separate from taps. for the days you want to say more than press."},
+wt11H:{en:"export to CSV or back up"},
+wt11D:{en:"export your taps and notes as CSV. or back up the whole app to a file. with no servers, a lost device means lost data."},
+wt12H:{en:"pin-protect the app"},
+wt12D:{en:"set a 4-digit pin for the app or individual boards. write it down somewhere safe (a password manager is fine). there's no way to recover a forgotten pin."},
+wt13H:{en:"encrypt your backups"},
+wt13D:{en:"set a password on your backup file. nothing can open it without that password, not even natallie."},
+wt14H:{en:"switch your language"},
+wt14D:{en:"change it from settings any time."},
+wt15H:{en:"now make it yours"},
+wt15D:{en:"twelve colors to choose from. set up your first slot when you're ready."},
 };
 var CL="en";try{CL=localStorage.getItem("nat-lang")||"en"}catch(x){}
 function t(k){var v=L[k];return v?(v[CL]||v.en):k}
@@ -482,6 +519,57 @@ function ExportModal(props){
         e("p",{style:cardDesc},t("fullBackupDesc")))))
 }
 
+/* ========== WALKTHROUGH ========== */
+function wIll1(){return e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,width:220}},Array.from({length:9},function(_,i){return e("div",{key:i,style:{aspectRatio:"1",borderRadius:14,background:"rgba(74,144,217,0.05)",border:"1.5px solid rgba(74,144,217,0.25)",display:"flex",alignItems:"center",justifyContent:"center"}},e("div",{style:{width:14,height:14,borderRadius:"50%",background:"#4A90D9",boxShadow:"0 0 8px rgba(74,144,217,0.4)"}}))}))}
+function wIll2(){return e("div",{style:{position:"relative",width:100,height:100}},e("div",{style:{position:"absolute",inset:-10,borderRadius:28,border:"2px solid rgba(74,144,217,0.3)",animation:"ripPop 1.6s ease-out infinite"}}),e("div",{style:{width:100,height:100,borderRadius:24,background:"rgba(74,144,217,0.05)",border:"2px solid rgba(74,144,217,0.25)",display:"flex",alignItems:"center",justifyContent:"center"}},e("div",{style:{width:18,height:18,borderRadius:"50%",background:"#4A90D9",boxShadow:"0 0 12px rgba(74,144,217,0.5)"}})),e("span",{style:{position:"absolute",bottom:-18,right:-22,fontSize:34,transform:"rotate(-15deg)"}},"☝"))}
+function wIll3(){return e("div",{style:{display:"flex",flexDirection:"column",gap:14,alignItems:"center"}},e("div",{style:{display:"flex",alignItems:"center",gap:10,background:SF,padding:"10px 14px",borderRadius:14,border:"1.5px solid rgba(74,144,217,0.3)"}},e("div",{style:{fontSize:12,fontWeight:700,color:TX}},"natallie"),e("div",{style:{padding:"4px 10px",borderRadius:8,background:"#4A90D9",color:"#fff",fontSize:10,fontWeight:600}},"setup")),e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6,width:150}},Array.from({length:9},function(_,i){return e("div",{key:i,style:{aspectRatio:"1",borderRadius:10,background:"rgba(74,144,217,0.05)",border:"1.5px solid rgba(74,144,217,0.2)"}})})))}
+function wIll4(){return e("div",{style:{position:"relative",width:230,height:170}},e("div",{style:{position:"absolute",left:10,top:30,width:90,height:90,borderRadius:18,background:"rgba(74,144,217,0.05)",border:"2px solid rgba(74,144,217,0.4)",display:"flex",alignItems:"center",justifyContent:"center"}},e("div",{style:{width:14,height:14,borderRadius:"50%",background:"#4A90D9"}})),e("div",{style:{position:"absolute",right:0,top:20,background:SF,borderRadius:10,padding:6,border:"1px solid #2a2a30",width:120,boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}},e("div",{style:{padding:"6px 10px",fontSize:11,color:TX}},"✎  edit"),e("div",{style:{padding:"6px 10px",fontSize:11,color:TX}},"→  move"),e("div",{style:{padding:"6px 10px",fontSize:11,color:"#FF6B6B"}},"✕  delete")))}
+function wIll5(){function mini(){return e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:3,padding:6,borderRadius:10,background:SF,border:"1.5px solid rgba(74,144,217,0.3)",width:90}},Array.from({length:9},function(_,i){return e("div",{key:i,style:{aspectRatio:"1",borderRadius:3,background:i<4?"rgba(74,144,217,0.4)":"transparent",border:i>=4?"1px dashed #333":"none"}})}))}return e("div",{style:{display:"flex",flexDirection:"column",alignItems:"center",gap:10}},mini(),e("div",{style:{color:DM,fontSize:18}},"↓"),mini())}
+function wIll6(){function mini(w){return e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:2,padding:4,borderRadius:8,background:SF,border:"1.5px solid rgba(74,144,217,0.3)",width:w}},Array.from({length:9},function(_,i){return e("div",{key:i,style:{aspectRatio:"1",borderRadius:2,background:"rgba(74,144,217,0.3)"}})}))}return e("div",{style:{display:"flex",flexDirection:"column",alignItems:"center",gap:6}},mini(100),e("div",{style:{color:DM,fontSize:14}},"↓"),mini(75),e("div",{style:{color:DM,fontSize:14}},"↓"),mini(55))}
+function wIll7(){return e("div",{style:{position:"relative",width:200,height:130}},e("div",{style:{position:"absolute",left:50,top:25,width:100,height:80,borderRadius:18,background:"rgba(74,144,217,0.05)",border:"2px solid rgba(74,144,217,0.4)",display:"flex",alignItems:"center",justifyContent:"center"}},e("div",{style:{width:14,height:14,borderRadius:"50%",background:"#4A90D9"}})),e("div",{style:{position:"absolute",right:0,top:0,width:36,height:36,borderRadius:18,background:SF,border:"1.5px solid rgba(74,144,217,0.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,color:"#4A90D9"}},"⏺"),e("div",{style:{position:"absolute",right:0,bottom:0,width:36,height:36,borderRadius:18,background:SF,border:"1.5px solid rgba(74,144,217,0.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,color:"#4A90D9"}},"☎"))}
+function wIll8(){return e("div",{style:{position:"relative",width:140,height:140,borderRadius:24,background:"rgba(74,144,217,0.05)",border:"2px solid rgba(74,144,217,0.4)",display:"flex",alignItems:"center",justifyContent:"center"}},e("div",{style:{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:6}},Array.from({length:4},function(_,i){return e("div",{key:i,style:{width:14,height:14,borderRadius:3,background:"#4A90D9"}})})),e("div",{style:{position:"absolute",bottom:8,right:8,padding:"3px 8px",borderRadius:8,background:"rgba(255,179,71,0.12)",border:"1px solid rgba(255,179,71,0.4)",fontSize:9,color:"#FFB347",fontWeight:700}},"7 days"))}
+function wIll9(){function phone(){return e("div",{style:{width:70,height:110,borderRadius:12,background:SF,border:"1.5px solid rgba(74,144,217,0.4)",padding:6,display:"flex",flexDirection:"column",gap:3}},Array.from({length:3},function(_,r){return e("div",{key:r,style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:2}},Array.from({length:3},function(_,c){return e("div",{key:c,style:{aspectRatio:"1",borderRadius:2,background:"#4A90D9",opacity:0.7}})}))}))}return e("div",{style:{display:"flex",alignItems:"center",gap:18}},phone(),e("span",{style:{color:"#4A90D9",fontSize:24,fontWeight:800}},"↗"),phone())}
+function wIll10(){return e("div",{style:{width:130,height:100,borderRadius:12,background:SF,border:"1.5px solid rgba(74,144,217,0.3)",padding:16,display:"flex",flexDirection:"column",gap:8}},e("div",{style:{height:4,borderRadius:2,background:"rgba(74,144,217,0.4)",width:"80%"}}),e("div",{style:{height:4,borderRadius:2,background:"rgba(74,144,217,0.4)",width:"60%"}}),e("div",{style:{height:4,borderRadius:2,background:"rgba(74,144,217,0.4)",width:"75%"}}),e("div",{style:{height:4,borderRadius:2,background:"rgba(74,144,217,0.4)",width:"40%"}}))}
+function wIll11(){return e("div",{style:{width:80,height:100,borderRadius:10,background:SF,border:"2px solid rgba(74,144,217,0.4)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6}},e("div",{style:{fontSize:11,color:"#4A90D9",fontWeight:800,letterSpacing:"0.08em"}},"CSV"),e("div",{style:{fontSize:28,color:"#4A90D9",lineHeight:1}},"↓"))}
+function wIll12(){return e("div",{style:{display:"flex",flexDirection:"column",alignItems:"center",gap:14}},e("div",{style:{display:"flex",gap:10}},Array.from({length:4},function(_,i){return e("div",{key:i,style:{width:12,height:12,borderRadius:"50%",background:i<2?"#4A90D9":"transparent",border:"2px solid #4A90D9"}})})),e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8}},[1,2,3,4,5,6,7,8,9].map(function(n){return e("div",{key:n,style:{width:36,height:36,borderRadius:"50%",background:SF,border:"1px solid rgba(74,144,217,0.2)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,color:"#4A90D9",fontWeight:600}},n)})))}
+function wIll13(){return e("div",{style:{width:80,height:96,position:"relative"}},e("div",{style:{position:"absolute",top:0,left:20,width:40,height:42,borderRadius:"50% 50% 0 0",border:"4px solid #4A90D9",borderBottom:"none"}}),e("div",{style:{position:"absolute",top:36,left:0,width:80,height:60,borderRadius:10,background:"rgba(74,144,217,0.1)",border:"2px solid rgba(74,144,217,0.4)",display:"flex",alignItems:"center",justifyContent:"center"}},e("div",{style:{width:14,height:14,borderRadius:"50%",background:"#4A90D9"}})))}
+function wIll14(){function chr(c){return e("div",{style:{width:50,height:50,borderRadius:12,background:SF,border:"1.5px solid rgba(74,144,217,0.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,fontWeight:700,color:"#4A90D9"}},c)}return e("div",{style:{display:"flex",gap:14,alignItems:"center"}},chr("A"),chr("あ"),chr("한"))}
+function wIll15(){return e("div",{style:{display:"flex",flexDirection:"column",alignItems:"center",gap:16}},e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,width:180}},COLORS.slice(0,9).map(function(c,i){return e("div",{key:i,style:{aspectRatio:"1",borderRadius:14,background:SF,border:"1.5px solid rgba(255,255,255,0.04)",display:"flex",alignItems:"center",justifyContent:"center"}},e("div",{style:{width:14,height:14,borderRadius:"50%",background:c,boxShadow:"0 0 8px "+c+"40"}}))})),e("div",{style:{fontSize:10,color:DM,textTransform:"uppercase",letterSpacing:"0.12em"}},"twelve colors"),e("div",{style:{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"center",maxWidth:240}},COLORS.map(function(c,i){return e("div",{key:i,style:{width:18,height:18,borderRadius:"50%",background:c}})})))}
+
+var WT_SCREENS=[{h:"wt1H",d:"wt1D",ill:wIll1},{h:"wt2H",d:"wt2D",ill:wIll2},{h:"wt3H",d:"wt3D",ill:wIll3},{h:"wt4H",d:"wt4D",ill:wIll4},{h:"wt5H",d:"wt5D",ill:wIll5},{h:"wt6H",d:"wt6D",ill:wIll6},{h:"wt7H",d:"wt7D",ill:wIll7},{h:"wt8H",d:"wt8D",ill:wIll8},{h:"wt9H",d:"wt9D",ill:wIll9},{h:"wt10H",d:"wt10D",ill:wIll10},{h:"wt11H",d:"wt11D",ill:wIll11},{h:"wt12H",d:"wt12D",ill:wIll12},{h:"wt13H",d:"wt13D",ill:wIll13},{h:"wt14H",d:"wt14D",ill:wIll14},{h:"wt15H",d:"wt15D",ill:wIll15}];
+
+function WalkthroughSkipConfirm(props){
+  return e("div",{style:{position:"fixed",inset:0,background:"rgba(0,0,0,0.7)",zIndex:310,display:"flex",alignItems:"flex-end",justifyContent:"center",padding:20},onClick:props.onKeepGoing},
+    e("div",{onClick:function(ev){ev.stopPropagation()},style:{background:SF,borderRadius:16,width:"100%",maxWidth:360,padding:18,textAlign:"center"}},
+      e("p",{style:{fontSize:14,color:TX,fontWeight:600,marginBottom:6}},t("wtSkipConfirmTitle")),
+      e("p",{style:{fontSize:12,color:DM,marginBottom:14,lineHeight:1.5}},t("wtSkipConfirmBody")),
+      e("div",{style:{display:"flex",gap:8}},
+        e("button",{onClick:props.onKeepGoing,style:{flex:1,padding:"10px 0",borderRadius:10,border:"1px solid #333",background:"transparent",color:TX,fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}},t("wtKeepGoing")),
+        e("button",{onClick:props.onConfirmSkip,style:{flex:1,padding:"10px 0",borderRadius:10,border:"none",background:"#4A90D9",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}},t("wtSkip")))))
+}
+
+function Walkthrough(props){
+  var s1=useState(0),idx=s1[0],setIdx=s1[1];
+  var s2=useState(false),showConf=s2[0],setShowConf=s2[1];
+  var TOTAL=WT_SCREENS.length;
+  var screen=WT_SCREENS[idx];
+  var isLast=idx===TOTAL-1;
+  function next(){hap("click");if(idx<TOTAL-1)setIdx(idx+1);else done()}
+  function done(){svs("nat-wt","1");props.onClose()}
+  function skip(){setShowConf(true)}
+  function confirmSkip(){svs("nat-wt","1");setShowConf(false);props.onClose()}
+  function keepGoing(){setShowConf(false)}
+  return e("div",{style:{position:"fixed",inset:0,background:BG,zIndex:300,display:"flex",flexDirection:"column"}},
+    !isLast?e("button",{onClick:skip,style:{position:"absolute",top:20,right:20,background:"none",border:"none",color:DM,fontSize:13,fontWeight:500,cursor:"pointer",zIndex:2,fontFamily:"inherit",padding:"6px 10px"}},t("wtSkip")):null,
+    e("div",{style:{flex:1,display:"flex",alignItems:"center",justifyContent:"center",padding:24,minHeight:0}},screen.ill()),
+    e("div",{style:{padding:"16px 32px 24px",textAlign:"center"}},
+      e("h2",{style:{fontSize:22,fontWeight:800,letterSpacing:"-0.02em",marginBottom:10,lineHeight:1.2,color:TX}},t(screen.h)),
+      e("p",{style:{fontSize:14,color:DM,lineHeight:1.5}},t(screen.d))),
+    e("div",{style:{padding:"16px 22px 30px",display:"flex",alignItems:"center",justifyContent:isLast?"center":"space-between"}},
+      !isLast?e("div",{style:{display:"flex",gap:6}},WT_SCREENS.map(function(_,i){return e("div",{key:i,style:{width:i===idx?18:6,height:6,borderRadius:i===idx?3:"50%",background:i===idx?"#4A90D9":"#2a2a30",transition:"all 0.2s"}})})):null,
+      e("button",{onClick:next,style:{background:"#4A90D9",color:"#fff",border:"none",borderRadius:10,padding:isLast?"12px 40px":"10px 24px",fontSize:isLast?15:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}},isLast?t("wtDone"):t("wtNext"))),
+    showConf?e(WalkthroughSkipConfirm,{onKeepGoing:keepGoing,onConfirmSkip:confirmSkip}):null)
+}
 
 function MainApp(){
   /* ALL HOOKS - fixed order */
@@ -512,7 +600,10 @@ function MainApp(){
   var hPwd=useState(null),pwdPrompt=hPwd[0],setPwdPrompt=hPwd[1];
   var hPending=useState(null),pendingFile=hPending[0],setPendingFile=hPending[1];
   var lpR=useRef(null),didLP=useRef(false),fileR=useRef(null),decR=useRef(null);
+  var hWT=useState(false),showWT=hWT[0],setShowWT=hWT[1];
   /* END HOOKS */
+
+  useEffect(function(){if(!lds("nat-wt",""))setShowWT(true)},[]);
 
   function setSlots(v){_SS(v);sv("nat-s",v)}
   function setLogs(fn){_SL(function(p){var n=typeof fn==="function"?fn(p):fn;sv("nat-l",n);return n})}
@@ -719,6 +810,7 @@ function MainApp(){
         e("p",{style:{fontSize:12,color:DM,margin:"0 0 16px"}},tbExtFor.nm),
         e("div",{style:{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:8}},[3,7,14,30].map(function(d){return e("button",{key:d,onClick:function(){tbExtend(tbExtFor.id,d)},style:{padding:"10px 0",borderRadius:10,border:"1px solid #333",background:"#2A2A2E",color:TX,fontSize:13,cursor:"pointer"}},t("tbDays"+d))})),
         e("button",{onClick:function(){setTbExtFor(null)},style:{marginTop:14,width:"100%",padding:"10px 0",borderRadius:10,border:"1px solid #333",background:"transparent",color:DM,fontSize:12,cursor:"pointer"}},t("cancel")))):null,
+    showWT?e(Walkthrough,{onClose:function(){setShowWT(false)}}):null,
     e("input",{ref:fileR,type:"file",accept:".natallie,.json",onChange:handleFileRead,style:{display:"none"}}),
     e("input",{ref:decR,type:"file",accept:".natallie,.natallie-csv,.json",onChange:handleDecryptFileRead,style:{display:"none"}}));
 
@@ -794,7 +886,8 @@ function MainApp(){
         e("div",{style:{color:DM,fontSize:11,marginTop:2}},t("recordTzDesc"))),
       e("button",{onClick:toggleRecordTz,style:{padding:"6px 14px",borderRadius:8,border:"none",fontSize:12,fontWeight:600,cursor:"pointer",background:recordTz?"#77DD77":"#2A2A2E",color:recordTz?BG:DM}},recordTz?t("on"):t("off"))),
     e("button",{onClick:function(){doDecryptOnly()},style:btnStyle},t("decryptFile")),
-    e("button",{onClick:function(){if(window.confirm(t("delAll"))){rms("nat-s");rms("nat-l");rms("nat-n");rms("nat-pin");rms("nat-ps");rms("nat-bp");rms("nat-lang");rms("nat-tr");rms("nat-nt");rms("nat-enc");rms("nat-tz");location.reload()}},style:Object.assign({},dangerBtnStyle,{marginTop:20})},t("resetAll"))),modals)}
+    e("button",{onClick:function(){setShowWT(true);setShowSet(false)},style:btnStyle},t("settingsShowWT")),
+    e("button",{onClick:function(){if(window.confirm(t("delAll"))){rms("nat-s");rms("nat-l");rms("nat-n");rms("nat-pin");rms("nat-ps");rms("nat-bp");rms("nat-lang");rms("nat-tr");rms("nat-nt");rms("nat-enc");rms("nat-tz");rms("nat-wt");location.reload()}},style:Object.assign({},dangerBtnStyle,{marginTop:20})},t("resetAll"))),modals)}
 
   /* ========== VIEW LOGS ========== */
   if(vl){var ids=cIds(vl),bl=logs.filter(function(l){return ids.indexOf(l.bi)>=0});var gr={};bl.forEach(function(l){var k=fD(l.ts);if(!gr[k])gr[k]=[];gr[k].push(l)});var st=gSt(logs,ids);var cols=[{l:t("today"),v:st.today},{l:t("dailyAvg"),v:st.avg},{l:t("thisWeek"),v:st.weekly},{l:t("thisMonth"),v:st.monthly}];if(st.sY)cols.push({l:t("thisYear"),v:st.yearly});
