@@ -117,10 +117,12 @@ footer p{margin-bottom:8px}
     <li><a href="#what">what natallie is</a></li>
     <li><a href="#first-tap">your first tap</a></li>
     <li><a href="#setup">setting up buttons</a></li>
+    <li><a href="#actions">on-tap actions</a></li>
     <li><a href="#colors">colors</a></li>
     <li><a href="#boards">nested boards</a></li>
     <li><a href="#notes">notes</a></li>
     <li><a href="#timebox">time-boxed boards</a></li>
+    <li><a href="#share">sharing board templates</a></li>
     <li><a href="#stats">stats and history</a></li>
     <li><a href="#trash">trash and restore</a></li>
     <li><a href="#pins">pin locks</a></li>
@@ -172,8 +174,22 @@ footer p{margin-bottom:8px}
   </div>
 </section>
 
-<section id="colors">
+<section id="actions">
   <div class="section-num">section 04</div>
+  <h2>on-tap actions</h2>
+  <div class="callout callout-warn">
+    <p>this feature is in development and not yet shipped. the section below describes how it will work in the next release.</p>
+  </div>
+  <p>a button can do more than log. when you set up or edit a button, you'll see a section called <em>on tap</em> with three choices , just log (the default), open camera, or call a number.</p>
+  <p><strong>open camera</strong>. when tapped, natallie logs the tap and then opens your phone's camera. the photo saves to your camera roll like any other photo you take. natallie never receives, sees, or stores the image. this only works in the installed app, not in a browser tab.</p>
+  <p><strong>call a number</strong>. when tapped, natallie logs the tap and then opens your dialer with a saved number pre-filled. you press the call button yourself. handy for something like a crisis line or your own emergency number. note that this opens the dialer; it does not auto-dial, and it is not a substitute for your phone's hardware emergency sos.</p>
+  <div class="callout">
+    <p>actions stack with logging. the tap is always recorded first. if the camera permission is denied or you cancel the photo, the tap still counts.</p>
+  </div>
+</section>
+
+<section id="colors">
+  <div class="section-num">section 05</div>
   <h2>colors</h2>
   <p>natallie ships with twelve colors. each one is soft, slightly muted, designed to look good in dark mode without being hard to read. you assign a color to each button when you create it, and you can change it later.</p>
 
@@ -185,7 +201,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="boards">
-  <div class="section-num">section 05</div>
+  <div class="section-num">section 06</div>
   <h2>nested boards</h2>
   <p>nine buttons isn't always enough. when you need more, you can turn a slot into a <em>board</em> , a folder containing its own 3x3 grid. boards can themselves contain boards, so you can nest as deep as you need to.</p>
   <p>boards display as four small dots in a 2x2 grid (one for each of the first four buttons inside them). tapping a board opens it, replacing the current grid with its contents. a back arrow at the top returns to the previous level.</p>
@@ -198,7 +214,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="notes">
-  <div class="section-num">section 06</div>
+  <div class="section-num">section 07</div>
   <h2>notes</h2>
   <p>sometimes a button isn't enough. you want to write a sentence. natallie has a separate notes view for this , open the notes panel from the bottom navigation, write whatever you want, and it gets timestamped and saved.</p>
   <p>notes are designed for privacy. by default the text is hidden from view (showing only the date and time) and revealed when you tap the entry.</p>
@@ -213,7 +229,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="timebox">
-  <div class="section-num">section 07</div>
+  <div class="section-num">section 08</div>
   <h2>time-boxed boards</h2>
   <p>most boards in natallie are open-ended; you build them and they stay forever. but sometimes you want to track something for a specific period and then be done. a 14-day migraine diary, a 30-day project, a 3-day check-in around a hospital stay. for those, you can give a board a time-box.</p>
   <p>when you create or edit a board in setup mode, you'll see a checkbox labeled "time-box this board". turn it on, pick a duration (3, 7, 14, or 30 days, or a custom number up to 50 years), and save. the board will display a small "ends in Nd" label on its tile so you can see at a glance how much time is left.</p>
@@ -233,8 +249,31 @@ footer p{margin-bottom:8px}
   </div>
 </section>
 
+<section id="share">
+  <div class="section-num">section 09</div>
+  <h2>sharing board templates</h2>
+  <div class="callout callout-warn">
+    <p>this feature is in development and not yet shipped. the section below describes how it will work in the next release.</p>
+  </div>
+  <p>if you've put together a board you're proud of, you can share its structure with another natallie user. in setup mode, hold a board to bring up the options, then tap <em>share board template</em>. natallie generates a link you can send via any messaging app , imessage, whatsapp, email, anywhere a link goes.</p>
+  <p>the recipient taps the link and sees a preview of what they're about to add. if they accept, the board appears in their grid alongside their own buttons.</p>
+  <p>what gets shared:</p>
+  <ul>
+    <li>the board's name and color</li>
+    <li>each slot's name and color</li>
+    <li>any sub-boards nested inside, recursively (unless you uncheck specific ones before sharing)</li>
+  </ul>
+  <p>what does <em>not</em> get shared:</p>
+  <ul>
+    <li>your event history (taps and timestamps)</li>
+    <li>your pin or any board pins</li>
+    <li>your settings, language, or anything else from your device</li>
+  </ul>
+  <p>the link encodes the board structure directly. nothing passes through any server, including natallie's. there is no shared database of templates and no way to browse templates from strangers. sharing is intentional, friend to friend.</p>
+</section>
+
 <section id="stats">
-  <div class="section-num">section 08</div>
+  <div class="section-num">section 10</div>
   <h2>stats and history</h2>
   <p>tapping a button in the bottom navigation opens the history view , a chronological list of every event you've logged, grouped by day. each entry shows the time, the button name, and the path through any boards.</p>
   <p>each button also has its own stats panel showing total taps, taps today, weekly count, monthly count, yearly count if applicable, and the date you first started tracking that button. you can reach a button's stats two ways: tap the small colored pill at the bottom of the home screen for that button, or tap the button while you're in setup mode.</p>
@@ -252,7 +291,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="trash">
-  <div class="section-num">section 09</div>
+  <div class="section-num">section 11</div>
   <h2>trash and restore</h2>
   <p>when you delete a button, board, or note, it doesn't disappear forever. it goes to the trash, which is accessible from the settings panel. from there you can restore it back to your home screen (if there's room) or permanently delete it.</p>
   <p>this catches accidental deletions. it also lets you experiment with structures , try a board layout, decide it's not for you, delete it, change your mind a week later and restore it.</p>
@@ -267,7 +306,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="pins">
-  <div class="section-num">section 10</div>
+  <div class="section-num">section 12</div>
   <h2>pin locks</h2>
   <p>natallie supports two kinds of pin protection. an <em>app-level pin</em> requires you to enter a code every time you open natallie. a <em>board-level pin</em> protects specific boards, requiring a code to open them while leaving the rest of your app accessible.</p>
   <p>pins are 4-digit numeric codes, set up from the settings panel. you can change or remove a pin at any time, but if you forget it, there is no recovery. natallie has no servers, no email-based reset, no support team to call. losing your pin means losing access to whatever it protected.</p>
@@ -284,7 +323,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="export">
-  <div class="section-num">section 11</div>
+  <div class="section-num">section 13</div>
   <h2>exporting data</h2>
   <p>your data belongs to you. natallie supports several export formats so you can move it elsewhere, analyze it, share it, or just keep a copy outside the browser.</p>
   <p>open the export dialog from the settings panel. it offers three options:</p>
@@ -311,7 +350,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="encryption">
-  <div class="section-num">section 12</div>
+  <div class="section-num">section 14</div>
   <h2>encryption</h2>
   <p>by default, the files you export from natallie (CSVs and full backups) are plain text. anyone who opens the file can read what's inside. for most people, most of the time, that's fine; you save the file to your own device, and that's that.</p>
   <p>if you'd like the files themselves to be unreadable without a password, turn on encryption. this protects your exports if they end up somewhere outside your control: an email attachment, a cloud drive, a shared folder, a stolen laptop.</p>
@@ -350,7 +389,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="backup">
-  <div class="section-num">section 13</div>
+  <div class="section-num">section 15</div>
   <h2>backup and restore</h2>
   <p>browser local storage is durable but not invincible. clearing your browser cache, switching browsers, getting a new phone, or rare browser bugs can all wipe your data. backups are how you protect against this.</p>
 
@@ -370,7 +409,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="privacy">
-  <div class="section-num">section 14</div>
+  <div class="section-num">section 16</div>
   <h2>privacy and your data</h2>
   <p>this is the part most apps put in fine print. natallie puts it in the manual.</p>
 
@@ -390,7 +429,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="install">
-  <div class="section-num">section 15</div>
+  <div class="section-num">section 17</div>
   <h2>install on your device</h2>
   <p>natallie is a progressive web app, which means it can be installed on your phone or computer just like a regular app, with its own icon and standalone window , no app store required.</p>
 
@@ -418,7 +457,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="troubleshooting">
-  <div class="section-num">section 16</div>
+  <div class="section-num">section 18</div>
   <h2>troubleshooting</h2>
 
   <h3>natallie shows a white screen or won't load</h3>
@@ -443,7 +482,7 @@ footer p{margin-bottom:8px}
 </section>
 
 <section id="faq">
-  <div class="section-num">section 17</div>
+  <div class="section-num">section 19</div>
   <h2>frequently asked questions</h2>
 
   <details class="faq-q"><summary>do you sell my data?</summary>
@@ -551,15 +590,15 @@ function BoardTile(props){
 
 /* ========== DEMO 1: BASIC TAPPING ========== */
 var demo1Initial=function(){return [
-  mkSlot("d1_0","coffee","#FFCBA4"),
-  mkSlot("d1_1","watered plants","#77DD77"),
-  mkSlot("d1_2","cigarette","#8899AA"),
-  mkSlot("d1_3","read 30min","#C3A6FF"),
-  mkSlot("d1_4","spotted a hawk","#7EC8E3"),
-  mkSlot("d1_5","cat fed","#FFB347"),
-  mkSlot("d1_6","took meds","#FF85A1"),
-  mkSlot("d1_7","customer call","#DDA0DD"),
-  mkSlot("d1_8","french lesson","#98E8C1")
+  mkSlot("d1_0","coffee","#4A90D9"),
+  mkSlot("d1_1","watered plants","#4A90D9"),
+  mkSlot("d1_2","cigarette","#4A90D9"),
+  mkSlot("d1_3","read 30min","#4A90D9"),
+  mkSlot("d1_4","spotted a hawk","#4A90D9"),
+  mkSlot("d1_5","cat fed","#4A90D9"),
+  mkSlot("d1_6","took meds","#4A90D9"),
+  mkSlot("d1_7","customer call","#4A90D9"),
+  mkSlot("d1_8","french lesson","#4A90D9")
 ]};
 function Demo1(){
   var s1=useState(demo1Initial),slots=s1[0],setSlots=s1[1];
@@ -581,8 +620,8 @@ function Demo1(){
 /* ========== DEMO 2: SETUP MODE ========== */
 function Demo2(){
   var s1=useState(function(){return [
-    mkSlot("d2_0","coffee","#FFCBA4"),
-    mkSlot("d2_1","run","#7EC8E3"),
+    mkSlot("d2_0","coffee","#4A90D9"),
+    mkSlot("d2_1","run","#4A90D9"),
     mkSlot("d2_2","",""),
     mkSlot("d2_3","",""),
     mkSlot("d2_4","",""),
@@ -595,7 +634,7 @@ function Demo2(){
   var s3=useState(""),nm=s3[0],setNm=s3[1];
   var s4=useState(""),cl=s4[0],setCl=s4[1];
   Demo2.reset=function(){setSlots([
-    mkSlot("d2_0","coffee","#FFCBA4"),mkSlot("d2_1","run","#7EC8E3"),
+    mkSlot("d2_0","coffee","#4A90D9"),mkSlot("d2_1","run","#4A90D9"),
     mkSlot("d2_2","",""),mkSlot("d2_3","",""),mkSlot("d2_4","",""),
     mkSlot("d2_5","",""),mkSlot("d2_6","",""),mkSlot("d2_7","",""),mkSlot("d2_8","","")]);
     setEditing(null);setNm("");setCl("")};
@@ -641,20 +680,20 @@ function Demo3(){
 /* ========== DEMO 4: BOARDS ========== */
 function Demo4(){
   var initial=function(){return [
-    mkSlot("d4_0","coffee","#FFCBA4"),
-    mkSlot("d4_1","run","#7EC8E3"),
-    mkSlot("d4_2","tasks","#C3A6FF","click","board",[
-      mkSlot("d4_2_0","emails","#7EC8E3"),
-      mkSlot("d4_2_1","laundry","#98E8C1"),
-      mkSlot("d4_2_2","shopping","#FFB347"),
-      mkSlot("d4_2_3","dishes","#FF85A1"),
+    mkSlot("d4_0","coffee","#4A90D9"),
+    mkSlot("d4_1","run","#4A90D9"),
+    mkSlot("d4_2","tasks","#4A90D9","click","board",[
+      mkSlot("d4_2_0","emails","#4A90D9"),
+      mkSlot("d4_2_1","laundry","#4A90D9"),
+      mkSlot("d4_2_2","shopping","#4A90D9"),
+      mkSlot("d4_2_3","dishes","#4A90D9"),
       mkSlot("d4_2_4","",""),
       mkSlot("d4_2_5","",""),
       mkSlot("d4_2_6","",""),
       mkSlot("d4_2_7","",""),
       mkSlot("d4_2_8","","")
     ]),
-    mkSlot("d4_3","cigarette","#8899AA"),
+    mkSlot("d4_3","cigarette","#4A90D9"),
     mkSlot("d4_4","",""),
     mkSlot("d4_5","",""),
     mkSlot("d4_6","",""),
@@ -712,9 +751,9 @@ function Demo6(){
 /* ========== DEMO 7: TRASH ========== */
 function Demo7(){
   var initial=function(){return [
-    mkSlot("d7_0","coffee","#FFCBA4"),
-    mkSlot("d7_1","run","#7EC8E3"),
-    mkSlot("d7_2","watered plants","#77DD77")
+    mkSlot("d7_0","coffee","#4A90D9"),
+    mkSlot("d7_1","run","#4A90D9"),
+    mkSlot("d7_2","watered plants","#4A90D9")
   ]};
   var s1=useState(initial),slots=s1[0],setSlots=s1[1];
   var s2=useState([]),trash=s2[0],setTrash=s2[1];
