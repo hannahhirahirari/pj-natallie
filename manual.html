@@ -93,25 +93,69 @@ footer p{margin-bottom:8px}
   section h2{font-size:24px}
   .demo{padding:16px;border-radius:16px}
 }
+
+/* ============ STEPPER LAYOUT (new) ============ */
+.manual-layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+@media (max-width:899px){.manual-layout{display:block}}
+.sidebar{background:#0D0D0F;border-right:1px solid rgba(232,232,236,0.08);padding:32px 22px 40px;overflow-y:auto;position:sticky;top:0;height:100vh}
+@media (max-width:899px){.sidebar{position:fixed;top:0;left:-100%;width:280px;height:100vh;z-index:200;transition:left 0.2s ease}.sidebar.open{left:0}}
+.sidebar .brand{font-size:15px;font-weight:800;letter-spacing:-0.01em;margin-bottom:6px;color:#E8E8EC}
+.sidebar .brand-sub{font-size:11px;color:#8888A0;margin-bottom:20px}
+.sidebar .toc-title{font-size:10px;letter-spacing:0.12em;color:#8888A0;text-transform:uppercase;font-weight:600;margin-top:14px;margin-bottom:10px}
+.sidebar #toc-list{display:block;list-style:none;padding:0;margin:0;counter-reset:s}
+.sidebar #toc-list li{counter-increment:s;font-size:12.5px;line-height:1.4;padding:6px 10px;border-radius:5px;cursor:pointer;color:#C8C8D0;display:block;margin-bottom:1px}
+.sidebar #toc-list li:hover{background:rgba(255,255,255,0.025)}
+.sidebar #toc-list li::before{content:counter(s,decimal-leading-zero) "";color:#555;margin-right:10px;font-variant-numeric:tabular-nums;font-size:10px;font-weight:600}
+.sidebar #toc-list li.active{background:rgba(74,144,217,0.12)}
+.sidebar #toc-list li.active::before{color:#4A90D9}
+.sidebar #toc-list li.active a{color:#4A90D9;font-weight:600}
+.sidebar #toc-list li.done::before{content:"✓";color:rgba(74,144,217,0.5);margin-right:10px}
+.sidebar #toc-list li.match-sub{padding-left:24px}
+.sidebar #toc-list li.match-sub::before{content:"›";color:#4A90D9;font-weight:600}
+.sidebar #toc-list a{color:#C8C8D0;border:none;display:block}
+.sidebar #toc-list a:hover{color:#E8E8EC}
+.sidebar .search-input{font-size:13px;padding:8px 10px 8px 32px;border-radius:8px}
+.sidebar .search-icon{width:14px;height:14px;left:10px}
+.sidebar .search-clear{font-size:16px;right:8px}
+.content{padding:48px 60px 80px;max-width:820px}
+@media (max-width:899px){.content{padding:24px 24px 60px;max-width:100%}}
+.mobile-toc-btn{display:none}
+@media (max-width:899px){.mobile-toc-btn{display:block;margin-bottom:18px}.mobile-toc-btn button{background:#1C1C1F;border:1px solid #2A2A2E;color:#E8E8EC;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px}}
+.step-meta-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.step-meta{font-size:10px;color:#8888A0;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;font-variant-numeric:tabular-nums}
+.progress-bar{height:3px;background:#1A1A1E;border-radius:2px;margin-bottom:36px;overflow:hidden}
+.progress-fill{height:100%;background:#4A90D9;transition:width 0.3s ease;width:5%}
+.manual-layout section[data-step]{display:none}
+.manual-layout section[data-step].active{display:block;margin-bottom:0;scroll-margin-top:0}
+.manual-layout section .section-num{display:none}
+.step-nav{display:flex;justify-content:space-between;align-items:stretch;margin-top:50px;padding-top:24px;border-top:1px solid rgba(232,232,236,0.08);gap:12px}
+.step-nav button{background:transparent;border:1px solid #2A2A2E;color:#C8C8D0;padding:14px 18px;border-radius:10px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;gap:3px;flex:1;max-width:300px;text-align:left}
+.step-nav button.next{text-align:right;align-items:flex-end}
+.step-nav button:not(:disabled):hover{border-color:#4A90D9}
+.step-nav button:disabled{opacity:0.3;cursor:default}
+.step-nav .nav-label{font-size:10px;color:#8888A0;letter-spacing:0.08em;text-transform:uppercase;font-weight:700}
+.step-nav .nav-title{font-size:13.5px;color:#E8E8EC;line-height:1.3}
+.step-nav button.next .nav-title{color:#4A90D9}
+
+/* Hide the old top-of-page wrap (hero, top TOC) since the sidebar replaces it */
+.manual-layout > .legacy-hidden{display:none}
+
 </style>
 </head>
 <body>
 
-<div class="wrap">
+<div class="manual-layout">
 
-<header class="hero">
-  <h1>the manual</h1>
-  <p class="sub">how natallie works, what every feature does, with things you can actually try</p>
-  <p class="lead">natallie is a tap-based event logger. you build your own buttons, tap them when something happens, and your data stays on your device. this manual walks through every feature with live demos you can play with safely. nothing you do here affects your real app.</p>
-</header>
-
-<nav class="toc">
+<aside class="sidebar" id="sidebar">
+  <div class="brand">the manual</div>
+  <div class="brand-sub">how natallie works, with live demos</div>
   <div class="search-wrap">
     <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
-    <input type="search" id="manual-search" class="search-input" placeholder="search the manual..." autocomplete="off" spellcheck="false">
+    <input type="search" id="manual-search" class="search-input" placeholder="search..." autocomplete="off" spellcheck="false">
     <button id="search-clear" class="search-clear" aria-label="clear search">×</button>
   </div>
   <div class="search-empty" id="search-empty">no matches. try a different word.</div>
+  <div class="toc-title">contents</div>
   <div class="toc-title">contents</div>
   <ol id="toc-list">
     <li><a href="#what">what natallie is</a></li>
@@ -134,9 +178,16 @@ footer p{margin-bottom:8px}
     <li><a href="#troubleshooting">troubleshooting</a></li>
     <li><a href="#faq">frequently asked questions</a></li>
   </ol>
-</nav>
+</aside>
 
-<section id="what">
+<main class="content">
+  <div class="mobile-toc-btn"><button type="button" id="open-toc-btn">☰ contents</button></div>
+  <div class="step-meta-row">
+    <span class="step-meta" id="step-meta">section 01 of 19</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+<section id="what" data-step="1">
   <div class="section-num">section 01</div>
   <h2>what natallie is</h2>
   <div class="callout callout-priv">
@@ -146,7 +197,7 @@ footer p{margin-bottom:8px}
   <p>the core idea: you create buttons that mean whatever you want them to mean. when something happens, you tap the corresponding button. each tap is a timestamped log entry. what you track is up to you.</p>
 </section>
 
-<section id="first-tap">
+<section id="first-tap" data-step="2">
   <div class="section-num">section 02</div>
   <h2>your first tap</h2>
   <p>natallie's home screen is a 3x3 grid. that's nine slots, and each one can hold either a button (a single thing you track) or a board (a folder of more buttons). when you first open natallie, all nine slots are empty.</p>
@@ -162,7 +213,7 @@ footer p{margin-bottom:8px}
   <p>natallie is designed to be fast. that's intentional, but it has a cost: a tap that takes no thought collects less information than a tap you paid attention to. you decide what's right for what you're tracking. notes (section 6) are there for the moments a tap by itself isn't enough.</p>
 </section>
 
-<section id="setup">
+<section id="setup" data-step="3">
   <div class="section-num">section 03</div>
   <h2>setting up buttons</h2>
   <p>tapping the small switch in the top right of the home screen toggles between <em>click mode</em> (the default, where taps log events) and <em>setup mode</em> (where taps configure buttons). in setup mode, tapping any slot opens an editor where you can name it, pick a color, and choose whether it's a button or a board.</p>
@@ -174,7 +225,7 @@ footer p{margin-bottom:8px}
   </div>
 </section>
 
-<section id="actions">
+<section id="actions" data-step="4">
   <div class="section-num">section 04</div>
   <h2>on-tap actions</h2>
   <div class="callout callout-warn">
@@ -188,7 +239,7 @@ footer p{margin-bottom:8px}
   </div>
 </section>
 
-<section id="colors">
+<section id="colors" data-step="5">
   <div class="section-num">section 05</div>
   <h2>colors</h2>
   <p>natallie ships with twelve colors. each one is soft, slightly muted, designed to look good in dark mode without being hard to read. you assign a color to each button when you create it, and you can change it later.</p>
@@ -200,7 +251,7 @@ footer p{margin-bottom:8px}
   </div>
 </section>
 
-<section id="boards">
+<section id="boards" data-step="6">
   <div class="section-num">section 06</div>
   <h2>nested boards</h2>
   <p>nine buttons isn't always enough. when you need more, you can turn a slot into a <em>board</em> , a folder containing its own 3x3 grid. boards can themselves contain boards, so you can nest as deep as you need to.</p>
@@ -213,7 +264,7 @@ footer p{margin-bottom:8px}
   </div>
 </section>
 
-<section id="notes">
+<section id="notes" data-step="7">
   <div class="section-num">section 07</div>
   <h2>notes</h2>
   <p>sometimes a button isn't enough. you want to write a sentence. natallie has a separate notes view for this , open the notes panel from the bottom navigation, write whatever you want, and it gets timestamped and saved.</p>
@@ -228,7 +279,7 @@ footer p{margin-bottom:8px}
   <p>you can edit a note after creating it (tap the pencil icon). you can also delete it , but deletions go to the trash, not into the void.</p>
 </section>
 
-<section id="timebox">
+<section id="timebox" data-step="8">
   <div class="section-num">section 08</div>
   <h2>time-boxed boards</h2>
   <p>most boards in natallie are open-ended; you build them and they stay forever. but sometimes you want to track something for a specific period and then be done. a 14-day migraine diary, a 30-day project, a 3-day check-in around a hospital stay. for those, you can give a board a time-box.</p>
@@ -249,7 +300,7 @@ footer p{margin-bottom:8px}
   </div>
 </section>
 
-<section id="share">
+<section id="share" data-step="9">
   <div class="section-num">section 09</div>
   <h2>sharing board templates</h2>
   <div class="callout callout-warn">
@@ -272,7 +323,7 @@ footer p{margin-bottom:8px}
   <p>the link encodes the board structure directly. nothing passes through any server, including natallie's. there is no shared database of templates and no way to browse templates from strangers. sharing is intentional, friend to friend.</p>
 </section>
 
-<section id="stats">
+<section id="stats" data-step="10">
   <div class="section-num">section 10</div>
   <h2>stats and history</h2>
   <p>tapping a button in the bottom navigation opens the history view , a chronological list of every event you've logged, grouped by day. each entry shows the time, the button name, and the path through any boards.</p>
@@ -290,7 +341,7 @@ footer p{margin-bottom:8px}
   <p>turning the toggle on does not retroactively label past taps; only taps logged after you turn it on get a timezone. turning the toggle off later does not erase timezone data from taps that already have it; future taps simply won't be recorded with one. nothing about this leaves your device.</p>
 </section>
 
-<section id="trash">
+<section id="trash" data-step="11">
   <div class="section-num">section 11</div>
   <h2>trash and restore</h2>
   <p>when you delete a button, board, or note, it doesn't disappear forever. it goes to the trash, which is accessible from the settings panel. from there you can restore it back to your home screen (if there's room) or permanently delete it.</p>
@@ -305,7 +356,7 @@ footer p{margin-bottom:8px}
   <p>notes show up in the trash too, but their content is hidden , only the original timestamp and the deletion time are visible. tap restore to bring the note back to your notes list with its text intact.</p>
 </section>
 
-<section id="pins">
+<section id="pins" data-step="12">
   <div class="section-num">section 12</div>
   <h2>pin locks</h2>
   <p>natallie supports two kinds of pin protection. an <em>app-level pin</em> requires you to enter a code every time you open natallie. a <em>board-level pin</em> protects specific boards, requiring a code to open them while leaving the rest of your app accessible.</p>
@@ -322,7 +373,7 @@ footer p{margin-bottom:8px}
   </div>
 </section>
 
-<section id="export">
+<section id="export" data-step="13">
   <div class="section-num">section 13</div>
   <h2>exporting data</h2>
   <p>your data belongs to you. natallie supports several export formats so you can move it elsewhere, analyze it, share it, or just keep a copy outside the browser.</p>
@@ -349,7 +400,7 @@ footer p{margin-bottom:8px}
   </div>
 </section>
 
-<section id="encryption">
+<section id="encryption" data-step="14">
   <div class="section-num">section 14</div>
   <h2>encryption</h2>
   <p>by default, the files you export from natallie (CSVs and full backups) are plain text. anyone who opens the file can read what's inside. for most people, most of the time, that's fine; you save the file to your own device, and that's that.</p>
@@ -388,7 +439,7 @@ footer p{margin-bottom:8px}
   </div>
 </section>
 
-<section id="backup">
+<section id="backup" data-step="15">
   <div class="section-num">section 15</div>
   <h2>backup and restore</h2>
   <p>browser local storage is durable but not invincible. clearing your browser cache, switching browsers, getting a new phone, or rare browser bugs can all wipe your data. backups are how you protect against this.</p>
@@ -408,7 +459,7 @@ footer p{margin-bottom:8px}
   <p>natallie is built and maintained by one person. that comes with a real continuity risk: if the project stops being updated, the live site might eventually go offline. your data is protected against this in three concrete ways. .natallie backup files are plain JSON inside, readable by any text editor without natallie being online. CSV exports are a universal format readable by any spreadsheet for the indefinite future. and an installed PWA copy of natallie keeps working on your device even if natallie.app stops responding. exporting periodically and keeping backups somewhere you trust is good practice for any tool, especially one that runs on no servers.</p>
 </section>
 
-<section id="privacy">
+<section id="privacy" data-step="16">
   <div class="section-num">section 16</div>
   <h2>privacy and your data</h2>
   <p>this is the part most apps put in fine print. natallie puts it in the manual.</p>
@@ -428,7 +479,7 @@ footer p{margin-bottom:8px}
   <p>see the full <a href="/privacy.html">privacy policy</a> for legal details.</p>
 </section>
 
-<section id="install">
+<section id="install" data-step="17">
   <div class="section-num">section 17</div>
   <h2>install on your device</h2>
   <p>natallie is a progressive web app, which means it can be installed on your phone or computer just like a regular app, with its own icon and standalone window , no app store required.</p>
@@ -456,7 +507,7 @@ footer p{margin-bottom:8px}
   <p>once installed, natallie works without an internet connection. your data is local, the app code is cached, and there's nothing it needs to fetch. you can use natallie on a plane, on a subway, in a remote area with no signal , nothing changes.</p>
 </section>
 
-<section id="troubleshooting">
+<section id="troubleshooting" data-step="18">
   <div class="section-num">section 18</div>
   <h2>troubleshooting</h2>
 
@@ -481,7 +532,7 @@ footer p{margin-bottom:8px}
   <p>this is rare but has been reported. try refreshing the page first. if that doesn't work, your browser may have an old cached version of the app. clear the cache for natallie.app specifically (not all your browser data) and reload.</p>
 </section>
 
-<section id="faq">
+<section id="faq" data-step="19">
   <div class="section-num">section 19</div>
   <h2>frequently asked questions</h2>
 
@@ -535,6 +586,18 @@ footer p{margin-bottom:8px}
     <p>for research purposes, the csv export is intended to be useful as a data source, but you'd need to design the study and get appropriate consents from any participants. natallie doesn't manage any of that.</p>
   </details>
 </section>
+
+  <div class="step-nav">
+    <button class="prev" id="prev-btn" type="button">
+      <span class="nav-label">previous</span>
+      <span class="nav-title"></span>
+    </button>
+    <button class="next" id="next-btn" type="button">
+      <span class="nav-label">next</span>
+      <span class="nav-title"></span>
+    </button>
+  </div>
+</main>
 
 </div>
 
@@ -1044,9 +1107,10 @@ document.querySelectorAll('.toc a').forEach(function(a){
         var href=a.getAttribute('href');
         if(href&&href.startsWith('#')){
           ev.preventDefault();
-          var el=document.querySelector(href);
+          var targetId=href.slice(1);
+          if(window.__manualShowStep)window.__manualShowStep(targetId);
+          var el=document.getElementById(targetId);
           if(el){
-            el.scrollIntoView({behavior:'smooth',block:'start'});
             /* If matched item was a FAQ, also open it */
             if(input.value.trim()){
               setTimeout(function(){
@@ -1071,6 +1135,106 @@ document.querySelectorAll('.toc a').forEach(function(a){
   });
   clearBtn.addEventListener('click',function(){input.value='';search('');input.focus()});
 })();
+
+/* ========== STEPPER NAVIGATION ========== */
+(function(){
+  var sections=Array.prototype.slice.call(document.querySelectorAll('section[data-step]'));
+  if(!sections.length)return;
+  var meta=document.getElementById('step-meta');
+  var fill=document.getElementById('progress-fill');
+  var prevBtn=document.getElementById('prev-btn');
+  var nextBtn=document.getElementById('next-btn');
+  var sidebar=document.getElementById('sidebar');
+  var tocList=document.getElementById('toc-list');
+  var openTocBtn=document.getElementById('open-toc-btn');
+  var TOTAL=sections.length;
+  var visited={};
+
+  function findByStep(step){return sections.find(function(s){return parseInt(s.dataset.step,10)===step})}
+  function findById(id){return sections.find(function(s){return s.id===id})}
+  function pad(n){return String(n).padStart(2,'0')}
+
+  function showStep(step,opts){
+    opts=opts||{};
+    if(step<1)step=1;if(step>TOTAL)step=TOTAL;
+    var target=findByStep(step);if(!target)return;
+    var targetId=target.id;
+    if(!opts.silent&&window.location.hash!=='#'+targetId){
+      history.replaceState(null,'','#'+targetId);
+    }
+    sections.forEach(function(s){s.classList.toggle('active',s===target)});
+    visited[step]=true;
+    /* Update TOC active/done state. Only operate on the original TOC, not search-filtered TOC. */
+    if(tocList){
+      Array.prototype.slice.call(tocList.querySelectorAll('li')).forEach(function(li,i){
+        var a=li.querySelector('a');
+        if(!a)return;
+        var href=a.getAttribute('href');
+        if(!href||!href.startsWith('#'))return;
+        var liId=href.slice(1);
+        var liSection=findById(liId);
+        if(!liSection)return;
+        var liStep=parseInt(liSection.dataset.step,10);
+        li.classList.toggle('active',liStep===step);
+        li.classList.toggle('done',visited[liStep]&&liStep!==step);
+      });
+    }
+    if(meta)meta.textContent='section '+pad(step)+' of '+pad(TOTAL);
+    if(fill)fill.style.width=(step/TOTAL*100)+'%';
+    var prev=findByStep(step-1);
+    var next=findByStep(step+1);
+    if(prevBtn){
+      if(prev){
+        prevBtn.disabled=false;
+        prevBtn.querySelector('.nav-title').textContent=prev.querySelector('h2').textContent;
+        prevBtn.onclick=function(){showStep(step-1)};
+      }else{
+        prevBtn.disabled=true;
+        prevBtn.querySelector('.nav-title').textContent='';
+        prevBtn.onclick=null;
+      }
+    }
+    if(nextBtn){
+      if(next){
+        nextBtn.disabled=false;
+        nextBtn.querySelector('.nav-title').textContent=next.querySelector('h2').textContent;
+        nextBtn.onclick=function(){showStep(step+1)};
+      }else{
+        nextBtn.disabled=true;
+        nextBtn.querySelector('.nav-title').textContent='';
+        nextBtn.onclick=null;
+      }
+    }
+    window.scrollTo(0,0);
+    if(sidebar)sidebar.classList.remove('open');
+  }
+
+  function loadFromHash(){
+    var hash=window.location.hash.slice(1);
+    if(hash){
+      var s=findById(hash);
+      if(s){showStep(parseInt(s.dataset.step,10),{silent:true});return}
+    }
+    showStep(1,{silent:true});
+  }
+
+  /* Listen for hash changes (triggered by anchor link clicks in TOC) */
+  window.addEventListener('hashchange',loadFromHash);
+
+  /* Expose showStep globally so the search IIFE can call it on click */
+  window.__manualShowStep=function(id){
+    var s=findById(id);
+    if(s)showStep(parseInt(s.dataset.step,10));
+  };
+
+  /* Mobile contents button */
+  if(openTocBtn&&sidebar){
+    openTocBtn.addEventListener('click',function(){sidebar.classList.toggle('open')});
+  }
+
+  loadFromHash();
+})();
+
 </script>
 </body>
 </html>
