@@ -149,8 +149,9 @@ All persistent user data lives in `localStorage` under the following keys:
 | `nat-nt` | JSON array | Notes |
 | `nat-enc` | string | Encryption toggle (`"1"` if enabled, empty otherwise) |
 | `nat-tz` | string | Per-tap timezone recording toggle (`"1"` if enabled, empty otherwise; off by default) |
+| `nat-wt` | string | First-launch walkthrough seen flag (`"1"` if the user has seen or skipped the walkthrough). Missing means the walkthrough shows on next app load. |
 
-The reset-everything action clears all eleven keys. Any new `nat-*` key added in the future must also be cleared in that path, or the app's privacy guarantees are weakened.
+The reset-everything action clears all twelve keys. Any new `nat-*` key added in the future must also be cleared in that path, or the app's privacy guarantees are weakened.
 
 ---
 
